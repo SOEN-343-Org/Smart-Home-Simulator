@@ -1,0 +1,80 @@
+{
+  "dimensions": {
+    "rows": 3,
+    "columns": 3
+  },
+  "rooms": [
+    {
+      "name": "bedroom",
+      "location": {
+        "row": 0,
+        "column": 1
+      },
+      "lights": 2,
+      "top": "window",
+      "right": "window",
+      "down": "door",
+      "left": null
+    },
+    {
+      "name": "living room",
+      "location": {
+        "row": 1,
+        "column": 0
+      },
+      "lights": 1,
+      "top": "window",
+      "right": "door",
+      "down": null,
+      "left": "door"
+    },
+    {
+      "name": "kitchen",
+      "location": {
+        "row": 2,
+        "column": 0
+      },
+      "lights": 1,
+      "top": null,
+      "right": "door",
+      "down": "window",
+      "left": "window"
+    },
+    {
+      "name": "dining room",
+      "location": {
+        "row": 2,
+        "column": 1
+      },
+      "lights": 2,
+      "top": "door",
+      "right": null,
+      "down": "window",
+      "left": "door"
+    },
+    {
+      "name": "hallway",
+      "location": {
+        "row": 1,
+        "column": 1
+      },
+      "lights": 1,
+      "top": "door",
+      "right": "door",
+      "down": "door",
+      "left": "door"
+    },
+    {
+      "name": "garage",
+      "location": {
+        "row": 1,
+        "column": 2
+      },
+      "lights": 2,
+      "top": "window",
+      "right": "door",
+      "down": "window",
+      "left": "door"
+    }
+  ]
+}
