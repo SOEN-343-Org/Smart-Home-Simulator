@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox fx:id="hbox" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="300.0" spacing="10"
+      xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
+      fx:controller="org.soen343.controller.DashboardController">
+    <Label fx:id="inputLbl" cache="true" cacheHint="SCALE" prefHeight="25.0" prefWidth="200.0"/>
+    <TextField fx:id="inputText" prefWidth="100.0"/>
+    <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false"
+            onAction="#sendLabelText" text="OK" textAlignment="CENTER"/>
+    <fx:include source="HouseLayoutView.fxml"/>
+</HBox>
