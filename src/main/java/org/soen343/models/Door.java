@@ -1,0 +1,59 @@
+package org.soen343.models;
+
+import java.util.Random;
+
+public class Door {
+
+    private final int id;
+    private boolean open;
+
+    /**
+     * Creates a Door object with id id
+     *
+     * @param id int id
+     */
+    public Door(int id) {
+        this.id = id;
+        Random r = new Random();
+        this.open = r.nextBoolean();
+    }
+
+    /**
+     * @return True if the door is opened
+     */
+    public boolean isOpen() {
+        return open;
+    }
+
+    /**
+     * Set state of the door
+     *
+     * @param open state of the door
+     */
+    public void setOpen(boolean open) {
+        this.open = open;
+    }
+
+    /**
+     * Gets the id of the door
+     *
+     * @return int id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Gets the name of the door
+     *
+     * @return string name
+     */
+    public String getName() {
+        return "Door #" + id;
+    }
+
+    @Override
+    public String toString() {
+        return this.getName() + ", state: " + (open ? "opened" : "closed");
+    }
+}
