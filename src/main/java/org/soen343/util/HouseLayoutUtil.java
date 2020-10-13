@@ -1,12 +1,18 @@
 package org.soen343.util;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.soen343.models.*;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 
+/**
+ * The type House layout util.
+ */
 public class HouseLayoutUtil {
 
     /**
@@ -139,5 +145,43 @@ public class HouseLayoutUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Gets room names.
+     *
+     * @return ObservableList of room names.
+     */
+    public static ObservableList getRoomNames() {
+        String fileUrl = "/org/soen343/houseLayout/house-layout.json";
+        InputStream inputStream = HouseLayoutUtil.class.getResourceAsStream(fileUrl);
+        if (inputStream == null) {
+            throw new NullPointerException("Cannot find the house-layout file at " + fileUrl);
+        }
+
+        ObservableList roomNames = FXCollections.observableArrayList();
+
+        try {
+
+            JSONTokener token = new JSONTokener(inputStream);
+            JSONObject object = new JSONObject(token);
+
+            // Retrieve the list of rooms from the file
+            JSONArray rooms = object.getJSONArray("rooms");
+            System.out.println("rooms : :: " + rooms.length());
+
+            for (int i = 0; i < rooms.length(); i++) {
+                JSONObject roomJson = rooms.getJSONObject(i);
+
+                String name = roomJson.getString("name");
+                roomNames.add(name);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error reading the house layout file.");
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        return roomNames;
     }
 }
