@@ -34,7 +34,8 @@ public class IndividualController {
     @FXML private ChoiceBox locationChoices;
     @FXML private TextField idToRemove;
     private static Connection dbCon;
-    // TODO : change db source
+
+    // TODO : change db source if not local
     private static String dbTable = "individuals";
     // dummy username of logged in username TODO : figure out how to get logged in user's username
     private String username = "flemmingway";
