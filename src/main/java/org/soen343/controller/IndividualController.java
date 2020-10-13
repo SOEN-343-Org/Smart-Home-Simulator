@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.soen343.models.*;
+import org.soen343.util.HouseLayoutUtil;
 
 /**
  * The type Individual controller.
@@ -49,13 +50,8 @@ public class IndividualController {
             "Stranger");
     private ComboBox individualRoleChoices = new ComboBox(roles);
 
-
-    // locations to select from ( TODO : to be provided by house layout specs )
-    private ObservableList locations = FXCollections.observableArrayList(
-            "Room 1",
-            "Room 2",
-            "Room 3",
-            "Outside");
+    // locations to select from
+    private ObservableList locations = HouseLayoutUtil.getRoomNames();
     private ComboBox individualLocationChoices = new ComboBox(locations);
 
     /**
