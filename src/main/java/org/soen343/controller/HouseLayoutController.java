@@ -107,7 +107,7 @@ public class HouseLayoutController {
     /**
      * Draw the house layout in the canvas
      */
-    private void drawLayout() {
+    public void drawLayout() {
         if (nullHouse) {
             drawNullLayout();
             return;
