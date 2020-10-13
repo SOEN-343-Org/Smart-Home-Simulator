@@ -18,7 +18,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.soen343.models.*;
 
-// IndividualsController would be better name
+/**
+ * The type Individual controller.
+ */
 public class IndividualController {
 
     @FXML private TableView <Individual> individualsTable;
@@ -40,14 +42,25 @@ public class IndividualController {
     private static Integer idSelected;
 
     // Roles to select from
-    private ObservableList roles = FXCollections.observableArrayList("Family Adult", "Family Child", "Guest", "Stranger");
+    private ObservableList roles = FXCollections.observableArrayList(
+            "Family Adult",
+            "Family Child",
+            "Guest",
+            "Stranger");
     private ComboBox individualRoleChoices = new ComboBox(roles);
 
 
     // locations to select from ( TODO : to be provided by house layout specs )
-    private ObservableList locations = FXCollections.observableArrayList("Room 1", "Room 2", "Room 3", "Outside");
+    private ObservableList locations = FXCollections.observableArrayList(
+            "Room 1",
+            "Room 2",
+            "Room 3",
+            "Outside");
     private ComboBox individualLocationChoices = new ComboBox(locations);
 
+    /**
+     * Initialize.
+     */
     @FXML
     public void initialize()  {
 
@@ -57,8 +70,6 @@ public class IndividualController {
         col_role.setCellValueFactory(new PropertyValueFactory<Individual, String>("roleChoices"));
         col_location.setCellValueFactory(new PropertyValueFactory<Individual, String>("locationChoices"));
 
-
-        // load real data into the individuals table
         individualsTable.setItems(getExistingIndividuals());
 
         // When a row is clicked once, a function that records its individual ID is triggered.
@@ -85,7 +96,8 @@ public class IndividualController {
 
     /**
      * This method fetches the existing individuals from the database.
-     * @return
+     * @return individualsList ObservableList,<Individual>
+     *     is the list of existing individuals in the database.
      * TODO : only display individuals that have the attribute username='desired username'
      */
     private ObservableList<Individual> getExistingIndividuals() {
@@ -99,7 +111,11 @@ public class IndividualController {
             ResultSet rs = dbCon.createStatement().executeQuery("select * from individuals");
 
             while (rs.next()){
-                Individual p = new Individual(rs.getInt("id"),rs.getString("name"), rs.getString("role"), rs.getString("location"), username);
+                Individual p = new Individual(rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("role"),
+                        rs.getString("location"),
+                        username);
                 p.setRoleChoices(roles);
                 p.setLocationChoices(locations);
                 individualsList.add(p);
@@ -115,7 +131,8 @@ public class IndividualController {
     /**
      * This method allows a user to double click a cell to edit
      * and update the Name column in the table and database.
-     * @param editedCell
+     *
+     * @param editedCell TableColumn.CellEditEvent The edited cell
      */
     @FXML
     public void onEditName(TableColumn.CellEditEvent editedCell) {
@@ -124,7 +141,10 @@ public class IndividualController {
         individualSelected.setName(newName);
 
         try {
-            dbCon.createStatement().executeUpdate("update "+ dbTable + " set name = '"+ newName + "' where id = " + idSelected);
+            dbCon.createStatement().executeUpdate(
+                    "update "+ dbTable +
+                    " set name = '"+ newName +
+                    "' where id = " + idSelected);
         } catch (SQLException e) {
             Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -133,8 +153,9 @@ public class IndividualController {
     /**
      * This method allows a user to double click a cell to edit
      * and update the Location column in the table and the database.
-     * @param location
-     * @param id
+     *
+     * @param location Object location of the individual
+     * @param id       Integer id of the individual
      */
     @FXML
     public static void onEditLocation(Object location, Integer id) {
@@ -142,7 +163,9 @@ public class IndividualController {
         idSelected = id;
 
         try {
-            dbCon.createStatement().executeUpdate("UPDATE "+ dbTable + " SET location = '"+ newLocation + "' WHERE id = " + idSelected);
+            dbCon.createStatement().executeUpdate("UPDATE "+ dbTable +
+                    " SET location = '"+ newLocation +
+                    "' WHERE id = " + idSelected);
         } catch (SQLException e) {
             Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -151,15 +174,19 @@ public class IndividualController {
 
     /**
      * This method updates the individual's Role in the database.
-     * @param role
-     * @param id
+     *
+     * @param role Object role
+     * @param id   Integer id
      */
     public static void onEditRole(Object role, Integer id) {
         String newRole = String.valueOf(role);
         idSelected = id;
 
         try {
-            dbCon.createStatement().executeUpdate("UPDATE "+ dbTable + " SET role = '"+ newRole + "' WHERE id = " + idSelected);
+            dbCon.createStatement().executeUpdate(
+                    "UPDATE "+ dbTable +
+                    " SET role = '"+ newRole +
+                    "' WHERE id = " + idSelected);
         } catch (SQLException e) {
             Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -168,11 +195,11 @@ public class IndividualController {
     /**
      * This method brings the user back to the
      * Edit Context of Simulation page.
+     *  TODO : figure out how to switch pages if setRoot is private
      * @throws IOException
      */
     @FXML
     private void cancelPushed() throws IOException {
-//        TODO : figure out how to switch pages if setRoot is private
 //        App.setRoot("editContext");
     }
 
@@ -185,7 +212,6 @@ public class IndividualController {
         // check the table's selected item and get selected item
         if (individualsTable.getSelectionModel().getSelectedItem() != null) {
             Individual selectedIndividual = individualsTable.getSelectionModel().getSelectedItem();
-            System.out.println("id in row :: "+ selectedIndividual.getId());
             idSelected = selectedIndividual.getId();
         }
     }
@@ -193,7 +219,6 @@ public class IndividualController {
     /**
      * This method adds a new individual
      * in the database and the view.
-     * TODO : somehow obtain username and add it to insert statement.
      */
     @FXML
     private void onAddIndividual() {
@@ -216,8 +241,9 @@ public class IndividualController {
      * This is a utility method that verifies whether a String is an Integer.
      * It returns true if it is
      * else false.
-     * @param s
-     * @return boolean
+     *
+     * @param s the s
+     * @return boolean boolean
      */
     public static boolean isInteger(String s) {
         try {
@@ -240,7 +266,6 @@ public class IndividualController {
     private void onRemoveIndividual() {
 
         if (isInteger(idToRemove.getText())) {
-            System.out.println("id to remove  ::  " + idToRemove.getText());
             try {
                 dbCon.createStatement().executeUpdate("DELETE from "+ dbTable +
                         " where id="+idToRemove.getText());

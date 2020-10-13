@@ -5,8 +5,17 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
+/**
+ * The type Db connection.
+ */
 public class DBConnection {
 
+    /**
+     * Gets connection to MySQL DB.
+     *
+     * @return Connection connection
+     * @throws SQLException the sql exception
+     */
     public  static Connection getConnection()  throws SQLException {
 
         String url = "jdbc:mysql://localhost:3306/";
