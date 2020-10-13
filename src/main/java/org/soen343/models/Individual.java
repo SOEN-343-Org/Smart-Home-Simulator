@@ -4,15 +4,19 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import org.soen343.controller.IndividualController;
 
+import java.util.ArrayList;
+
 
 /**
  * The type Individual.
  */
-public class Individual {
+public class Individual implements Reporter {
 
-    private final int id;
+//    private final int id;
+    public final int id;
     private String name, role, location, username;
     private ComboBox roleChoices, locationChoices;
+    private ArrayList<Observer> observers;
 
     /**
      * Creates an Individual
@@ -29,6 +33,7 @@ public class Individual {
         this.role= role;
         this.location = location;
         this.username = username;
+        observers = new ArrayList<Observer>();
     }
 
     /**
@@ -56,6 +61,13 @@ public class Individual {
         this.locationChoices.setValue(getLocation());
         this.locationChoices.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
             IndividualController.onEditLocation(newValue, getId());
+            notifyObserver();
+
+            // after updating the rooms, print the list of individuals in each observer room - for testing
+            for (Observer observer : observers) {
+                System.out.println("Room individuals : " + observer);
+            }
+
         });
     }
 
@@ -179,5 +191,37 @@ public class Individual {
      */
     public void setLocationChoices(ComboBox locationChoices) {
         this.locationChoices = locationChoices;
+    }
+
+
+
+    @Override
+    public void registerObserver(Observer newRoomObserver) {
+        // added to individual's unique list of room observers
+        observers.add(newRoomObserver);
+
+        // add this individual to the observer's unique list of individuals
+//        newRoomObserver.addIndividual(this);
+        newRoomObserver.update(this);
+    }
+
+
+    @Override
+    public void unregister(Observer deleteObserver) {
+        int observerIndex = observers.indexOf(deleteObserver);
+
+        System.out.println("Observer :  " + (observerIndex+1) + " deleted successfully !!");
+
+        observers.remove(observerIndex);
+    }
+
+    @Override
+    public void notifyObserver() {
+
+        for (Observer observer : observers) {
+            observer.update(this); // want to either pass individual obj or String role
+        }
+        System.out.println("Observer was notified !!");
+
     }
 }

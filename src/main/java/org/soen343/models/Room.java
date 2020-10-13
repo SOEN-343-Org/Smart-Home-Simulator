@@ -2,14 +2,23 @@ package org.soen343.models;
 
 import java.util.HashMap;
 
-public class Room {
+public class Room implements Observer{
 
     private final HashMap<Integer, Window> windows;
     private final HashMap<Integer, Door> doors;
     private final HashMap<Integer, Light> lights;
-    private final HashMap<Integer, Individual> individuals;
+//    private final HashMap<Integer, Individual> individuals;
     private final int id;
+    public HashMap<Integer, Individual> individuals;
     private final String name;
+    // shared amongst all class instances to act as a counter
+    private static int observerIDTracker= 0;
+
+    // For each individual Observer object created
+    private int observerID;
+
+    // ref for Reporter
+    private Reporter individual;
 
     private final Object top;
     private final Object right;
@@ -71,14 +80,14 @@ public class Room {
      * @param ind Individual to add in a room
      * @return True if the individual is added
      */
-    public boolean addIndividual(Individual ind) {
-        try {
-            individuals.put(ind.getId(), ind);
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
+//    public boolean addIndividual(Individual ind) {
+//        try {
+//            individuals.put(ind.getId(), ind);
+//        } catch (Exception e) {
+//            return false;
+//        }
+//        return true;
+//    }
 
     /**
      * Remove an individual from a room
@@ -251,5 +260,27 @@ public class Room {
      */
     public Object getLeft() {
         return left;
+    }
+
+    public void addIndividual(Individual ind) {
+        // add individual to room's unique list of individuals that they are subscribed to
+        individuals.put(ind.id, ind);
+    }
+
+    @Override
+    public void update(Object o) {
+        // boolean correctLocation = object.location equals this.name
+        // Object individualIsSubscribed = individuals.get(object.id) ( null if not present )
+
+        // is the object.location equal to this.name of room ?
+            // if so then is the object.id present in the individuals hashmap ?
+                // if so then
+                    // do nothing
+                // else
+                    // add this object individual to your individuals list
+            // else if object.location does not equal that of this room
+                // if so then is the object.id present in the individuals hashmap ?
+                    //if so then remove individual from the individuals hashmap
+
     }
 }
