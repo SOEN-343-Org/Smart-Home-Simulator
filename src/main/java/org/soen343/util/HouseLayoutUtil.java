@@ -160,13 +160,11 @@ public class HouseLayoutUtil {
         ObservableList roomNames = FXCollections.observableArrayList();
 
         try {
-
             JSONTokener token = new JSONTokener(inputStream);
             JSONObject object = new JSONObject(token);
 
             // Retrieve the list of rooms from the file
             JSONArray rooms = object.getJSONArray("rooms");
-            System.out.println("rooms : :: " + rooms.length());
 
             for (int i = 0; i < rooms.length(); i++) {
                 JSONObject roomJson = rooms.getJSONObject(i);
