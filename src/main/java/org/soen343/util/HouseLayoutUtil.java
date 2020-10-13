@@ -15,6 +15,8 @@ import java.util.ArrayList;
  */
 public class HouseLayoutUtil {
 
+    public static ArrayList<Room> roomList = new ArrayList<Room>();
+
     /**
      * Read the house layout and creates an House object
      *
@@ -133,7 +135,10 @@ public class HouseLayoutUtil {
                         throw new NullPointerException(top + " is not in the valid option [window, door]");
                     }
                 }
-                house[row][column] = new Room(roomId++, name, lights, topObject, rightObject, downObject, leftObject);
+                Room r = new Room(roomId++, name, lights, topObject, rightObject, downObject, leftObject);
+                roomList.add(r);
+                System.out.println("new room created :: " + r); /////// to remove
+                house[row][column] = r;
             }
 
             return new House(house);
