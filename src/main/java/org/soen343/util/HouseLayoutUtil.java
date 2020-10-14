@@ -137,7 +137,6 @@ public class HouseLayoutUtil {
                 }
                 Room r = new Room(roomId++, name, lights, topObject, rightObject, downObject, leftObject);
                 roomList.add(r);
-                System.out.println("new room created :: " + r); /////// to remove
                 house[row][column] = r;
             }
 

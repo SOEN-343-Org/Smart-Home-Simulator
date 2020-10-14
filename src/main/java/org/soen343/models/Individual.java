@@ -230,8 +230,9 @@ public class Individual implements Reporter {
      */
     @Override
     public void notifyObserver() {
-System.out.println("individual that changed :: " + this);
-        System.out.println("UPDATEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD ==============");
+        // Can remove println, just for testing
+        System.out.println("individual that changed :: " + this);
+        System.out.println("============= UPDATED ==============");
         for (Observer observer : locationObserversList) {
             observer.update(this);
         }
