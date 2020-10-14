@@ -68,7 +68,7 @@ public class IndividualController {
     @FXML
     public void initialize()  {
 
-        // to remove, use this bc no redirect button to manage individuals yet
+        // TODO: to remove, use this bc no redirect button to manage individuals yet
         h = HouseLayoutUtil.ReadHouseLayoutFile();
         // list of room objects from house layout specs
         locationsList = HouseLayoutUtil.roomList;
@@ -107,7 +107,6 @@ public class IndividualController {
      * This method fetches the existing individuals from the database.
      * @return individualsList ObservableList,<Individual>
      *     is the list of existing individuals in the database.
-     * TODO : only display individuals that have the attribute username='desired username'
      */
     private ObservableList<Individual> getExistingIndividuals() {
         // the list of individuals that will go in the table
@@ -117,7 +116,7 @@ public class IndividualController {
             dbCon = DBConnection.getConnection();
 
             // existing individuals set
-            ResultSet rs = dbCon.createStatement().executeQuery("select * from individuals");
+            ResultSet rs = dbCon.createStatement().executeQuery("select * from individuals where username='" + username + "'");
 
             while (rs.next()){
                 Individual p = new Individual(rs.getInt("id"),
