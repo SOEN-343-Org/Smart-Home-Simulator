@@ -1,10 +1,20 @@
 package org.soen343.models;
 
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextField;
+import org.soen343.connection.DBConnection;
 import org.soen343.controller.IndividualController;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -16,6 +26,7 @@ public class Individual implements Reporter {
     public String name, role, location, username;
     private ComboBox roleChoices, locationChoices;
     private ArrayList<Observer> locationObserversList = new ArrayList<Observer>();
+    private static Connection dbCon;
 
     /**
      * Creates an Individual
@@ -60,6 +71,81 @@ public class Individual implements Reporter {
         this.locationChoices.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
             IndividualController.onEditLocation(newValue, getId(), this);
         });
+    }
+
+    public static ResultSet getindsDB(String username, Connection dbCon) {
+        ResultSet rs = null;
+        try {
+//            dbCon = DBConnection.getConnection();
+             rs = dbCon.createStatement().executeQuery("select * from individuals where username='" + username + "'");
+        } catch (SQLException e) {
+            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return rs;
+    }
+
+    /**
+     * This method allows a user to double click a cell to edit
+     * and update the Name column in the table and database.
+     *
+
+     */
+
+    public static void updateNameDB(Connection dbCon, String dbTableName, String newName, Integer idSelected) {
+        try {
+            dbCon.createStatement().executeUpdate(
+                    "update "+ dbTableName +
+                            " set name = '"+ newName +
+                            "' where id = " + idSelected);
+        } catch (SQLException e) {
+            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    public static void updateLocationDB(Connection dbCon, String dbTableName, String newLocation, Integer idSelected) {
+
+        try {
+            dbCon.createStatement().executeUpdate("UPDATE "+ dbTableName +
+                    " SET location = '"+ newLocation +
+                    "' WHERE id = " + idSelected);
+        } catch (SQLException e) {
+            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    public static void updateRoleDB(Connection dbCon, String dbTableName, String newRole, Integer idSelected) {
+        try {
+            dbCon.createStatement().executeUpdate(
+                    "UPDATE "+ dbTableName +
+                            " SET role = '"+ newRole +
+                            "' WHERE id = " + idSelected);
+        } catch (SQLException e) {
+            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+    }
+
+    public static void removeIndividualDB(Connection dbCon, String dbTableName, TextField idToRemove) {
+            try {
+                dbCon.createStatement().executeUpdate("DELETE from "+ dbTableName +
+                        " where id="+idToRemove.getText());
+            } catch (SQLException e) {
+                Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
+            }
+    }
+
+    public static void addIndividualDB(Connection dbCon, String dbTableName, TextField addedName,
+                                       ChoiceBox roleChoices, ChoiceBox locationChoices, String username) {
+
+            try {
+                dbCon.createStatement().executeUpdate("INSERT into "+ dbTableName +
+                        " (name,role,location,username) VALUES ('"+ addedName.getText() + "','" +
+                        roleChoices.getSelectionModel().getSelectedItem() + "','" +
+                        locationChoices.getSelectionModel().getSelectedItem() + "','" +
+                        username + "')");
+            } catch (SQLException e) {
+                Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
+            }
     }
 
     /**

@@ -37,7 +37,7 @@ public class IndividualController {
     private static Connection dbCon;
 
     // TODO : change db source if not local
-    private static String dbTable = "individuals";
+    private static String dbTableName = "individuals";
     // dummy username of logged in username TODO : figure out how to get logged in user's username
     private String username = "flemmingway";
 
@@ -79,7 +79,10 @@ public class IndividualController {
         col_role.setCellValueFactory(new PropertyValueFactory<Individual, String>("roleChoices"));
         col_location.setCellValueFactory(new PropertyValueFactory<Individual, String>("locationChoices"));
 
-        individualsTable.setItems(getExistingIndividuals());
+        ObservableList s = getExistingIndividuals();
+        System.out.println("existing individual objs ::: " + s);
+        individualsTable.setItems(s);
+        System.out.println("table :: " + individualsTable);
 
         // When a row is clicked once, a function that records its individual ID is triggered.
         individualsTable.setOnMouseClicked((MouseEvent event) -> {
@@ -116,7 +119,8 @@ public class IndividualController {
             dbCon = DBConnection.getConnection();
 
             // existing individuals set
-            ResultSet rs = dbCon.createStatement().executeQuery("select * from individuals where username='" + username + "'");
+//            ResultSet rs = dbCon.createStatement().executeQuery("select * from individuals where username='" + username + "'");
+            ResultSet rs = Individual.getindsDB(username, dbCon);
 
             while (rs.next()){
                 Individual p = new Individual(rs.getInt("id"),
@@ -149,14 +153,7 @@ public class IndividualController {
         String newName = editedCell.getNewValue().toString();
         individualSelected.setName(newName);
 
-        try {
-            dbCon.createStatement().executeUpdate(
-                    "update "+ dbTable +
-                    " set name = '"+ newName +
-                    "' where id = " + idSelected);
-        } catch (SQLException e) {
-            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
-        }
+        Individual.updateNameDB(dbCon, dbTableName, newName, idSelected);
     }
 
     /**
@@ -171,13 +168,7 @@ public class IndividualController {
         String newLocation = String.valueOf(location);
         idSelected = id;
 
-        try {
-            dbCon.createStatement().executeUpdate("UPDATE "+ dbTable +
-                    " SET location = '"+ newLocation +
-                    "' WHERE id = " + idSelected);
-        } catch (SQLException e) {
-            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
-        }
+        Individual.updateLocationDB(dbCon, dbTableName, newLocation, idSelected);
         ind.location = newLocation;
         ind.notifyObserver();
 
@@ -193,14 +184,7 @@ public class IndividualController {
         String newRole = String.valueOf(role);
         idSelected = id;
 
-        try {
-            dbCon.createStatement().executeUpdate(
-                    "UPDATE "+ dbTable +
-                    " SET role = '"+ newRole +
-                    "' WHERE id = " + idSelected);
-        } catch (SQLException e) {
-            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
-        }
+        Individual.updateRoleDB(dbCon, dbTableName, newRole, idSelected);
         ind.role = newRole;
         ind.notifyObserver();
     }
@@ -237,15 +221,7 @@ public class IndividualController {
     private void onAddIndividual() {
 
         if (!addedName.getText().trim().isEmpty()){
-            try {
-                dbCon.createStatement().executeUpdate("INSERT into "+ dbTable +
-                        " (name,role,location,username) VALUES ('"+ addedName.getText() + "','" +
-                        roleChoices.getSelectionModel().getSelectedItem() + "','" +
-                        locationChoices.getSelectionModel().getSelectedItem() + "','" +
-                        username + "')");
-            } catch (SQLException e) {
-                Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
-            }
+           Individual.addIndividualDB(dbCon, dbTableName, addedName, roleChoices, locationChoices, username);
         }
         individualsTable.setItems(getExistingIndividuals());
     }
@@ -279,12 +255,7 @@ public class IndividualController {
     private void onRemoveIndividual() {
 
         if (isInteger(idToRemove.getText())) {
-            try {
-                dbCon.createStatement().executeUpdate("DELETE from "+ dbTable +
-                        " where id="+idToRemove.getText());
-            } catch (SQLException e) {
-                Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
-            }
+          Individual.removeIndividualDB(dbCon, dbTableName, idToRemove);
             removeFromReporterList();
             individualsTable.setItems(getExistingIndividuals());
         }
