@@ -56,6 +56,7 @@ public class IndividualController {
     private ObservableList locations = HouseLayoutUtil.getRoomNames();
     private ComboBox individualLocationChoices = new ComboBox(locations);
 
+    // locations information from House layout specs
     private House h;
     private ArrayList<Room> locationsList;
 
@@ -67,11 +68,10 @@ public class IndividualController {
     @FXML
     public void initialize()  {
 
-        // to remove
+        // to remove, use this bc no redirect button to manage individuals yet
         h = HouseLayoutUtil.ReadHouseLayoutFile();
-        // list of room objects
+        // list of room objects from house layout specs
         locationsList = HouseLayoutUtil.roomList;
-        System.out.println("all rooms :: " + locationsList);
 
         // set up the columns with titles in the individuals table
         col_id.setCellValueFactory(new PropertyValueFactory<Individual, Integer>("id"));

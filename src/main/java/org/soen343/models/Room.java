@@ -262,12 +262,9 @@ public class Room implements Observer{
      */
     @Override
     public void update(Object o) {
-
         Individual ind = (Individual) o;
          boolean correctLocation = ind.location.equals(this.name);
-         System.out.println("individual location is :: " + ind.location + ", observer location :: " + this.name + " are same :: " + correctLocation);
          boolean individualIsSubscribed = individuals.get(ind.id) == null ? false : true;
-
 
          if (correctLocation && individualIsSubscribed) {
              boolean correctRole = individuals.get(ind.id).role.equals(ind.role) ? true : false;
@@ -275,12 +272,10 @@ public class Room implements Observer{
              if (!correctRole) {
                  individuals.replace(ind.id, ind);
              }
-         }
-        else if (correctLocation && !individualIsSubscribed) {
+         } else if (correctLocation && !individualIsSubscribed) {
             individuals.put(ind.id, ind);
-        } else if (!correctLocation && individualIsSubscribed) {
+         } else if (!correctLocation && individualIsSubscribed) {
             individuals.remove(ind.id);
-        }
-        System.out.println("Room : " + this.name + " individuals : " + individuals);
+         }
     }
 }
