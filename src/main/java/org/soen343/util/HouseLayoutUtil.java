@@ -69,7 +69,6 @@ public class HouseLayoutUtil {
                         } else {
                             topObject = new Door(doorId++);
                         }
-                        System.out.println("down" + topObject);
                     } else {
                         throw new NullPointerException(top + " is not in the valid option [window, door]");
                     }
@@ -119,7 +118,6 @@ public class HouseLayoutUtil {
                         leftObject = new Window(windowId++);
                     } else if (left.toString().equalsIgnoreCase("door")) {
                         // check if left room is initialized and take that door object if it is, else create a new one
-                        System.out.println(row);
                         if (column > 0 && house[row][column - 1] != null) {
                             leftObject = house[row][column - 1].getRight();
                         } else {

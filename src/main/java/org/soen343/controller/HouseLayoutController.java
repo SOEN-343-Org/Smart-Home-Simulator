@@ -16,6 +16,7 @@ public class HouseLayoutController {
     private double roomSize;
     private double width;
     private double height;
+    private boolean nullHouse = false;
 
     @FXML
     private Canvas canvas;
@@ -71,13 +72,12 @@ public class HouseLayoutController {
      */
     public void setHouseLayout(House house) {
         if (house == null) {
-            drawNullLayout();
+            nullHouse = true;
             return;
         }
         layout = house.getLayout();
         roomSize = (int) Math.round((canvas.getHeight() - (2 * safeZoneH)) / layout.length);
         safeZoneW = (int) Math.round((canvas.getWidth() - (roomSize * layout[0].length)) / 2);
-        drawLayout();
     }
 
     /**
@@ -107,7 +107,11 @@ public class HouseLayoutController {
     /**
      * Draw the house layout in the canvas
      */
-    private void drawLayout() {
+    public void drawLayout() {
+        if (nullHouse) {
+            drawNullLayout();
+            return;
+        }
 
         gc.drawImage(grass, 0, 0, width, height);
         gc.setLineWidth(8.0);
