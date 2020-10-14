@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class HouseLayoutUtil {
 
     public static ArrayList<Room> roomList = new ArrayList<Room>();
+    public static ObservableList roomNames = FXCollections.observableArrayList();
 
     /**
      * Read the house layout and creates an House object
@@ -53,6 +54,7 @@ public class HouseLayoutUtil {
                 JSONObject roomJson = rooms.getJSONObject(i);
 
                 String name = roomJson.getString("name");
+                roomNames.add(name);
 
                 int numberOfLights = roomJson.getInt("lights");
                 Light[] lights = new Light[numberOfLights];
@@ -147,41 +149,5 @@ public class HouseLayoutUtil {
             e.printStackTrace();
         }
         return null;
-    }
-
-    /**
-     * Gets room names.
-     *
-     * @return ObservableList of room names.
-     */
-    public static ObservableList getRoomNames() {
-        String fileUrl = "/org/soen343/houseLayout/house-layout.json";
-        InputStream inputStream = HouseLayoutUtil.class.getResourceAsStream(fileUrl);
-        if (inputStream == null) {
-            throw new NullPointerException("Cannot find the house-layout file at " + fileUrl);
-        }
-
-        ObservableList roomNames = FXCollections.observableArrayList();
-
-        try {
-            JSONTokener token = new JSONTokener(inputStream);
-            JSONObject object = new JSONObject(token);
-
-            // Retrieve the list of rooms from the file
-            JSONArray rooms = object.getJSONArray("rooms");
-
-            for (int i = 0; i < rooms.length(); i++) {
-                JSONObject roomJson = rooms.getJSONObject(i);
-
-                String name = roomJson.getString("name");
-                roomNames.add(name);
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error reading the house layout file.");
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-        return roomNames;
     }
 }

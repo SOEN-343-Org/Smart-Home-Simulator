@@ -53,7 +53,7 @@ public class IndividualController {
     private ComboBox individualRoleChoices = new ComboBox(roles);
 
     // locations to select from
-    private ObservableList locations = HouseLayoutUtil.getRoomNames();
+    private ObservableList locations = HouseLayoutUtil.roomNames;
     private ComboBox individualLocationChoices = new ComboBox(locations);
 
     // locations information from House layout specs
@@ -79,10 +79,7 @@ public class IndividualController {
         col_role.setCellValueFactory(new PropertyValueFactory<Individual, String>("roleChoices"));
         col_location.setCellValueFactory(new PropertyValueFactory<Individual, String>("locationChoices"));
 
-        ObservableList s = getExistingIndividuals();
-        System.out.println("existing individual objs ::: " + s);
-        individualsTable.setItems(s);
-        System.out.println("table :: " + individualsTable);
+        individualsTable.setItems(getExistingIndividuals());
 
         // When a row is clicked once, a function that records its individual ID is triggered.
         individualsTable.setOnMouseClicked((MouseEvent event) -> {
@@ -101,9 +98,9 @@ public class IndividualController {
         roleChoices.setItems(roles);
         roleChoices.setValue("Family Adult");
 
-        // Load options for Locations Choicebox with Outside as default
+        // Load options for Locations Choicebox with kitchen as default
         locationChoices.setItems(locations);
-        locationChoices.setValue("Outside");
+        locationChoices.setValue("kitchen");
     }
 
     /**
@@ -118,9 +115,7 @@ public class IndividualController {
         try {
             dbCon = DBConnection.getConnection();
 
-            // existing individuals set
-//            ResultSet rs = dbCon.createStatement().executeQuery("select * from individuals where username='" + username + "'");
-            ResultSet rs = Individual.getindsDB(username, dbCon);
+            ResultSet rs = Individual.getIndividualsDB(username, dbCon);
 
             while (rs.next()){
                 Individual p = new Individual(rs.getInt("id"),
@@ -137,7 +132,6 @@ public class IndividualController {
         } catch (SQLException e) {
             Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
         }
-
         return individualsList;
     }
 
@@ -152,7 +146,6 @@ public class IndividualController {
         Individual individualSelected = individualsTable.getSelectionModel().getSelectedItem();
         String newName = editedCell.getNewValue().toString();
         individualSelected.setName(newName);
-
         Individual.updateNameDB(dbCon, dbTableName, newName, idSelected);
     }
 
@@ -167,11 +160,9 @@ public class IndividualController {
     public static void onEditLocation(Object location, Integer id, Individual ind) {
         String newLocation = String.valueOf(location);
         idSelected = id;
-
         Individual.updateLocationDB(dbCon, dbTableName, newLocation, idSelected);
         ind.location = newLocation;
         ind.notifyObserver();
-
     }
 
     /**
@@ -183,7 +174,6 @@ public class IndividualController {
     public static void onEditRole(Object role, Integer id, Individual ind) {
         String newRole = String.valueOf(role);
         idSelected = id;
-
         Individual.updateRoleDB(dbCon, dbTableName, newRole, idSelected);
         ind.role = newRole;
         ind.notifyObserver();
@@ -219,7 +209,6 @@ public class IndividualController {
      */
     @FXML
     private void onAddIndividual() {
-
         if (!addedName.getText().trim().isEmpty()){
            Individual.addIndividualDB(dbCon, dbTableName, addedName, roleChoices, locationChoices, username);
         }
@@ -253,7 +242,6 @@ public class IndividualController {
      */
     @FXML
     private void onRemoveIndividual() {
-
         if (isInteger(idToRemove.getText())) {
           Individual.removeIndividualDB(dbCon, dbTableName, idToRemove);
             removeFromReporterList();

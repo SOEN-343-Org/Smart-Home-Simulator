@@ -1,12 +1,9 @@
 package org.soen343.models;
 
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
-import org.soen343.connection.DBConnection;
 import org.soen343.controller.IndividualController;
 
 import java.sql.Connection;
@@ -73,10 +70,15 @@ public class Individual implements Reporter {
         });
     }
 
-    public static ResultSet getindsDB(String username, Connection dbCon) {
+    /**
+     * This method gets the elements from the individuals table in the database
+     * @param username String username associated to the individual
+     * @param dbCon Connection instance to the database
+     * @return ResultTest of individuals
+     */
+    public static ResultSet getIndividualsDB(String username, Connection dbCon) {
         ResultSet rs = null;
         try {
-//            dbCon = DBConnection.getConnection();
              rs = dbCon.createStatement().executeQuery("select * from individuals where username='" + username + "'");
         } catch (SQLException e) {
             Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
@@ -84,13 +86,14 @@ public class Individual implements Reporter {
         return rs;
     }
 
+
     /**
-     * This method allows a user to double click a cell to edit
-     * and update the Name column in the table and database.
-     *
-
+     * This method updates the individual's name in the database
+     * @param dbCon Connection instance to the database
+     * @param dbTableName String name of table affected in the database
+     * @param newName String desired name for the individual
+     * @param idSelected Integer ID of the individual
      */
-
     public static void updateNameDB(Connection dbCon, String dbTableName, String newName, Integer idSelected) {
         try {
             dbCon.createStatement().executeUpdate(
@@ -102,8 +105,14 @@ public class Individual implements Reporter {
         }
     }
 
+    /**
+     * This method updates the individual's location in the database
+     * @param dbCon Connection instance to the database
+     * @param dbTableName String name of table affected in the database
+     * @param newLocation String desired location for the individual
+     * @param idSelected Integer ID of the individual
+     */
     public static void updateLocationDB(Connection dbCon, String dbTableName, String newLocation, Integer idSelected) {
-
         try {
             dbCon.createStatement().executeUpdate("UPDATE "+ dbTableName +
                     " SET location = '"+ newLocation +
@@ -113,6 +122,13 @@ public class Individual implements Reporter {
         }
     }
 
+    /**
+     * This method updates the role of the individual in the database
+     * @param dbCon Connection instance to the database
+     * @param dbTableName String name of table affected in the database
+     * @param newRole String desired role for the individual
+     * @param idSelected Integer ID of the individual
+     */
     public static void updateRoleDB(Connection dbCon, String dbTableName, String newRole, Integer idSelected) {
         try {
             dbCon.createStatement().executeUpdate(
@@ -122,9 +138,14 @@ public class Individual implements Reporter {
         } catch (SQLException e) {
             Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
         }
-
     }
 
+    /**
+     * This method removes an individual fro mthe database
+     * @param dbCon Connection instance to the database
+     * @param dbTableName String name of table affected in the database
+     * @param idToRemove TextField ID of the individual
+     */
     public static void removeIndividualDB(Connection dbCon, String dbTableName, TextField idToRemove) {
             try {
                 dbCon.createStatement().executeUpdate("DELETE from "+ dbTableName +
@@ -134,9 +155,17 @@ public class Individual implements Reporter {
             }
     }
 
+    /**
+     * This method adds an individual to the database
+     * @param dbCon Connection instance to the database
+     * @param dbTableName String name of table affected in the database
+     * @param addedName String desired name for the individual
+     * @param roleChoices ChoiceBox options for roles
+     * @param locationChoices ChoiceBox options for locations
+     * @param username String username associated to the individual
+     */
     public static void addIndividualDB(Connection dbCon, String dbTableName, TextField addedName,
                                        ChoiceBox roleChoices, ChoiceBox locationChoices, String username) {
-
             try {
                 dbCon.createStatement().executeUpdate("INSERT into "+ dbTableName +
                         " (name,role,location,username) VALUES ('"+ addedName.getText() + "','" +
