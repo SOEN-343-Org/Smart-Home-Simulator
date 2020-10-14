@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.soen343.models.*;
@@ -55,11 +56,22 @@ public class IndividualController {
     private ObservableList locations = HouseLayoutUtil.getRoomNames();
     private ComboBox individualLocationChoices = new ComboBox(locations);
 
+    private House h;
+    private ArrayList<Room> locationsList;
+
+    ObservableList<Individual> individualsList;
+
     /**
      * Initialize.
      */
     @FXML
     public void initialize()  {
+
+        // to remove
+        h = HouseLayoutUtil.ReadHouseLayoutFile();
+        // list of room objects
+        locationsList = HouseLayoutUtil.roomList;
+        System.out.println("all rooms :: " + locationsList);
 
         // set up the columns with titles in the individuals table
         col_id.setCellValueFactory(new PropertyValueFactory<Individual, Integer>("id"));
@@ -99,7 +111,7 @@ public class IndividualController {
      */
     private ObservableList<Individual> getExistingIndividuals() {
         // the list of individuals that will go in the table
-        ObservableList<Individual> individualsList = FXCollections.observableArrayList();
+        individualsList = FXCollections.observableArrayList();
 
         try {
             dbCon = DBConnection.getConnection();
@@ -115,6 +127,7 @@ public class IndividualController {
                         username);
                 p.setRoleChoices(roles);
                 p.setLocationChoices(locations);
+                p.setLocationObserversList(locationsList);
                 individualsList.add(p);
             }
 
@@ -155,7 +168,7 @@ public class IndividualController {
      * @param id       Integer id of the individual
      */
     @FXML
-    public static void onEditLocation(Object location, Integer id) {
+    public static void onEditLocation(Object location, Integer id, Individual ind) {
         String newLocation = String.valueOf(location);
         idSelected = id;
 
@@ -166,6 +179,7 @@ public class IndividualController {
         } catch (SQLException e) {
             Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
         }
+        ind.notifyObserver();
 
     }
 
@@ -269,7 +283,17 @@ public class IndividualController {
             } catch (SQLException e) {
                 Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
             }
+            removeFromReporterList();
             individualsTable.setItems(getExistingIndividuals());
         }
+    }
+
+    private void removeFromReporterList() {
+        individualsList.forEach((ind) -> {
+            if (ind.getId() == Integer.parseInt(idToRemove.getText())) {
+                ind.location="";
+                ind.notifyObserver();
+            }
+        });
     }
 }

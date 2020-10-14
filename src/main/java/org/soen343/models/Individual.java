@@ -14,9 +14,9 @@ public class Individual implements Reporter {
 
 //    private final int id;
     public final int id;
-    private String name, role, location, username;
+    public String name, role, location, username;
     private ComboBox roleChoices, locationChoices;
-    private ArrayList<Observer> observers;
+    private ArrayList<Observer> locationObserversList = new ArrayList<Observer>();
 
     /**
      * Creates an Individual
@@ -33,7 +33,6 @@ public class Individual implements Reporter {
         this.role= role;
         this.location = location;
         this.username = username;
-        observers = new ArrayList<Observer>();
     }
 
     /**
@@ -60,15 +59,22 @@ public class Individual implements Reporter {
         this.locationChoices = new ComboBox(locations);
         this.locationChoices.setValue(getLocation());
         this.locationChoices.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
-            IndividualController.onEditLocation(newValue, getId());
-            notifyObserver();
+            IndividualController.onEditLocation(newValue, getId(), this);
+
 
             // after updating the rooms, print the list of individuals in each observer room - for testing
-            for (Observer observer : observers) {
+            for (Observer observer : locationObserversList) {
                 System.out.println("Room individuals : " + observer);
             }
 
         });
+    }
+
+    public void setLocationObserversList(ArrayList<Room> locationsList) {
+        // loop thru locationsList to register each room observer obj as a subscriber to this particular individual
+        for (Room r : locationsList) {
+            registerObserver(r);
+        }
     }
 
     /**
@@ -91,7 +97,7 @@ public class Individual implements Reporter {
 
     @Override
     public String toString() {
-        return "Individual " + getName() + ", role = ";
+        return "Individual " + getName() + ", role = " + getRole();
     }
 
     /**
@@ -198,30 +204,27 @@ public class Individual implements Reporter {
     @Override
     public void registerObserver(Observer newRoomObserver) {
         // added to individual's unique list of room observers
-        observers.add(newRoomObserver);
+        locationObserversList.add(newRoomObserver);
 
         // add this individual to the observer's unique list of individuals
-//        newRoomObserver.addIndividual(this);
         newRoomObserver.update(this);
     }
 
 
     @Override
     public void unregister(Observer deleteObserver) {
-        int observerIndex = observers.indexOf(deleteObserver);
+        int observerIndex = locationObserversList.indexOf(deleteObserver);
 
         System.out.println("Observer :  " + (observerIndex+1) + " deleted successfully !!");
 
-        observers.remove(observerIndex);
+        locationObserversList.remove(observerIndex);
     }
 
     @Override
     public void notifyObserver() {
 
-        for (Observer observer : observers) {
+        for (Observer observer : locationObserversList) {
             observer.update(this); // want to either pass individual obj or String role
         }
-        System.out.println("Observer was notified !!");
-
     }
 }
