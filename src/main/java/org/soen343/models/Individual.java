@@ -12,7 +12,6 @@ import java.util.ArrayList;
  */
 public class Individual implements Reporter {
 
-//    private final int id;
     public final int id;
     public String name, role, location, username;
     private ComboBox roleChoices, locationChoices;
@@ -45,7 +44,7 @@ public class Individual implements Reporter {
         this.roleChoices = new ComboBox(roles);
         this.roleChoices.setValue(getRole());
         this.roleChoices.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
-            IndividualController.onEditRole(newValue, getId());
+            IndividualController.onEditRole(newValue, getId(), this);
         });
     }
 
@@ -60,18 +59,15 @@ public class Individual implements Reporter {
         this.locationChoices.setValue(getLocation());
         this.locationChoices.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
             IndividualController.onEditLocation(newValue, getId(), this);
-
-
-            // after updating the rooms, print the list of individuals in each observer room - for testing
-            for (Observer observer : locationObserversList) {
-                System.out.println("Room individuals : " + observer);
-            }
-
         });
     }
 
+    /**
+     * This method sets the registers all the location
+     * observers to observe this individual.
+     * @param locationsList
+     */
     public void setLocationObserversList(ArrayList<Room> locationsList) {
-        // loop thru locationsList to register each room observer obj as a subscriber to this particular individual
         for (Room r : locationsList) {
             registerObserver(r);
         }
@@ -200,31 +196,44 @@ public class Individual implements Reporter {
     }
 
 
-
+    /**
+     * This method registers a specific observer
+     * to this individual.
+     * It first adds the observer to the individual's unique list of location observers
+     * then the observer updates their unique list of individuals
+     * @param newRoomObserver
+     */
     @Override
     public void registerObserver(Observer newRoomObserver) {
-        // added to individual's unique list of room observers
+
         locationObserversList.add(newRoomObserver);
 
-        // add this individual to the observer's unique list of individuals
         newRoomObserver.update(this);
     }
 
-
+    /**
+     * This method unregisters an observer from the
+     * individual's list of observers.
+     * @param deleteObserver
+     */
     @Override
     public void unregister(Observer deleteObserver) {
-        int observerIndex = locationObserversList.indexOf(deleteObserver);
 
-        System.out.println("Observer :  " + (observerIndex+1) + " deleted successfully !!");
+        int observerIndex = locationObserversList.indexOf(deleteObserver);
 
         locationObserversList.remove(observerIndex);
     }
 
+    /**
+     * This method updates the all the observer's state
+     * based on changes in the individual's state.
+     */
     @Override
     public void notifyObserver() {
-
+System.out.println("individual that changed :: " + this);
+        System.out.println("UPDATEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD ==============");
         for (Observer observer : locationObserversList) {
-            observer.update(this); // want to either pass individual obj or String role
+            observer.update(this);
         }
     }
 }

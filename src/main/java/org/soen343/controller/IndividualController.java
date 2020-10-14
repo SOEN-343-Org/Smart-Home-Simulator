@@ -179,6 +179,7 @@ public class IndividualController {
         } catch (SQLException e) {
             Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
         }
+        ind.location = newLocation;
         ind.notifyObserver();
 
     }
@@ -189,7 +190,7 @@ public class IndividualController {
      * @param role Object role
      * @param id   Integer id
      */
-    public static void onEditRole(Object role, Integer id) {
+    public static void onEditRole(Object role, Integer id, Individual ind) {
         String newRole = String.valueOf(role);
         idSelected = id;
 
@@ -201,6 +202,8 @@ public class IndividualController {
         } catch (SQLException e) {
             Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
         }
+        ind.role = newRole;
+        ind.notifyObserver();
     }
 
     /**
@@ -288,6 +291,13 @@ public class IndividualController {
         }
     }
 
+    /**
+     * I will use reporter interchangeably with individual.
+     * This method removes a reporter from
+     * the list of existing reporters, updates its location
+     * to empty since it does not exist anywhere
+     * and notifies all observers that this individual is gone.
+     */
     private void removeFromReporterList() {
         individualsList.forEach((ind) -> {
             if (ind.getId() == Integer.parseInt(idToRemove.getText())) {

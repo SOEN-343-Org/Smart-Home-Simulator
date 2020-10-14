@@ -7,18 +7,9 @@ public class Room implements Observer{
     private final HashMap<Integer, Window> windows;
     private final HashMap<Integer, Door> doors;
     private final HashMap<Integer, Light> lights;
-//    private final HashMap<Integer, Individual> individuals;
     private final int id;
     public HashMap<Integer, Individual> individuals;
     private final String name;
-    // shared amongst all class instances to act as a counter
-    private static int observerIDTracker= 0;
-
-    // For each individual Observer object created
-    private int observerID;
-
-    // ref for Reporter
-    private Reporter individual;
 
     private final Object top;
     private final Object right;
@@ -271,29 +262,25 @@ public class Room implements Observer{
      */
     @Override
     public void update(Object o) {
+
         Individual ind = (Individual) o;
          boolean correctLocation = ind.location.equals(this.name);
-         boolean individualIsSubscribed;
-         if (individuals.get(ind.id) == null) {
-             individualIsSubscribed = false;
-         } else {
-             individualIsSubscribed = true;
-         }
-        // is the object.location equal to this.name of room ?
-            // if so then is the object.id present in the individuals hashmap ?
-                // if so then do nothing
-            // else
-                // add this object individual to your individuals list
-        // else if object.location does not equal that of this room
-            // if so then is the object.id present in the individuals hashmap ?
-                //if so then remove individual from the individuals hashmap
+         System.out.println("individual location is :: " + ind.location + ", observer location :: " + this.name + " are same :: " + correctLocation);
+         boolean individualIsSubscribed = individuals.get(ind.id) == null ? false : true;
 
-        if (correctLocation && !individualIsSubscribed) {
+
+         if (correctLocation && individualIsSubscribed) {
+             boolean correctRole = individuals.get(ind.id).role.equals(ind.role) ? true : false;
+
+             if (!correctRole) {
+                 individuals.replace(ind.id, ind);
+             }
+         }
+        else if (correctLocation && !individualIsSubscribed) {
             individuals.put(ind.id, ind);
         } else if (!correctLocation && individualIsSubscribed) {
             individuals.remove(ind.id);
         }
-
         System.out.println("Room : " + this.name + " individuals : " + individuals);
     }
 }
