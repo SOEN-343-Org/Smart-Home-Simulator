@@ -164,7 +164,7 @@ public class IndividualController extends Controller {
      */
     @FXML
     private void cancelPushed() throws IOException {
-        mainController.setIndividualViewVisibility(false);
+        mainController.exitIndividualView();
     }
 
     /**

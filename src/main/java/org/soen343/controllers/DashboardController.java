@@ -15,7 +15,8 @@ public class DashboardController extends Controller {
     private LoginController loginController;
     @FXML
     private IndividualController individualController;
-
+    @FXML
+    private SimulationInfoController simulationInfoController;
     @FXML
     private AnchorPane login;
 
@@ -27,26 +28,31 @@ public class DashboardController extends Controller {
         // Sets the model for controller superclass
         this.setModel(new Model());
 
+        simulationInfoController.setMainController(this);
         individualController.setMainController(this);
         individualController.init();
+        individual.setVisible(false); // We dont want to show the profile selection menu at the start
 
-
-        //loginController.setMain(this);
         houseLayoutController.init();
 
         drawLayout();
     }
 
-    public void setIndividualViewVisibility(boolean vis) {
+    public void exitIndividualView() {
         drawLayout();
-        individual.setVisible(vis);
+        individual.setVisible(false);
     }
+
+    public void enterIndividualView() {
+        individual.setVisible(true);
+    }
+
 
     public void drawLayout() {
         houseLayoutController.drawLayout();
     }
 
-    public void login() {
+    public void exitLoginView() {
         drawLayout();
         login.setVisible(false);
     }
