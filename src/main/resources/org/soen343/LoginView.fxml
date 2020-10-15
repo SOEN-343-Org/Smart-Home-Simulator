@@ -5,7 +5,7 @@
 <AnchorPane fx:id="login" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="900.0" prefWidth="1200.0" style="-fx-background-color: white;"
             xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.soen343.LoginController">
+            fx:controller="org.soen343.controllers.LoginController">
     <children>
         <Button fx:id="button" layoutX="574.0" layoutY="438.0" mnemonicParsing="false" onAction="#changeScene"
                 text="Button"/>

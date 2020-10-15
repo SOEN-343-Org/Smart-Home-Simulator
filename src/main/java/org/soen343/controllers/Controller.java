@@ -4,9 +4,9 @@ import org.soen343.models.Model;
 
 public abstract class Controller {
 
-    public Model model;
+    public static Model model;
 
     public void setModel(Model model) {
-        this.model = model;
+        Controller.model = model;
     }
 }

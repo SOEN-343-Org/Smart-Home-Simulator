@@ -54,8 +54,9 @@
                 </Label>
             </children>
         </GridPane>
-        <fx:include fx:id="login" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                    prefHeight="900.0" prefWidth="1200.0" source="LoginView.fxml"/>
+
+        <fx:include fx:id="individual" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                    prefHeight="900.0" prefWidth="1200.0" source="IndividualView.fxml"/>
     </children>
 
 </AnchorPane>

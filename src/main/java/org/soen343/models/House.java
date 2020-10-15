@@ -13,6 +13,8 @@ public class House {
 
     public ArrayList<String> roomsName = new ArrayList<>();
 
+    public HashMap<Integer, Individual> individuals = new HashMap<>();
+
     /**
      * Constructor for a House, should only be called once
      *

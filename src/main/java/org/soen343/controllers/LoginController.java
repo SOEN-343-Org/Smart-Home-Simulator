@@ -1,4 +1,4 @@
-package org.soen343;
+package org.soen343.controllers;
 
 import javafx.event.ActionEvent;
 import org.soen343.controllers.Controller;
