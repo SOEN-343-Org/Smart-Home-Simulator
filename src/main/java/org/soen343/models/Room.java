@@ -1,14 +1,14 @@
 package org.soen343.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Room implements Observer{
+public class Room {
 
     private final HashMap<Integer, Window> windows;
     private final HashMap<Integer, Door> doors;
     private final HashMap<Integer, Light> lights;
     private final int id;
-    public HashMap<Integer, Individual> individuals;
     private final String name;
 
     private final Object top;
@@ -32,7 +32,6 @@ public class Room implements Observer{
         this.lights = new HashMap<>();
         this.windows = new HashMap<>();
         this.doors = new HashMap<>();
-        this.individuals = new HashMap<>();
         this.top = top;
         this.right = right;
         this.down = down;
@@ -66,36 +65,6 @@ public class Room implements Observer{
     }
 
     /**
-     * Add an individual in a room
-     *
-     * @param ind Individual to add in a room
-     * @return True if the individual is added
-     */
-    public boolean addIndividual(Individual ind) {
-        try {
-            individuals.put(ind.getId(), ind);
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Remove an individual from a room
-     *
-     * @param id id of the individual to remove
-     * @return True if the individual is removed
-     */
-    public boolean removeIndividual(int id) {
-        try {
-            individuals.remove(id);
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Gets a window by id
      *
      * @param id window's id
@@ -126,27 +95,12 @@ public class Room implements Observer{
     }
 
     /**
-     * Gets an individual by id
-     *
-     * @param id individual's id
-     * @return Individual object
-     */
-    public Individual getIndividual(int id) {
-        return individuals.get(id);
-    }
-
-    /**
      * Gets all windows in the room
      *
      * @return List of Window objects
      */
-    public Window[] getWindows() {
-        Window[] windowsArray = new Window[lights.size()];
-        Object[] objectsArray = windows.values().toArray();
-        for (int i = 0; i < windowsArray.length; i++) {
-            windowsArray[i] = (Window) objectsArray[i];
-        }
-        return windowsArray;
+    public ArrayList<Window> getWindows() {
+        return new ArrayList<>(windows.values());
     }
 
     /**
@@ -154,13 +108,8 @@ public class Room implements Observer{
      *
      * @return List of Door objects
      */
-    public Door[] getDoors() {
-        Door[] doorsArray = new Door[doors.size()];
-        Object[] objectsArray = doors.values().toArray();
-        for (int i = 0; i < doorsArray.length; i++) {
-            doorsArray[i] = (Door) objectsArray[i];
-        }
-        return doorsArray;
+    public ArrayList<Door> getDoors() {
+        return new ArrayList<>(doors.values());
     }
 
     /**
@@ -168,29 +117,9 @@ public class Room implements Observer{
      *
      * @return List of Light objects
      */
-    public Light[] getLights() {
-        Light[] lightsArray = new Light[lights.size()];
-        Object[] objectsArray = lights.values().toArray();
-        for (int i = 0; i < lightsArray.length; i++) {
-            lightsArray[i] = (Light) objectsArray[i];
-        }
-        return lightsArray;
+    public ArrayList<Light> getLights() {
+        return new ArrayList<>(lights.values());
     }
-
-    /**
-     * Get all the individuals in the room
-     *
-     * @return List of Individual objects
-     */
-    public Individual[] getIndividuals() {
-        Individual[] individualsArray = new Individual[individuals.size()];
-        Object[] objectsArray = individuals.values().toArray();
-        for (int i = 0; i < individualsArray.length; i++) {
-            individualsArray[i] = (Individual) objectsArray[i];
-        }
-        return individualsArray;
-    }
-
 
     /**
      * Gets the name of the room
@@ -253,29 +182,4 @@ public class Room implements Observer{
         return left;
     }
 
-
-    /**
-     * This method adds or removes individuals
-     * from its list of individuals.
-     * @param o Object is an Individual that the location
-     *          is observing.
-     */
-    @Override
-    public void update(Object o) {
-        Individual ind = (Individual) o;
-         boolean correctLocation = ind.location.equals(this.name);
-         boolean individualIsSubscribed = individuals.get(ind.id) == null ? false : true;
-
-         if (correctLocation && individualIsSubscribed) {
-             boolean correctRole = individuals.get(ind.id).role.equals(ind.role) ? true : false;
-
-             if (!correctRole) {
-                 individuals.replace(ind.id, ind);
-             }
-         } else if (correctLocation && !individualIsSubscribed) {
-            individuals.put(ind.id, ind);
-         } else if (!correctLocation && individualIsSubscribed) {
-            individuals.remove(ind.id);
-         }
-    }
 }

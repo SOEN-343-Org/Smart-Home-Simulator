@@ -1,7 +1,5 @@
 package org.soen343.models;
 
-import java.util.Random;
-
 public class Light {
 
     private final int id;
@@ -13,9 +11,8 @@ public class Light {
      * @param id id of the light
      */
     public Light(int id) {
-        Random r = new Random();
         this.id = id;
-        this.open = r.nextBoolean();
+        this.open = false;
     }
 
     /**
@@ -50,7 +47,7 @@ public class Light {
      *
      * @return string name
      */
-    private String getName() {
+    public String getName() {
         return "Light #" + id;
     }
 

@@ -1,5 +1,6 @@
 package org.soen343.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class House {
@@ -9,6 +10,10 @@ public class House {
 
     // Doors and windows have the same reference to the objects inside layout
     private final HashMap<Integer, Room> rooms;
+
+    public ArrayList<String> roomsName = new ArrayList<>();
+
+    public HashMap<Integer, Individual> individuals = new HashMap<>();
 
     /**
      * Constructor for a House, should only be called once
@@ -20,10 +25,13 @@ public class House {
         this.rooms = new HashMap<>();
         for (Room[] value : layout) {
             for (Room room : value) {
-                if (room != null)
+                if (room != null) {
                     rooms.put(room.getId(), room);
+                    roomsName.add(room.getName());
+                }
             }
         }
+        roomsName.add("outside");
     }
 
     /**
@@ -40,8 +48,8 @@ public class House {
      *
      * @return Array of rooms
      */
-    public Room[] getRooms() {
-        return (Room[]) rooms.values().toArray();
+    public ArrayList<Room> getRooms() {
+        return new ArrayList<>(rooms.values());
     }
 
     /**
@@ -52,6 +60,40 @@ public class House {
      */
     public Room getRoomById(int id) {
         return rooms.get(id);
+    }
+
+
+    public Door getDoorById(int id) {
+        ArrayList<Room> rooms = getRooms();
+        for (Room room : rooms) {
+            Door door = room.getDoor(id);
+            if (door != null) {
+                return door;
+            }
+        }
+        return null;
+    }
+
+    public Window getWindowById(int id) {
+        ArrayList<Room> rooms = getRooms();
+        for (Room room : rooms) {
+            Window window = room.getWindow(id);
+            if (window != null) {
+                return window;
+            }
+        }
+        return null;
+    }
+
+    public Light getLightById(int id) {
+        ArrayList<Room> rooms = getRooms();
+        for (Room room : rooms) {
+            Light light = room.getLight(id);
+            if (light != null) {
+                return light;
+            }
+        }
+        return null;
     }
 
     @Override

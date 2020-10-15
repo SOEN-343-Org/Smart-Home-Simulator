@@ -30,7 +30,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("HouseLayoutView"), 1200, 900); //TODO: Change scene for our project flow in the future
+        scene = new Scene(loadFXML("DashboardView"), 1200, 900); //TODO: Change scene for our project flow in the future
         stage.setScene(scene);
         stage.show();
     }

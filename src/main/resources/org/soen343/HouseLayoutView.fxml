@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.layout.VBox?>
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.soen343.controller.HouseLayoutController">
-    <Canvas fx:id="canvas"/>
-</VBox>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<AnchorPane fx:id="houseLayout" maxHeight="510.0" maxWidth="510.0" minHeight="510.0" minWidth="510.0"
+            prefHeight="510.0" prefWidth="510.0"
+            style="-fx-border-color: black; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.soen343.controllers.HouseLayoutController">
+    <BorderPane prefHeight="510.0" prefWidth="510.0">
+        <center>
+            <Canvas fx:id="canvas" height="500.0" width="500.0" BorderPane.alignment="CENTER"/>
+        </center>
+    </BorderPane>
+</AnchorPane>
