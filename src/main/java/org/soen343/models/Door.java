@@ -1,7 +1,5 @@
 package org.soen343.models;
 
-import java.util.Random;
-
 public class Door {
 
     private final int id;
@@ -14,8 +12,7 @@ public class Door {
      */
     public Door(int id) {
         this.id = id;
-        Random r = new Random();
-        this.open = r.nextBoolean();
+        this.open = false;
     }
 
     /**

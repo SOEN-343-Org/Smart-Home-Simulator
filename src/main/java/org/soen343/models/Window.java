@@ -1,7 +1,5 @@
 package org.soen343.models;
 
-import java.util.Random;
-
 public class Window {
 
     private final int id;
@@ -15,9 +13,8 @@ public class Window {
      */
     public Window(int id) {
         this.id = id;
-        Random r = new Random();
-        this.open = r.nextBoolean();
-        this.blocked = r.nextBoolean();
+        this.open = false;
+        this.blocked = false;
     }
 
     /**

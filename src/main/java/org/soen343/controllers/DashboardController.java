@@ -33,6 +33,9 @@ public class DashboardController extends Controller {
         individualController.init();
         individual.setVisible(false); // We dont want to show the profile selection menu at the start
 
+        smartHomeCoreController.setMainController(this);
+        smartHomeCoreController.init();
+
         houseLayoutController.init();
 
         drawLayout();

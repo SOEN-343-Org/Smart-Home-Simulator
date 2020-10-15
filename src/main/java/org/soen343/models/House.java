@@ -62,8 +62,43 @@ public class House {
         return rooms.get(id);
     }
 
+
+    public Door getDoorById(int id) {
+        ArrayList<Room> rooms = getRooms();
+        for (Room room : rooms) {
+            Door door = room.getDoor(id);
+            if (door != null) {
+                return door;
+            }
+        }
+        return null;
+    }
+
+    public Window getWindowById(int id) {
+        ArrayList<Room> rooms = getRooms();
+        for (Room room : rooms) {
+            Window window = room.getWindow(id);
+            if (window != null) {
+                return window;
+            }
+        }
+        return null;
+    }
+
+    public Light getLightById(int id) {
+        ArrayList<Room> rooms = getRooms();
+        for (Room room : rooms) {
+            Light light = room.getLight(id);
+            if (light != null) {
+                return light;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "House of dimension (" + layout.length + " by " + layout[0].length + ")\nRooms=\n" + rooms;
     }
+
 }
