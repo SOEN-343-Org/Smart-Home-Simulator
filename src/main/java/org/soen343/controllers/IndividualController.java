@@ -1,4 +1,4 @@
-package org.soen343.controller;
+package org.soen343.controllers;
 
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -8,15 +8,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.soen343.App;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.soen343.models.*;
@@ -25,7 +22,7 @@ import org.soen343.util.HouseLayoutUtil;
 /**
  * The type Individual controller.
  */
-public class IndividualController {
+public class IndividualController extends Controller{
 
     @FXML private TableView <Individual> individualsTable;
     @FXML private TableColumn <Individual, String> col_name;

@@ -16,7 +16,7 @@ public class DBConnection {
      * @return Connection connection
      * @throws SQLException the sql exception
      */
-    public  static Connection getConnection()  throws SQLException {
+    public static Connection getConnection()  throws SQLException {
 
         String hostName = "sql9.freemysqlhosting.net";
         String port = "3306";

@@ -11,6 +11,8 @@ public class House {
     // Doors and windows have the same reference to the objects inside layout
     private final HashMap<Integer, Room> rooms;
 
+    public ArrayList<String> roomsName = new ArrayList<>();
+
     /**
      * Constructor for a House, should only be called once
      *
@@ -21,8 +23,10 @@ public class House {
         this.rooms = new HashMap<>();
         for (Room[] value : layout) {
             for (Room room : value) {
-                if (room != null)
+                if (room != null) {
                     rooms.put(room.getId(), room);
+                    roomsName.add(room.getName());
+                }
             }
         }
     }

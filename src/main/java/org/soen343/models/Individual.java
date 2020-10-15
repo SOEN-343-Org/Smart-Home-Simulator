@@ -4,7 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import org.soen343.controller.IndividualController;
+import org.soen343.controllers.IndividualController;
 
 import java.sql.*;
 import java.util.ArrayList;

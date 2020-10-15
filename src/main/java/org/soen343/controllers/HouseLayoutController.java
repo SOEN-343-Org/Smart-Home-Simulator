@@ -8,17 +8,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.soen343.models.*;
-import org.soen343.util.HouseLayoutUtil;
 
 import java.util.ArrayList;
 
-public class HouseLayoutController {
+public class HouseLayoutController extends Controller {
 
     private final double safeZoneH = 35;
-    private double safeZoneW;
-    private double roomSize;
     private final double width = 500;
     private final double height = 500;
+    private double safeZoneW;
+    private double roomSize;
     private boolean nullHouse = false;
 
     @FXML
@@ -35,6 +34,11 @@ public class HouseLayoutController {
     private Image openedLight;
     private Image closedLight;
 
+    @Override
+    public void setModel(Model model) {
+        super.setModel(model);
+        setHouseLayout(model.house);
+    }
 
     /**
      * Initialize the data in the scene, is called when fxml is loaded and displayed
@@ -54,8 +58,6 @@ public class HouseLayoutController {
         closedLight = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/closed_light.png")));
 
         gc = canvas.getGraphicsContext2D();
-        setHouseLayout(HouseLayoutUtil.ReadHouseLayoutFile());
-        drawLayout();
     }
 
 
@@ -64,7 +66,7 @@ public class HouseLayoutController {
      *
      * @param house House object
      */
-    public void setHouseLayout(House house) {
+    private void setHouseLayout(House house) {
         if (house == null) {
             nullHouse = true;
             return;
