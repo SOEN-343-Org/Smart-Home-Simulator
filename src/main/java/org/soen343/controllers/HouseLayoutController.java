@@ -33,12 +33,8 @@ public class HouseLayoutController extends Controller {
     private Image blocker;
     private Image openedLight;
     private Image closedLight;
+    private Image individual;
 
-    @Override
-    public void setModel(Model model) {
-        super.setModel(model);
-        setHouseLayout(model.house);
-    }
 
     /**
      * Initialize the data in the scene, is called when fxml is loaded and displayed
@@ -56,22 +52,21 @@ public class HouseLayoutController extends Controller {
         blocker = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/blocker.png")));
         openedLight = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/opened_light.png")));
         closedLight = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/closed_light.png")));
+        individual = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/individual.png")));
 
         gc = canvas.getGraphicsContext2D();
     }
 
 
     /**
-     * Setter to set the house layout
-     *
-     * @param house House object
+     * Init method of the controller to set the house layout and determine the room size
      */
-    private void setHouseLayout(House house) {
-        if (house == null) {
+    public void init() {
+        if (Model.house.getLayout() == null) {
             nullHouse = true;
             return;
         }
-        layout = house.getLayout();
+        layout = Model.house.getLayout();
         roomSize = (int) Math.round((canvas.getHeight() - (2 * safeZoneH)) / layout.length);
         safeZoneW = (int) Math.round((canvas.getWidth() - (roomSize * layout[0].length)) / 2);
     }
@@ -109,6 +104,8 @@ public class HouseLayoutController extends Controller {
             return;
         }
 
+        ArrayList<Individual> individuals = new ArrayList<>(Model.house.individuals.values());
+
         gc.drawImage(grass, 0, 0, width, height);
 
         for (int i = 0; i < layout.length; i++) {
@@ -116,7 +113,7 @@ public class HouseLayoutController extends Controller {
                 if (layout[i][j] != null) {
                     gc.drawImage(floor, safeZoneW + roomSize * j, safeZoneH + roomSize * i, roomSize, roomSize);
                     gc.setStroke(Color.BLACK);
-                    gc.setLineWidth(10.0);
+                    gc.setLineWidth(5.0);
                     gc.strokeRect(safeZoneW + roomSize * j, safeZoneH + roomSize * i, roomSize, roomSize);
                 }
             }
@@ -211,8 +208,17 @@ public class HouseLayoutController extends Controller {
                         }
                     }
 
-                    // User - under text
-                    //TODO: Draw users in the house layout
+                    // User - under text there is visual maximum of individual inside of the same room, or else they wont be drawn
+                    int currentIndividualPosition = 0;
+                    for (Individual ind : individuals) {
+                        if (ind.getLocation().equals(room.getName()) && currentIndividualPosition < 4) {
+                            // Draw individual
+                            gc.drawImage(individual, (safeZoneW + roomSize * j) + (currentIndividualPosition * iconSize) + 5, (safeZoneH + roomSize * i) + (roomSize / 2.0), iconSize, iconSize);
+                            gc.setFill(Color.ALICEBLUE);
+                            gc.fillText(Integer.toString(ind.getId()), (safeZoneW + roomSize * j) + (iconSize / 2.0) - 5 + (currentIndividualPosition * iconSize), (safeZoneH + roomSize * i) + (roomSize / 2) + iconSize);
+                            currentIndividualPosition++;
+                        }
+                    }
                 }
             }
         }

@@ -31,6 +31,7 @@ public class House {
                 }
             }
         }
+        roomsName.add("outside");
     }
 
     /**
@@ -65,5 +66,4 @@ public class House {
     public String toString() {
         return "House of dimension (" + layout.length + " by " + layout[0].length + ")\nRooms=\n" + rooms;
     }
-
 }

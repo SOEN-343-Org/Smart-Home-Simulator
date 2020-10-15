@@ -24,30 +24,30 @@ public class DashboardController extends Controller {
 
     @FXML
     public void initialize() {
-        // Sets the model for all controllers
+        // Sets the model for controller superclass
         this.setModel(new Model());
-        //loginController.setModel(model);
-        houseLayoutController.setModel(model);
-        smartHomeCoreController.setModel(model);
 
-
-        individualController.setModel(model);
         individualController.setMainController(this);
         individualController.init();
 
 
         //loginController.setMain(this);
+        houseLayoutController.init();
 
-        houseLayoutController.drawLayout();
-
-
+        drawLayout();
     }
 
-    public void setIndividualViewVisibility(boolean vis){
+    public void setIndividualViewVisibility(boolean vis) {
+        drawLayout();
         individual.setVisible(vis);
     }
 
+    public void drawLayout() {
+        houseLayoutController.drawLayout();
+    }
+
     public void login() {
+        drawLayout();
         login.setVisible(false);
     }
 }
