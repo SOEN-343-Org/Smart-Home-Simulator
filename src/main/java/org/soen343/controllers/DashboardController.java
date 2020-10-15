@@ -11,7 +11,7 @@ public class DashboardController extends Controller {
     @FXML
     private HouseLayoutController houseLayoutController;
     @FXML
-    private SHCController shcController;
+    private SmartHomeCoreController smartHomeCoreController;
     @FXML
     private LoginController loginController;
 
@@ -22,7 +22,8 @@ public class DashboardController extends Controller {
     public void initialize() {
         this.setModel(new Model());
         houseLayoutController.setModel(model);
-        shcController.setModel(model);
+        smartHomeCoreController.setModel(model);
+        loginController.setModel(model);
 
         houseLayoutController.drawLayout();
 

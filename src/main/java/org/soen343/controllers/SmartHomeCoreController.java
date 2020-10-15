@@ -2,7 +2,7 @@ package org.soen343.controllers;
 
 import javafx.fxml.FXML;
 
-public class SHCController extends Controller {
+public class SmartHomeCoreController extends Controller {
 
     @FXML
     public void initialize() {
