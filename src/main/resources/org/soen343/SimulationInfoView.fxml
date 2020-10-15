@@ -14,7 +14,7 @@
               AnchorPane.topAnchor="0.0">
             <children>
                 <Label alignment="TOP_CENTER" contentDisplay="CENTER" style="-fx-alignment: center;" text="Simulation"/>
-                <ToggleButton mnemonicParsing="false" text="ON"/>
+                <ToggleButton mnemonicParsing="false" text="ON" onAction="#startSimulation"/>
             </children>
             <Button fx:id="individualButton" onAction="#openIndividualView" text="Edit individuals and profiles"/>
         </VBox>
