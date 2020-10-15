@@ -1,5 +1,6 @@
 package org.soen343.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Room {
@@ -140,13 +141,8 @@ public class Room {
      *
      * @return List of Window objects
      */
-    public Window[] getWindows() {
-        Window[] windowsArray = new Window[lights.size()];
-        Object[] objectsArray = windows.values().toArray();
-        for (int i = 0; i < windowsArray.length; i++) {
-            windowsArray[i] = (Window) objectsArray[i];
-        }
-        return windowsArray;
+    public ArrayList<Window> getWindows() {
+        return new ArrayList<>(windows.values());
     }
 
     /**
@@ -154,13 +150,8 @@ public class Room {
      *
      * @return List of Door objects
      */
-    public Door[] getDoors() {
-        Door[] doorsArray = new Door[doors.size()];
-        Object[] objectsArray = doors.values().toArray();
-        for (int i = 0; i < doorsArray.length; i++) {
-            doorsArray[i] = (Door) objectsArray[i];
-        }
-        return doorsArray;
+    public ArrayList<Door> getDoors() {
+        return new ArrayList<>(doors.values());
     }
 
     /**
@@ -168,13 +159,8 @@ public class Room {
      *
      * @return List of Light objects
      */
-    public Light[] getLights() {
-        Light[] lightsArray = new Light[lights.size()];
-        Object[] objectsArray = lights.values().toArray();
-        for (int i = 0; i < lightsArray.length; i++) {
-            lightsArray[i] = (Light) objectsArray[i];
-        }
-        return lightsArray;
+    public ArrayList<Light> getLights() {
+        return new ArrayList<>(lights.values());
     }
 
     /**
@@ -182,13 +168,8 @@ public class Room {
      *
      * @return List of Individual objects
      */
-    public Individual[] getIndividuals() {
-        Individual[] individualsArray = new Individual[individuals.size()];
-        Object[] objectsArray = individuals.values().toArray();
-        for (int i = 0; i < individualsArray.length; i++) {
-            individualsArray[i] = (Individual) objectsArray[i];
-        }
-        return individualsArray;
+    public ArrayList<Individual> getIndividuals() {
+        return new ArrayList<>(individuals.values());
     }
 
 

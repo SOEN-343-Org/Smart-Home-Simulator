@@ -1,5 +1,6 @@
 package org.soen343.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class House {
@@ -40,8 +41,8 @@ public class House {
      *
      * @return Array of rooms
      */
-    public Room[] getRooms() {
-        return (Room[]) rooms.values().toArray();
+    public ArrayList<Room> getRooms() {
+        return new ArrayList<>(rooms.values());
     }
 
     /**

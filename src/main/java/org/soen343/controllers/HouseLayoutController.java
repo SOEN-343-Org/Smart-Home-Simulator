@@ -1,4 +1,4 @@
-package org.soen343.controller;
+package org.soen343.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -8,14 +8,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.soen343.models.*;
+import org.soen343.util.HouseLayoutUtil;
+
+import java.util.ArrayList;
 
 public class HouseLayoutController {
 
     private final double safeZoneH = 35;
     private double safeZoneW;
     private double roomSize;
-    private double width;
-    private double height;
+    private final double width = 500;
+    private final double height = 500;
     private boolean nullHouse = false;
 
     @FXML
@@ -49,21 +52,12 @@ public class HouseLayoutController {
         blocker = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/blocker.png")));
         openedLight = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/opened_light.png")));
         closedLight = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/closed_light.png")));
+
+        gc = canvas.getGraphicsContext2D();
+        setHouseLayout(HouseLayoutUtil.ReadHouseLayoutFile());
+        drawLayout();
     }
 
-    /**
-     * Creates the canvas with the inputted width and height
-     *
-     * @param w width
-     * @param h height
-     */
-    public void createCanvas(double w, double h) {
-        width = w;
-        height = h;
-        canvas.setWidth(w);
-        canvas.setHeight(h);
-        gc = canvas.getGraphicsContext2D();
-    }
 
     /**
      * Setter to set the house layout
@@ -114,9 +108,6 @@ public class HouseLayoutController {
         }
 
         gc.drawImage(grass, 0, 0, width, height);
-        gc.setLineWidth(8.0);
-
-        gc.strokeRect(0, 0, width, height);
 
         for (int i = 0; i < layout.length; i++) {
             for (int j = 0; j < layout[i].length; j++) {
@@ -193,7 +184,7 @@ public class HouseLayoutController {
                     // Lights - in corner
                     // There is a maximum of 4 items (lights, heater, AC) that will be placed in the corners
                     int currentObjectPosition = 0;
-                    Light[] lights = room.getLights();
+                    ArrayList<Light> lights = room.getLights();
                     for (Light light : lights) {
                         if (currentObjectPosition == 0) {
                             currentObjectPosition++;
