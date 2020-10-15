@@ -18,14 +18,16 @@ public class DBConnection {
      */
     public  static Connection getConnection()  throws SQLException {
 
-        String url = "jdbc:mysql://localhost:3306/";
-        String dbName="smarthomesimulator";
-        String username="root";
-        String password="";
+        String hostName = "sql9.freemysqlhosting.net";
+        String port = "3306";
+        String dbName = "sql9370834";
+        String url = "jdbc:mysql://" + hostName + ":" + port + "/" + dbName;
+        String username = "sql9370834";
+        String password = "48zb95EinY";
 
         System.out.println("Connecting database...");
 
-        Connection connection= DriverManager.getConnection(url+dbName,username,password);
+        Connection connection= DriverManager.getConnection(url,username,password);
 
         System.out.println("Database connected!");
 

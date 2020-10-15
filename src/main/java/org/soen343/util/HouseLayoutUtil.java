@@ -9,6 +9,7 @@ import org.soen343.models.*;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The type House layout util.
@@ -17,6 +18,8 @@ public class HouseLayoutUtil {
 
     public static ArrayList<Room> roomList = new ArrayList<Room>();
     public static ObservableList roomNames = FXCollections.observableArrayList();
+    public static HashMap<String, String> individualsToLocations = new HashMap<String, String>();
+    public static boolean firstTimeLoad = true;
 
     /**
      * Read the house layout and creates an House object

@@ -6,9 +6,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import org.soen343.controller.IndividualController;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +21,6 @@ public class Individual implements Reporter {
     public String name, role, location, username;
     private ComboBox roleChoices, locationChoices;
     private ArrayList<Observer> locationObserversList = new ArrayList<Observer>();
-    private static Connection dbCon;
 
     /**
      * Creates an Individual
@@ -86,7 +83,6 @@ public class Individual implements Reporter {
         return rs;
     }
 
-
     /**
      * This method updates the individual's name in the database
      * @param dbCon Connection instance to the database
@@ -99,24 +95,7 @@ public class Individual implements Reporter {
             dbCon.createStatement().executeUpdate(
                     "update "+ dbTableName +
                             " set name = '"+ newName +
-                            "' where id = " + idSelected);
-        } catch (SQLException e) {
-            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
-        }
-    }
-
-    /**
-     * This method updates the individual's location in the database
-     * @param dbCon Connection instance to the database
-     * @param dbTableName String name of table affected in the database
-     * @param newLocation String desired location for the individual
-     * @param idSelected Integer ID of the individual
-     */
-    public static void updateLocationDB(Connection dbCon, String dbTableName, String newLocation, Integer idSelected) {
-        try {
-            dbCon.createStatement().executeUpdate("UPDATE "+ dbTableName +
-                    " SET location = '"+ newLocation +
-                    "' WHERE id = " + idSelected);
+                            "' where individualId = " + idSelected);
         } catch (SQLException e) {
             Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -134,14 +113,14 @@ public class Individual implements Reporter {
             dbCon.createStatement().executeUpdate(
                     "UPDATE "+ dbTableName +
                             " SET role = '"+ newRole +
-                            "' WHERE id = " + idSelected);
+                            "' WHERE individualId = " + idSelected);
         } catch (SQLException e) {
             Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
     /**
-     * This method removes an individual fro mthe database
+     * This method removes an individual from the database
      * @param dbCon Connection instance to the database
      * @param dbTableName String name of table affected in the database
      * @param idToRemove TextField ID of the individual
@@ -149,7 +128,7 @@ public class Individual implements Reporter {
     public static void removeIndividualDB(Connection dbCon, String dbTableName, TextField idToRemove) {
             try {
                 dbCon.createStatement().executeUpdate("DELETE from "+ dbTableName +
-                        " where id="+idToRemove.getText());
+                        " where individualId="+idToRemove.getText());
             } catch (SQLException e) {
                 Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
             }
@@ -161,20 +140,29 @@ public class Individual implements Reporter {
      * @param dbTableName String name of table affected in the database
      * @param addedName String desired name for the individual
      * @param roleChoices ChoiceBox options for roles
-     * @param locationChoices ChoiceBox options for locations
      * @param username String username associated to the individual
      */
-    public static void addIndividualDB(Connection dbCon, String dbTableName, TextField addedName,
-                                       ChoiceBox roleChoices, ChoiceBox locationChoices, String username) {
+    public static Integer addIndividualDB(Connection dbCon, String dbTableName, TextField addedName,
+                                       ChoiceBox roleChoices , String username) {
+        int generatedKey = 0;
             try {
-                dbCon.createStatement().executeUpdate("INSERT into "+ dbTableName +
-                        " (name,role,location,username) VALUES ('"+ addedName.getText() + "','" +
+                String sqlStatement = "INSERT into "+ dbTableName +
+                        " (name,role,username) VALUES ('"+ addedName.getText() + "','" +
                         roleChoices.getSelectionModel().getSelectedItem() + "','" +
-                        locationChoices.getSelectionModel().getSelectedItem() + "','" +
-                        username + "')");
+                         "test123" + "')";
+                PreparedStatement ps = dbCon.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
+                ps.execute();
+                ResultSet rs = ps.getGeneratedKeys();
+
+                if (rs.next()) {
+                    generatedKey = rs.getInt(1);
+                }
+
+                System.out.println("Inserted record's ID : " + generatedKey);
             } catch (SQLException e) {
                 Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
             }
+            return generatedKey;
     }
 
     /**

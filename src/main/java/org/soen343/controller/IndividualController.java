@@ -15,6 +15,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.soen343.models.*;
@@ -36,10 +38,9 @@ public class IndividualController {
     @FXML private TextField idToRemove;
     private static Connection dbCon;
 
-    // TODO : change db source if not local
     private static String dbTableName = "individuals";
     // dummy username of logged in username TODO : figure out how to get logged in user's username
-    private String username = "flemmingway";
+    private String username = "test123";
 
     // idSelected is used to track which individual is selected for editing.
     private static Integer idSelected;
@@ -69,7 +70,10 @@ public class IndividualController {
     public void initialize()  {
 
         // TODO: to remove, use this bc no redirect button to manage individuals yet
-        h = HouseLayoutUtil.ReadHouseLayoutFile();
+        if (HouseLayoutUtil.firstTimeLoad) {
+            h = HouseLayoutUtil.ReadHouseLayoutFile();
+        }
+
         // list of room objects from house layout specs
         locationsList = HouseLayoutUtil.roomList;
 
@@ -98,9 +102,9 @@ public class IndividualController {
         roleChoices.setItems(roles);
         roleChoices.setValue("Family Adult");
 
-        // Load options for Locations Choicebox with kitchen as default
+        // Load options for Locations Choicebox with outside as default
         locationChoices.setItems(locations);
-        locationChoices.setValue("kitchen");
+        locationChoices.setValue("outside");
     }
 
     /**
@@ -118,13 +122,24 @@ public class IndividualController {
             ResultSet rs = Individual.getIndividualsDB(username, dbCon);
 
             while (rs.next()){
-                Individual p = new Individual(rs.getInt("id"),
+                String individualCurrentLocation = "";
+
+                if (HouseLayoutUtil.firstTimeLoad) {
+                    // when the application first starts, each individual begins in the location "outside"
+                    individualCurrentLocation = "outside";
+
+                } else {
+                    individualCurrentLocation = HouseLayoutUtil.individualsToLocations.get(rs.getString("individualId"));
+                }
+                HouseLayoutUtil.individualsToLocations.put(rs.getString("individualId"), individualCurrentLocation);
+
+                Individual p = new Individual(rs.getInt("individualId"),
                         rs.getString("name"),
                         rs.getString("role"),
-                        rs.getString("location"),
+                        individualCurrentLocation,
                         username);
                 p.setRoleChoices(roles);
-                p.setLocationChoices(locations);
+                p.setLocationChoices(HouseLayoutUtil.roomNames);
                 p.setLocationObserversList(locationsList);
                 individualsList.add(p);
             }
@@ -132,6 +147,7 @@ public class IndividualController {
         } catch (SQLException e) {
             Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
         }
+        HouseLayoutUtil.firstTimeLoad = false;
         return individualsList;
     }
 
@@ -160,7 +176,9 @@ public class IndividualController {
     public static void onEditLocation(Object location, Integer id, Individual ind) {
         String newLocation = String.valueOf(location);
         idSelected = id;
-        Individual.updateLocationDB(dbCon, dbTableName, newLocation, idSelected);
+        // TODO : won't ned db, just update in map
+//        Individual.updateLocationDB(dbCon, dbTableName, newLocation, idSelected);
+        HouseLayoutUtil.individualsToLocations.put(Integer.toString(idSelected), newLocation);
         ind.location = newLocation;
         ind.notifyObserver();
     }
@@ -182,12 +200,11 @@ public class IndividualController {
     /**
      * This method brings the user back to the
      * Edit Context of Simulation page.
-     *  TODO : figure out how to switch pages if setRoot is private
      * @throws IOException
      */
     @FXML
     private void cancelPushed() throws IOException {
-//        App.setRoot("editContext");
+//        App.setRoot("HouseLayoutView");
     }
 
     /**
@@ -209,9 +226,11 @@ public class IndividualController {
      */
     @FXML
     private void onAddIndividual() {
+        int generatedId = 0;
         if (!addedName.getText().trim().isEmpty()){
-           Individual.addIndividualDB(dbCon, dbTableName, addedName, roleChoices, locationChoices, username);
+           generatedId = Individual.addIndividualDB(dbCon, dbTableName, addedName, roleChoices, username);
         }
+        HouseLayoutUtil.individualsToLocations.put(Integer.toString(generatedId), (String) locationChoices.getSelectionModel().getSelectedItem());
         individualsTable.setItems(getExistingIndividuals());
     }
 
@@ -244,8 +263,9 @@ public class IndividualController {
     private void onRemoveIndividual() {
         if (isInteger(idToRemove.getText())) {
           Individual.removeIndividualDB(dbCon, dbTableName, idToRemove);
-            removeFromReporterList();
-            individualsTable.setItems(getExistingIndividuals());
+          HouseLayoutUtil.individualsToLocations.remove(idToRemove);
+          removeFromReporterList();
+          individualsTable.setItems(getExistingIndividuals());
         }
     }
 
