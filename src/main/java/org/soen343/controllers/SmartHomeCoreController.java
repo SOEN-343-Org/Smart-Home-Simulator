@@ -17,10 +17,10 @@ public class SmartHomeCoreController extends Controller {
     @FXML
     public TreeView<String> blockUnblockTreeView;
 
-    Set<TreeItem<String>> openCloseSelected;
-    Set<TreeItem<String>> blockUnblockSelected;
+    private Set<TreeItem<String>> openCloseSelected;
+    private Set<TreeItem<String>> blockUnblockSelected;
 
-    DashboardController mainController;
+    private DashboardController mainController;
 
     public void setMainController(DashboardController c) {
         mainController = c;
@@ -136,6 +136,10 @@ public class SmartHomeCoreController extends Controller {
     @FXML
     private void openClose(ActionEvent actionEvent) {
 
+        if (!model.simulationStarted) {
+            // Simulation is not on
+            return;
+        }
         HashSet<Integer> doorsToUpdate = new HashSet<>();
         HashSet<Integer> windowsToUpdate = new HashSet<>();
         HashSet<Integer> lightsToUpdate = new HashSet<>();
@@ -179,6 +183,11 @@ public class SmartHomeCoreController extends Controller {
 
     @FXML
     private void blockUnblock(ActionEvent actionEvent) {
+
+        if (!model.simulationStarted) {
+            // Simulation is not on
+            return;
+        }
         HashSet<Integer> windowsToUpdate = new HashSet<>();
 
         for (TreeItem<String> item : blockUnblockSelected) {

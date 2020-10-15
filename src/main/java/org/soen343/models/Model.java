@@ -17,13 +17,14 @@ public class Model {
 
     public static House house;
     private static Connection connection;
+    public boolean simulationStarted;
 
     /**
      * Default constructor for Model object
      */
     public Model() {
         house = HouseLayoutUtil.ReadHouseLayoutFile();
-
+        simulationStarted = false;
         try {
             connection = DBConnection.getConnection();
         } catch (SQLException throwables) {
