@@ -14,7 +14,6 @@ import org.soen343.models.Individual;
 import org.soen343.models.Model;
 
 import java.io.IOException;
-import java.sql.Connection;
 
 /**
  * The type Individual controller.
@@ -165,7 +164,7 @@ public class IndividualController extends Controller {
      */
     @FXML
     private void cancelPushed() throws IOException {
-//        App.setRoot("HouseLayoutView");
+        mainController.setIndividualViewVisibility(false);
     }
 
     /**

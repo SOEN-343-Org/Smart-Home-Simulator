@@ -16,9 +16,11 @@ public class DashboardController extends Controller {
     @FXML
     private IndividualController individualController;
 
-
     @FXML
     private AnchorPane login;
+
+    @FXML
+    private AnchorPane individual;
 
     @FXML
     public void initialize() {
@@ -27,7 +29,10 @@ public class DashboardController extends Controller {
         //loginController.setModel(model);
         houseLayoutController.setModel(model);
         smartHomeCoreController.setModel(model);
+
+
         individualController.setModel(model);
+        individualController.setMainController(this);
         individualController.init();
 
 
@@ -36,6 +41,10 @@ public class DashboardController extends Controller {
         houseLayoutController.drawLayout();
 
 
+    }
+
+    public void setIndividualViewVisibility(boolean vis){
+        individual.setVisible(vis);
     }
 
     public void login() {
