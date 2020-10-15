@@ -2,13 +2,13 @@ package org.soen343.models;
 
 import java.util.HashMap;
 
-public class Room {
+public class Room implements Observer{
 
     private final HashMap<Integer, Window> windows;
     private final HashMap<Integer, Door> doors;
     private final HashMap<Integer, Light> lights;
-    private final HashMap<Integer, Individual> individuals;
     private final int id;
+    public HashMap<Integer, Individual> individuals;
     private final String name;
 
     private final Object top;
@@ -251,5 +251,31 @@ public class Room {
      */
     public Object getLeft() {
         return left;
+    }
+
+
+    /**
+     * This method adds or removes individuals
+     * from its list of individuals.
+     * @param o Object is an Individual that the location
+     *          is observing.
+     */
+    @Override
+    public void update(Object o) {
+        Individual ind = (Individual) o;
+         boolean correctLocation = ind.location.equals(this.name);
+         boolean individualIsSubscribed = individuals.get(ind.id) == null ? false : true;
+
+         if (correctLocation && individualIsSubscribed) {
+             boolean correctRole = individuals.get(ind.id).role.equals(ind.role) ? true : false;
+
+             if (!correctRole) {
+                 individuals.replace(ind.id, ind);
+             }
+         } else if (correctLocation && !individualIsSubscribed) {
+            individuals.put(ind.id, ind);
+         } else if (!correctLocation && individualIsSubscribed) {
+            individuals.remove(ind.id);
+         }
     }
 }

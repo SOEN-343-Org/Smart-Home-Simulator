@@ -1,13 +1,25 @@
 package org.soen343.util;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.soen343.models.*;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+/**
+ * The type House layout util.
+ */
 public class HouseLayoutUtil {
+
+    public static ArrayList<Room> roomList = new ArrayList<Room>();
+    public static ObservableList roomNames = FXCollections.observableArrayList();
+    public static HashMap<String, String> individualsToLocations = new HashMap<String, String>();
+    public static boolean firstTimeLoad = true;
 
     /**
      * Read the house layout and creates an House object
@@ -45,6 +57,7 @@ public class HouseLayoutUtil {
                 JSONObject roomJson = rooms.getJSONObject(i);
 
                 String name = roomJson.getString("name");
+                roomNames.add(name);
 
                 int numberOfLights = roomJson.getInt("lights");
                 Light[] lights = new Light[numberOfLights];
@@ -127,7 +140,9 @@ public class HouseLayoutUtil {
                         throw new NullPointerException(top + " is not in the valid option [window, door]");
                     }
                 }
-                house[row][column] = new Room(roomId++, name, lights, topObject, rightObject, downObject, leftObject);
+                Room r = new Room(roomId++, name, lights, topObject, rightObject, downObject, leftObject);
+                roomList.add(r);
+                house[row][column] = r;
             }
 
             return new House(house);
