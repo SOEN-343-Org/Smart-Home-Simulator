@@ -1,8 +1,12 @@
 package org.soen343.connection;
 
+import org.soen343.controllers.IndividualController;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -16,7 +20,7 @@ public class DBConnection {
      * @return Connection connection
      * @throws SQLException the sql exception
      */
-    public static Connection getConnection()  throws SQLException {
+    public static Connection getConnection(){
 
         String hostName = "sql9.freemysqlhosting.net";
         String port = "3306";
@@ -27,10 +31,15 @@ public class DBConnection {
 
         System.out.println("Connecting database...");
 
-        Connection connection= DriverManager.getConnection(url,username,password);
-
-        System.out.println("Database connected!");
-
-        return connection;
+        try {
+            Connection connection = DriverManager.getConnection(url, username, password);
+            System.out.println("Database connected!");
+            return connection;
+        }
+        catch (SQLException e){
+            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
+            System.exit(0);
+        }
+        return null;
     }
 }

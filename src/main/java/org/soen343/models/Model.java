@@ -25,12 +25,7 @@ public class Model {
     public Model() {
         house = HouseLayoutUtil.ReadHouseLayoutFile();
         simulationStarted = false;
-        try {
-            connection = DBConnection.getConnection();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            System.exit(0);
-        }
+        connection = DBConnection.getConnection();
     }
 
     public static void updateIndividualRole(String newRole, Integer idSelected) {
