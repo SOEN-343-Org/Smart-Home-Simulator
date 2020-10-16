@@ -14,17 +14,8 @@ import java.util.Set;
 public class SmartHomeCoreController extends Controller {
     @FXML
     public TreeView<String> openCloseTreeView;
-    @FXML
-    public TreeView<String> blockUnblockTreeView;
 
     private Set<TreeItem<String>> openCloseSelected;
-    private Set<TreeItem<String>> blockUnblockSelected;
-
-    private DashboardController mainController;
-
-    public void setMainController(DashboardController c) {
-        mainController = c;
-    }
 
     @FXML
     public void initialize() {
@@ -89,47 +80,6 @@ public class SmartHomeCoreController extends Controller {
                 }
             }
         });
-
-        // BLOCK AND UNBLOCK of WINDOWS
-
-        CheckBoxTreeItem<String> root2 = new CheckBoxTreeItem<>("Rooms");
-        root2.setExpanded(true);
-        for (Room room : Model.house.getRooms()) {
-
-            if (room.getWindows().size() > 0) {
-                CheckBoxTreeItem<String> superItem = new CheckBoxTreeItem<>(room.getName());
-
-                CheckBoxTreeItem<String> windowsItem = new CheckBoxTreeItem<>("Windows");
-                for (Window window : room.getWindows()) {
-                    CheckBoxTreeItem<String> item = new CheckBoxTreeItem<>(window.getName());
-                    windowsItem.getChildren().add(item);
-                }
-                superItem.getChildren().add(windowsItem);
-                root2.getChildren().add(superItem);
-            }
-
-        }
-        blockUnblockTreeView.setRoot(root2);
-
-        blockUnblockTreeView.setCellFactory(CheckBoxTreeCell.<String>forTreeView());
-        blockUnblockSelected = new HashSet<>();
-        root2.addEventHandler(CheckBoxTreeItem.checkBoxSelectionChangedEvent(), (CheckBoxTreeItem.TreeModificationEvent<String> evt) -> {
-            CheckBoxTreeItem<String> item = evt.getTreeItem();
-
-            if (evt.wasIndeterminateChanged()) {
-                if (item.isIndeterminate()) {
-                    blockUnblockSelected.remove(item);
-                } else if (item.isSelected()) {
-                    blockUnblockSelected.add(item);
-                }
-            } else if (evt.wasSelectionChanged()) {
-                if (item.isSelected()) {
-                    blockUnblockSelected.add(item);
-                } else {
-                    blockUnblockSelected.remove(item);
-                }
-            }
-        });
     }
 
 
@@ -176,34 +126,6 @@ public class SmartHomeCoreController extends Controller {
             Light light = Model.house.getLightById(lightId);
             light.setOpen(!light.isOpen());
             // TODO: Need to log that we open a light #lightId
-        }
-        mainController.drawLayout();
-    }
-
-
-    @FXML
-    private void blockUnblock(ActionEvent actionEvent) {
-
-        if (!model.simulationStarted) {
-            // Simulation is not on
-            return;
-        }
-        HashSet<Integer> windowsToUpdate = new HashSet<>();
-
-        for (TreeItem<String> item : blockUnblockSelected) {
-            if (item.isLeaf()) {
-                String value = item.getValue();
-                String type = value.split(" ")[0];
-                if ("Window".equals(type)) {
-                    windowsToUpdate.add(Integer.parseInt(value.split(" ")[1].replace("#", "")));
-                }
-            }
-        }
-
-        for (int windowId : windowsToUpdate) {
-            Window window = Model.house.getWindowById(windowId);
-            window.setBlocked(!window.isBlocked());
-            // TODO: Need to log that we block/unblock a window #windowId
         }
         mainController.drawLayout();
     }

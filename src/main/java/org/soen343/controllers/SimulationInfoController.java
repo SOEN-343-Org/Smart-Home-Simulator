@@ -4,16 +4,11 @@ import javafx.event.ActionEvent;
 
 public class SimulationInfoController extends Controller {
 
-    DashboardController mainController;
-
-    public void setMainController(DashboardController c) {
-        mainController = c;
-    }
-
-    public void openIndividualView(ActionEvent actionEvent) {
-    }
-
     public void startSimulation(ActionEvent actionEvent) {
         model.simulationStarted = !model.simulationStarted;
+    }
+
+    public void openSimulationContextView(ActionEvent actionEvent) {
+        mainController.enterSimulationContext();
     }
 }

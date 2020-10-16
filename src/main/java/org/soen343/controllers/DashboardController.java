@@ -18,10 +18,12 @@ public class DashboardController extends Controller {
     @FXML
     private SimulationInfoController simulationInfoController;
     @FXML
+    private SimulationContextController simulationContextController;
+    @FXML
     private AnchorPane login;
 
     @FXML
-    private AnchorPane individual;
+    private AnchorPane simulationContext;
 
     @FXML
     public void initialize() {
@@ -31,12 +33,15 @@ public class DashboardController extends Controller {
         simulationInfoController.setMainController(this);
         smartHomeContextController.setMainController(this);
         smartHomeCoreController.setMainController(this);
+        simulationContextController.setMainController(this);
 
         // init
+        simulationContextController.init();
         smartHomeContextController.init();
         smartHomeCoreController.init();
-
         houseLayoutController.init();
+
+        exitSimulationContext();
 
         drawLayout();
     }
@@ -49,5 +54,15 @@ public class DashboardController extends Controller {
     public void exitLoginView() {
         drawLayout();
         login.setVisible(false);
+    }
+
+    public void enterSimulationContext() {
+        simulationContextController.updateInfo();
+        simulationContext.setVisible(true);
+    }
+
+    public void exitSimulationContext() {
+        drawLayout();
+        simulationContext.setVisible(false);
     }
 }

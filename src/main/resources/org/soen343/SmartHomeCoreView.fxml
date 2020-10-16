@@ -7,10 +7,9 @@
 
 <AnchorPane fx:id="smartHomeCore" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.soen343.controllers.SmartHomeCoreController">
     <children>
-        <Button fx:id="opencloseButton" layoutX="343.0" layoutY="163.0" mnemonicParsing="false" onAction="#openClose" text="Open / Close" />
-        <Button fx:id="blockunblockButton" layoutX="336.0" layoutY="380.0" mnemonicParsing="false" onAction="#blockUnblock" text="Block / Unblock" />
-        <TreeView fx:id="openCloseTreeView" layoutX="25.0" layoutY="34.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="245.0" prefWidth="301.0" />
+        <Button fx:id="opencloseButton" layoutX="343.0" layoutY="228.0" mnemonicParsing="false" onAction="#openClose" text="Open / Close" />
+        <TreeView fx:id="openCloseTreeView" layoutX="25.0" layoutY="61.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="394.0" prefWidth="305.0" />
         <Label layoutX="14.0" layoutY="6.0" text="SMART HOME CORE MODULE" />
-        <TreeView fx:id="blockUnblockTreeView" layoutX="25.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="173.0" prefWidth="301.0" />
+      <Label layoutX="14.0" layoutY="31.0" text="Open/Close doors, windows and lights" />
     </children>
 </AnchorPane>

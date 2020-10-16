@@ -79,6 +79,7 @@
                 </Label>
             </children>
         </GridPane>
+        <fx:include source="SimulationContextView.fxml" fx:id="simulationContext"/>
     </children>
 
 </AnchorPane>

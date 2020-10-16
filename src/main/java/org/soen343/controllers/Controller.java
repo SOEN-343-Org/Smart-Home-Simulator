@@ -16,5 +16,4 @@ public abstract class Controller {
         mainController = dashboardController;
     }
 
-    ;
 }
