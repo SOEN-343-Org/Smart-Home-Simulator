@@ -21,6 +21,6 @@ public class SQLQueriesBuilder {
     public static String addUser(String username, String password){
         username = "'"+username+"'";
         password = "'"+password+"'";
-        return "INSERT INTO users(username,password) VALUES(" + username + "," + password + ")";
+        return "INSERT INTO users VALUES(" + username + "," + password + ")";
     }
 }

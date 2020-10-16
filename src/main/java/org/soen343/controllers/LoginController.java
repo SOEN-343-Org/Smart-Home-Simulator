@@ -3,14 +3,22 @@ package org.soen343.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import org.soen343.App;
 import org.soen343.connection.DBConnection;
 import org.soen343.connection.SQLQueriesBuilder;
 import org.soen343.models.User;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,8 +34,11 @@ public class LoginController extends Controller {
     @FXML private PasswordField tfPassLogIn;
     @FXML private Button btnLogIn;
     @FXML private Button btnSwitchSignUp;
+    @FXML private Button btnSwitchLogIn;
     @FXML private Label invalidLogInLabel;
     @FXML private Label invalidSignUpLabel;
+    @FXML private Pane signUpPane;
+    @FXML private Pane logInPane;
     DashboardController mainController;
     Connection connection;
     Statement statement;
@@ -43,7 +54,22 @@ public class LoginController extends Controller {
     }
 
     public void btnSwitchSignUpAction(ActionEvent actionEvent){
-        //switch to sign up page
+        tfUsernameSignUp.setText("");
+        tfPassSignUp.setText("");
+        tfUsernameLogIn.setText("");
+        tfPassLogIn.setText("");
+        invalidSignUpLabel.setText("");
+        invalidLogInLabel.setText("");
+        signUpPane.toFront();
+    }
+    public void btnSwitchLogInAction(ActionEvent actionEvent){
+        tfUsernameSignUp.setText("");
+        tfPassSignUp.setText("");
+        tfUsernameLogIn.setText("");
+        tfPassLogIn.setText("");
+        invalidSignUpLabel.setText("");
+        invalidLogInLabel.setText("");
+        logInPane.toFront();
     }
 
     public void btnLogInAction(ActionEvent actionEvent){
@@ -55,23 +81,27 @@ public class LoginController extends Controller {
     }
 
     public void btnSignUpAction(ActionEvent actionEvent){
-        if(!tfUsernameLogIn.getText().isBlank() && !tfPassLogIn.getText().isBlank()){
+        if(!tfUsernameSignUp.getText().isBlank() && !tfPassSignUp.getText().isBlank()){
             validateSignUp();
         }else {
-            invalidLogInLabel.setText("Please enter a username and password");
+            invalidSignUpLabel.setText("Please enter a username and password");
         }
     }
 
     public void validateSignUp(){
         try {
-            String usernameExistsQuery = SQLQueriesBuilder.usernameExists(tfUsernameLogIn.getText());
+            String usernameExistsQuery = SQLQueriesBuilder.usernameExists(tfUsernameSignUp.getText());
             ResultSet queryResult = statement.executeQuery(usernameExistsQuery);
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, usernameExistsQuery);
             while (queryResult.next()){
                 if (queryResult.getInt(1)==1){
                     invalidSignUpLabel.setText("This username is already in use");
                 }else {
-                    SQLQueriesBuilder.addUser(tfUsernameSignUp.getText(),tfPassSignUp.getText());
-                    //go to next place
+                    String addUserQuery = SQLQueriesBuilder.addUser(tfUsernameSignUp.getText(),tfPassSignUp.getText());
+                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, addUserQuery);
+                    statement.executeUpdate(addUserQuery);
+                    //CHANGE SCENES HERE TO DASHBOARDVIEW
+                    break;
                 }
             }
         }catch (SQLException e){
@@ -97,19 +127,31 @@ public class LoginController extends Controller {
                             invalidLogInLabel.setText("Invalid password. Please try again");
                         }else {
                             invalidLogInLabel.setText("IT WORKED. REMOVE LATER");
-                            //User
-                            //go to next place
+                            User.setUsername(tfUsernameLogIn.getText());
+                            changeScene();
+                            //CHANGE SCENE HERE TO DASHBOARDVIEW
                         }
                     }
                 }
             }
         }catch (SQLException e){
-            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
             System.exit(0);
         }
     }
 
-    public void changeScene(ActionEvent actionEvent) {
-        mainController.exitLoginView();
+    //not sure
+    public void changeScene(){
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("DashboardView.fxml"));
+            Stage dashboardStage = new Stage();
+            dashboardStage.initStyle(StageStyle.UNDECORATED);
+            dashboardStage.setScene(new Scene(root,1200, 900));
+            dashboardStage.show();
+
+        }catch (IOException e){
+
+        }
     }
+
 }
