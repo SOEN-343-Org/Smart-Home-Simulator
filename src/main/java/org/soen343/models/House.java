@@ -96,6 +96,15 @@ public class House {
         return null;
     }
 
+    public Individual getIndividualByName(String name) {
+        for (Individual ind : individuals.values()) {
+            if (ind.getName().equals(name)) {
+                return ind;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "House of dimension (" + layout.length + " by " + layout[0].length + ")\nRooms=\n" + rooms;

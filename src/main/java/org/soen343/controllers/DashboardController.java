@@ -12,9 +12,9 @@ public class DashboardController extends Controller {
     @FXML
     private SmartHomeCoreController smartHomeCoreController;
     @FXML
-    private LoginController loginController;
+    private SmartHomeContextController smartHomeContextController;
     @FXML
-    private IndividualController individualController;
+    private LoginController loginController;
     @FXML
     private SimulationInfoController simulationInfoController;
     @FXML
@@ -27,27 +27,18 @@ public class DashboardController extends Controller {
     public void initialize() {
         // Sets the model for controller superclass
         this.setModel(new Model());
-
+        model.setIndividualsFromUser(model.user.getName()); //TODO: Add login logic to get the good username
         simulationInfoController.setMainController(this);
-        individualController.setMainController(this);
-        individualController.init();
-        individual.setVisible(false); // We dont want to show the profile selection menu at the start
-
+        smartHomeContextController.setMainController(this);
         smartHomeCoreController.setMainController(this);
+
+        // init
+        smartHomeContextController.init();
         smartHomeCoreController.init();
 
         houseLayoutController.init();
 
         drawLayout();
-    }
-
-    public void exitIndividualView() {
-        drawLayout();
-        individual.setVisible(false);
-    }
-
-    public void enterIndividualView() {
-        individual.setVisible(true);
     }
 
 

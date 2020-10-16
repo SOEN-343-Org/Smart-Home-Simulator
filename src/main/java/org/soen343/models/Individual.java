@@ -1,18 +1,12 @@
 package org.soen343.models;
 
-import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
-import org.soen343.controllers.IndividualController;
-
-
 /**
  * The type Individual.
  */
 public class Individual {
 
-    public final int id;
-    public String name, role, location, username;
-    private ComboBox roleChoices, locationChoices;
+    private final int id;
+    private String name, role, location, username;
 
     /**
      * Creates an Individual
@@ -60,7 +54,7 @@ public class Individual {
 
     @Override
     public String toString() {
-        return "Individual " + getName() + ", role = " + getRole();
+        return "Individual " + getName() + ", role = " + getRole() + ", location = " + getLocation();
     }
 
     /**
@@ -116,69 +110,4 @@ public class Individual {
     public void setUsername(String username) {
         this.username = username;
     }
-
-    /**
-     * Gets role choices.
-     *
-     * @return the role choices
-     */
-    public ComboBox getRoleChoices() {
-        return roleChoices;
-    }
-
-    /**
-     * This method assigns a ComboBox to choose amongst
-     * roles for this Individual.
-     *
-     * @param roles ObservableList of possible roles for individual.
-     */
-    public void setRoleChoices(ObservableList roles) {
-        this.roleChoices = new ComboBox(roles);
-        this.roleChoices.setValue(getRole());
-        this.roleChoices.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            IndividualController.onEditRole(newValue, getId(), this);
-        });
-    }
-
-    /**
-     * Sets role choices.
-     *
-     * @param roleChoices the role choices
-     */
-    public void setRoleChoices(ComboBox roleChoices) {
-        this.roleChoices = roleChoices;
-    }
-
-    /**
-     * Gets location choices.
-     *
-     * @return the location choices
-     */
-    public ComboBox getLocationChoices() {
-        return locationChoices;
-    }
-
-    /**
-     * This method assigns a ComboBox to choose amongst
-     * locations for this Individual.
-     *
-     * @param locations ObservableList of locations for individual.
-     */
-    public void setLocationChoices(ObservableList locations) {
-        this.locationChoices = new ComboBox(locations);
-        this.locationChoices.setValue(getLocation());
-        this.locationChoices.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            IndividualController.onEditLocation(newValue, getId(), this);
-        });
-    }
-
-    /**
-     * Sets location choices.
-     *
-     * @param locationChoices the location choices
-     */
-    public void setLocationChoices(ComboBox locationChoices) {
-        this.locationChoices = locationChoices;
-    }
-
 }

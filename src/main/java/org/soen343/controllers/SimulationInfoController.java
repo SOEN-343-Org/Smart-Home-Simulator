@@ -11,7 +11,6 @@ public class SimulationInfoController extends Controller {
     }
 
     public void openIndividualView(ActionEvent actionEvent) {
-        mainController.enterIndividualView();
     }
 
     public void startSimulation(ActionEvent actionEvent) {
