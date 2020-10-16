@@ -1,8 +1,6 @@
 package org.soen343.models;
 
-import javafx.collections.FXCollections;
 import org.soen343.connection.DBConnection;
-import org.soen343.controllers.IndividualController;
 import org.soen343.util.HouseLayoutUtil;
 
 import java.sql.*;
@@ -18,6 +16,8 @@ public class Model {
     public static House house;
     private static Connection connection;
     public boolean simulationStarted;
+    public User user;
+    public Time time;
 
     /**
      * Default constructor for Model object
@@ -25,6 +25,8 @@ public class Model {
     public Model() {
         house = HouseLayoutUtil.ReadHouseLayoutFile();
         simulationStarted = false;
+        user = new User("test123");
+        time = new Time();
         try {
             connection = DBConnection.getConnection();
         } catch (SQLException throwables) {
@@ -41,7 +43,7 @@ public class Model {
                             "' WHERE individualId = " + idSelected);
             house.individuals.get(idSelected).setRole(newRole);
         } catch (SQLException e) {
-            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -57,13 +59,8 @@ public class Model {
                         "outside",
                         username);
                 house.individuals.put(individual.getId(), individual);
-                individual.setLocationChoices(FXCollections.observableArrayList(house.roomsName));
-                individual.setRoleChoices(FXCollections.observableArrayList(
-                        "Family Adult",
-                        "Family Child",
-                        "Guest",
-                        "Stranger"));
             }
+            user.setCurrentIndividual((Individual) house.individuals.values().toArray()[0]); //TODO: remove this for proper login logic
         } catch (SQLException e) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, "Could not retrieve individual list from user", e);
         }
@@ -78,7 +75,7 @@ public class Model {
 
             house.individuals.get(idSelected).setName(newName);
         } catch (SQLException e) {
-            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, "Could not update individual name", e);
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, "Could not update individual name", e);
         }
     }
 
@@ -98,15 +95,9 @@ public class Model {
 
             Individual ind = new Individual(generatedKey, name, role, location, username);
             house.individuals.put(generatedKey, ind);
-            ind.setLocationChoices(FXCollections.observableArrayList(house.roomsName));
-            ind.setRoleChoices(FXCollections.observableArrayList(
-                    "Family Adult",
-                    "Family Child",
-                    "Guest",
-                    "Stranger"));
             System.out.println("Inserted record's ID : " + generatedKey);
         } catch (SQLException e) {
-            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, "Could not add new Individual", e);
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, "Could not add new Individual", e);
         }
     }
 
@@ -116,7 +107,7 @@ public class Model {
                     " where individualId=" + idToRemove);
             house.individuals.remove(idToRemove);
         } catch (SQLException e) {
-            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 }

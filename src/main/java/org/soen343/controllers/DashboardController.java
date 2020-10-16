@@ -12,42 +12,38 @@ public class DashboardController extends Controller {
     @FXML
     private SmartHomeCoreController smartHomeCoreController;
     @FXML
+    private SmartHomeContextController smartHomeContextController;
+    @FXML
     private LoginController loginController;
     @FXML
-    private IndividualController individualController;
-    @FXML
     private SimulationInfoController simulationInfoController;
+    @FXML
+    private SimulationContextController simulationContextController;
     @FXML
     private AnchorPane login;
 
     @FXML
-    private AnchorPane individual;
+    private AnchorPane simulationContext;
 
     @FXML
     public void initialize() {
         // Sets the model for controller superclass
         this.setModel(new Model());
-
+        model.setIndividualsFromUser(model.user.getName()); //TODO: Add login logic to get the good username
         simulationInfoController.setMainController(this);
-        individualController.setMainController(this);
-        individualController.init();
-        individual.setVisible(false); // We dont want to show the profile selection menu at the start
-
+        smartHomeContextController.setMainController(this);
         smartHomeCoreController.setMainController(this);
-        smartHomeCoreController.init();
+        simulationContextController.setMainController(this);
 
+        // init
+        simulationContextController.init();
+        smartHomeContextController.init();
+        smartHomeCoreController.init();
         houseLayoutController.init();
 
-        drawLayout();
-    }
+        exitSimulationContext();
 
-    public void exitIndividualView() {
         drawLayout();
-        individual.setVisible(false);
-    }
-
-    public void enterIndividualView() {
-        individual.setVisible(true);
     }
 
 
@@ -58,5 +54,15 @@ public class DashboardController extends Controller {
     public void exitLoginView() {
         drawLayout();
         login.setVisible(false);
+    }
+
+    public void enterSimulationContext() {
+        simulationContextController.updateInfo();
+        simulationContext.setVisible(true);
+    }
+
+    public void exitSimulationContext() {
+        drawLayout();
+        simulationContext.setVisible(false);
     }
 }
