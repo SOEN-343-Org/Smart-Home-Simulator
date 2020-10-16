@@ -69,7 +69,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                             <children>
-                                <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#updateIndividualLocation" prefHeight="25.0" prefWidth="104.0" text="Set Information" />
+                                <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#updateIndividualLocation" prefHeight="25.0" prefWidth="104.0" text="Set Location" />
                             </children>
                         </HBox>
                     </children>

@@ -46,10 +46,19 @@ public class House {
     /**
      * Gets all the rooms in the house
      *
-     * @return Array of rooms
+     * @return ArrayList of rooms
      */
     public ArrayList<Room> getRooms() {
         return new ArrayList<>(rooms.values());
+    }
+
+    /**
+     * Gets all the individuals in the house
+     *
+     * @return ArrayList of Individual
+     */
+    public ArrayList<Individual> getIndividuals() {
+        return new ArrayList<>(individuals.values());
     }
 
     /**
@@ -91,15 +100,6 @@ public class House {
             Light light = room.getLight(id);
             if (light != null) {
                 return light;
-            }
-        }
-        return null;
-    }
-
-    public Individual getIndividualByName(String name) {
-        for (Individual ind : individuals.values()) {
-            if (ind.getName().equals(name)) {
-                return ind;
             }
         }
         return null;
