@@ -39,9 +39,9 @@
                             <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                     <children>
-                                        <fx:include fx:id="smartHomeContext" maxHeight="-Infinity" maxWidth="-Infinity"
+                                        <fx:include fx:id="smartHomeSimulatorModule" maxHeight="-Infinity" maxWidth="-Infinity"
                                                     minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0"
-                                                    prefWidth="450.0" source="SmartHomeContextView.fxml"
+                                                    prefWidth="450.0" source="SmartHomeSimulatorModuleView.fxml"
                                                     GridPane.columnIndex="1" GridPane.halignment="CENTER"
                                                     GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
                                     </children>
@@ -50,9 +50,9 @@
                         </Tab>
                         <Tab closable="false" text="SHC">
                             <content>
-                                <fx:include fx:id="smartHomeCore" maxHeight="-Infinity" maxWidth="-Infinity"
+                                <fx:include fx:id="smartHomeCoreModule" maxHeight="-Infinity" maxWidth="-Infinity"
                                             minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0"
-                                            prefWidth="450.0" source="SmartHomeCoreView.fxml" GridPane.columnIndex="1"
+                                            prefWidth="450.0" source="SmartHomeCoreModuleView.fxml" GridPane.columnIndex="1"
                                             GridPane.halignment="CENTER" GridPane.rowIndex="1"
                                             GridPane.valignment="CENTER"/>
                             </content>
