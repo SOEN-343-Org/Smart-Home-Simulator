@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.soen343.models.*;
+import org.soen343.services.HouseLayoutService;
 
 import java.util.ArrayList;
 
@@ -35,13 +36,13 @@ public class HouseLayoutController extends Controller {
     private Image closedLight;
     private Image individual;
 
+    private HouseLayoutService houseLayoutService;
 
-    /**
-     * Initialize the data in the scene, is called when fxml is loaded and displayed
-     */
     @FXML
     public void initialize() {
         // Initialization code can go here.
+
+        houseLayoutService = new HouseLayoutService();
 
         grass = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/grass.jpg")));
         floor = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/floor.jpg")));
@@ -57,23 +58,17 @@ public class HouseLayoutController extends Controller {
         gc = canvas.getGraphicsContext2D();
     }
 
+    public void initializeController() {
+        layout = houseLayoutService.getHouseLayout();
 
-    /**
-     * Init method of the controller to set the house layout and determine the room size
-     */
-    public void init() {
-        if (Model.house.getLayout() == null) {
+        if (layout == null) {
             nullHouse = true;
             return;
         }
-        layout = Model.house.getLayout();
         roomSize = (int) Math.round((canvas.getHeight() - (2 * safeZoneH)) / layout.length);
         safeZoneW = (int) Math.round((canvas.getWidth() - (roomSize * layout[0].length)) / 2);
     }
 
-    /**
-     * Draw a a text indicating that the house is null and to restart the application
-     */
     private void drawNullLayout() {
         gc.setLineWidth(8.0);
         gc.strokeRect(0, 0, width, height);
@@ -86,25 +81,18 @@ public class HouseLayoutController extends Controller {
     }
 
 
-    /**
-     * @param object Door or Window object
-     * @return True if the object is a Door
-     */
     private boolean isDoor(Object object) {
         // Not the best and prettiest way but there is no place to put this yet.
         return object instanceof Door;
     }
 
-    /**
-     * Draw the house layout in the canvas
-     */
     public void drawLayout() {
         if (nullHouse) {
             drawNullLayout();
             return;
         }
 
-        ArrayList<Individual> individuals = new ArrayList<>(Model.house.individuals.values());
+        ArrayList<Individual> individuals = houseLayoutService.getIndividuals();
 
         gc.drawImage(grass, 0, 0, width, height);
 
