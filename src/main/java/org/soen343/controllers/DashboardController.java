@@ -2,7 +2,7 @@ package org.soen343.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
-import org.soen343.models.Model;
+import org.soen343.services.DashboardService;
 
 public class DashboardController extends Controller {
 
@@ -10,59 +10,56 @@ public class DashboardController extends Controller {
     @FXML
     private HouseLayoutController houseLayoutController;
     @FXML
-    private SmartHomeCoreController smartHomeCoreController;
+    private SmartHomeCoreModuleController smartHomeCoreModuleController;
     @FXML
-    private SmartHomeContextController smartHomeContextController;
-    @FXML
-    private LoginController loginController;
+    private SmartHomeSimulatorModuleController smartHomeSimulatorModuleController;
     @FXML
     private SimulationInfoController simulationInfoController;
     @FXML
     private SimulationContextController simulationContextController;
-    @FXML
-    private AnchorPane login;
 
+    // UI element to change view
     @FXML
     private AnchorPane simulationContext;
 
-    @FXML
     public void initialize() {
-        // Sets the model for controller superclass
-        this.setModel(new Model());
-        model.setIndividualsFromUser(model.user.getName()); //TODO: Add login logic to get the good username
+        DashboardService dashboardService = new DashboardService();
+        dashboardService.populateIndividuals();
+
         simulationInfoController.setMainController(this);
-        smartHomeContextController.setMainController(this);
-        smartHomeCoreController.setMainController(this);
+        smartHomeSimulatorModuleController.setMainController(this);
+        smartHomeCoreModuleController.setMainController(this);
         simulationContextController.setMainController(this);
+        simulationInfoController.setMainController(this);
 
-        // init
-        simulationContextController.init();
-        smartHomeContextController.init();
-        smartHomeCoreController.init();
-        houseLayoutController.init();
+        // initialize controllers
+        simulationContextController.initializeController();
+        smartHomeSimulatorModuleController.initializeController();
+        smartHomeCoreModuleController.initializeController();
+        houseLayoutController.initializeController();
+        simulationInfoController.initializeController();
 
+        // hide simulation context window
         exitSimulationContext();
-
-        drawLayout();
+        update();
     }
 
-
-    public void drawLayout() {
+    public void update() {
         houseLayoutController.drawLayout();
     }
 
-    public void exitLoginView() {
-        drawLayout();
-        login.setVisible(false);
-    }
-
     public void enterSimulationContext() {
-        simulationContextController.updateInfo();
+        simulationContextController.initializeController();
         simulationContext.setVisible(true);
     }
 
     public void exitSimulationContext() {
-        drawLayout();
+        update();
         simulationContext.setVisible(false);
+    }
+
+    @Override
+    void initializeController() {
+
     }
 }
