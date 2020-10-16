@@ -8,9 +8,9 @@ import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import org.soen343.models.Individual;
-import org.soen343.models.Model;
 import org.soen343.models.Room;
 import org.soen343.models.Window;
+import org.soen343.services.SimulationContextService;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,13 +31,21 @@ public class SimulationContextController extends Controller {
     @FXML
     private TableView<Individual> individualsTable;
     @FXML
-    private ChoiceBox<String> nameChoices;
+    private ChoiceBox<Individual> nameChoices;
     @FXML
     private ChoiceBox<String> locationChoices;
 
     private Set<TreeItem<String>> blockUnblockSelected;
 
-    public void init() {
+    private SimulationContextService simulationContextService;
+
+    @FXML
+    public void initialize() {
+    }
+
+    public void initializeController() {
+
+        simulationContextService = new SimulationContextService();
 
         column1.setCellValueFactory(new PropertyValueFactory<>("id"));
         column2.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -45,17 +53,17 @@ public class SimulationContextController extends Controller {
         column4.setCellValueFactory(new PropertyValueFactory<>("location"));
         column2.setCellFactory(TextFieldTableCell.<Individual>forTableColumn());
 
-        setIndividualsTable();
-        setComboBox();
         // BLOCK AND UNBLOCK of WINDOWS
 
         CheckBoxTreeItem<String> root2 = new CheckBoxTreeItem<>("Rooms");
         root2.setExpanded(true);
-        for (Room room : Model.house.getRooms()) {
+
+        ArrayList<Room> rooms = simulationContextService.getHouseRooms();
+
+        for (Room room : rooms) {
 
             if (room.getWindows().size() > 0) {
                 CheckBoxTreeItem<String> superItem = new CheckBoxTreeItem<>(room.getName());
-
                 CheckBoxTreeItem<String> windowsItem = new CheckBoxTreeItem<>("Windows");
                 for (Window window : room.getWindows()) {
                     CheckBoxTreeItem<String> item = new CheckBoxTreeItem<>(window.getName());
@@ -64,7 +72,6 @@ public class SimulationContextController extends Controller {
                 superItem.getChildren().add(windowsItem);
                 root2.getChildren().add(superItem);
             }
-
         }
         blockUnblockTreeView.setRoot(root2);
 
@@ -87,32 +94,26 @@ public class SimulationContextController extends Controller {
                 }
             }
         });
+        setTableAndComboChoice();
     }
 
-    public void updateInfo() {
-        setIndividualsTable();
-        setComboBox();
-    }
 
-    private void setComboBox() {
-        ArrayList<String> roomsName = Model.house.roomsName;
+    private void setTableAndComboChoice() {
+        ArrayList<String> roomsName = simulationContextService.getHouseRoomsName();
+        String currentUserLocation = simulationContextService.getCurrentUserLocation();
         locationChoices.setItems(FXCollections.observableArrayList(roomsName));
+        locationChoices.setValue(currentUserLocation);
 
-        locationChoices.setValue(model.user.getCurrentIndividual().getLocation());
-        ArrayList<String> names = new ArrayList<>();
-        for (Individual ind : Model.house.individuals.values()) {
-            names.add(ind.getName());
-        }
+        ArrayList<Individual> individualsList = simulationContextService.getIndividuals();
+        Individual currentUserIndividual = simulationContextService.getCurrentUserIndividual();
 
-        nameChoices.setItems(FXCollections.observableArrayList(names));
-        nameChoices.setValue(model.user.getCurrentIndividual().getName());
-    }
+        nameChoices.setItems(FXCollections.observableArrayList(individualsList));
+        nameChoices.setValue(currentUserIndividual);
 
-
-    private void setIndividualsTable() {
-        individualsTable.setItems(FXCollections.observableArrayList(Model.house.individuals.values()));
+        individualsTable.setItems(FXCollections.observableArrayList(individualsList));
         individualsTable.refresh();
     }
+
 
     @FXML
     private void blockUnblock(ActionEvent actionEvent) {
@@ -127,27 +128,23 @@ public class SimulationContextController extends Controller {
                 }
             }
         }
-
         for (int windowId : windowsToUpdate) {
-            Window window = Model.house.getWindowById(windowId);
-            window.setBlocked(!window.isBlocked());
-            // TODO: Need to log that we block/unblock a window #windowId
+            simulationContextService.updateWindowBlockState(windowId);
         }
-        mainController.drawLayout();
+        mainController.update();
+    }
+
+    @FXML
+    private void updateIndividualLocation(ActionEvent actionEvent) {
+        String location = locationChoices.getSelectionModel().getSelectedItem();
+        Individual individual = nameChoices.getSelectionModel().getSelectedItem();
+        simulationContextService.updateIndividualLocation(individual, location);
+        setTableAndComboChoice();
+        mainController.update();
     }
 
     public void exitSimulationContext(ActionEvent actionEvent) {
         mainController.exitSimulationContext();
     }
 
-    @FXML
-    private void updateIndividualLocation(ActionEvent actionEvent) {
-        String location = locationChoices.getSelectionModel().getSelectedItem();
-        String name = nameChoices.getSelectionModel().getSelectedItem();
-        Individual ind = Model.house.getIndividualByName(name);
-        ind.setLocation(location);
-        setIndividualsTable();
-        setComboBox();
-        mainController.drawLayout();
-    }
 }
