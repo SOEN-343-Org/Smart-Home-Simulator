@@ -6,28 +6,37 @@ import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.CheckBoxTreeCell;
-import org.soen343.models.*;
+import org.soen343.models.Door;
+import org.soen343.models.Light;
+import org.soen343.models.Room;
+import org.soen343.models.Window;
+import org.soen343.services.SmartHomeCoreModuleService;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SmartHomeCoreController extends Controller {
+public class SmartHomeCoreModuleController extends Controller {
     @FXML
     public TreeView<String> openCloseTreeView;
-
+    SmartHomeCoreModuleService smartHomeCoreModuleService;
     private Set<TreeItem<String>> openCloseSelected;
 
     @FXML
     public void initialize() {
-
     }
 
-    public void init() {
+    public void initializeController() {
+
+        smartHomeCoreModuleService = new SmartHomeCoreModuleService();
 
         // OPEN AND CLOSE of DOORS LIGHTS AND WINDOWS
         CheckBoxTreeItem<String> root = new CheckBoxTreeItem<>("Rooms");
         root.setExpanded(true);
-        for (Room room : Model.house.getRooms()) {
+
+        ArrayList<Room> rooms = smartHomeCoreModuleService.getHouseRooms();
+
+        for (Room room : rooms) {
             CheckBoxTreeItem<String> superItem = new CheckBoxTreeItem<>(room.getName());
             if (room.getWindows().size() > 0) {
                 CheckBoxTreeItem<String> windowsItem = new CheckBoxTreeItem<>("Windows");
@@ -86,7 +95,7 @@ public class SmartHomeCoreController extends Controller {
     @FXML
     private void openClose(ActionEvent actionEvent) {
 
-        if (!model.simulationStarted) {
+        if (!smartHomeCoreModuleService.SimulationIsRunning()) {
             // Simulation is not on
             return;
         }
@@ -113,20 +122,14 @@ public class SmartHomeCoreController extends Controller {
         }
 
         for (int doorId : doorsToUpdate) {
-            Door door = Model.house.getDoorById(doorId);
-            door.setOpen(!door.isOpen());
-            // TODO: Need to log that we open a door #doorId
+            smartHomeCoreModuleService.updateDoorState(doorId);
         }
         for (int windowId : windowsToUpdate) {
-            Window window = Model.house.getWindowById(windowId);
-            window.setOpen(!window.isOpen());
-            // TODO: Need to log that we open a window #windowId
+            smartHomeCoreModuleService.updateWindowState(windowId);
         }
         for (int lightId : lightsToUpdate) {
-            Light light = Model.house.getLightById(lightId);
-            light.setOpen(!light.isOpen());
-            // TODO: Need to log that we open a light #lightId
+            smartHomeCoreModuleService.updateLightState(lightId);
         }
-        mainController.drawLayout();
+        mainController.update();
     }
 }
