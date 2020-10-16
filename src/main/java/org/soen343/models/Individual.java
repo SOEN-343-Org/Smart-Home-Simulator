@@ -54,7 +54,7 @@ public class Individual {
 
     @Override
     public String toString() {
-        return "Individual " + getName() + ", role = " + getRole() + ", location = " + getLocation();
+        return getName();
     }
 
     /**
