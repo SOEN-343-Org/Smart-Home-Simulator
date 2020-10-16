@@ -2,12 +2,12 @@ package org.soen343.models;
 
 import java.time.LocalDate;
 
-public class Time {
+public class DateTime {
     private int hours;
     private int minutes;
     private LocalDate date;
 
-    public Time() {
+    public DateTime() {
     }
 
     public int getHours() {
