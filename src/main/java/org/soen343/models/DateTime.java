@@ -3,9 +3,9 @@ package org.soen343.models;
 import java.time.LocalDate;
 
 public class DateTime {
-    private int hours;
-    private int minutes;
-    private LocalDate date;
+    private int hours = 0;
+    private int minutes = 0;
+    private LocalDate date = LocalDate.now();
 
     public DateTime() {
     }

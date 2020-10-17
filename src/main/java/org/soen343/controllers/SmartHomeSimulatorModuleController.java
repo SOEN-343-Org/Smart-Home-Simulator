@@ -87,6 +87,10 @@ public class SmartHomeSimulatorModuleController extends Controller {
             }
         });
         setTableAndComboChoice();
+
+        datePicker.valueProperty().addListener((ov, oldValue, newValue) -> {
+            updateDate(newValue);
+        });
     }
 
     private void setTableAndComboChoice() {
@@ -170,29 +174,31 @@ public class SmartHomeSimulatorModuleController extends Controller {
     }
 
     @FXML
-    private void updateTimeHours(MouseEvent mouseEvent) {
+    private void updateTimeHours(ActionEvent ae) {
         String h = hours.getText();
         if (isInteger(h)) {
             int hours = Integer.parseInt(h);
             smartHomeSimulatorModuleService.updateDateTimeHours(hours);
         }
         mainController.update();
+        mainController.updateContextInfo();
     }
 
     @FXML
-    private void updateTimeMinutes(MouseEvent mouseEvent) {
+    private void updateTimeMinutes(ActionEvent ae) {
         String m = minutes.getText();
         if (isInteger(m)) {
             int minutes = Integer.parseInt(m);
             smartHomeSimulatorModuleService.updateDateTimeMinutes(minutes);
         }
         mainController.update();
+        mainController.updateContextInfo();
     }
 
-    public void updateDate(MouseEvent mouseEvent) {
-        LocalDate date = datePicker.getValue();
-        smartHomeSimulatorModuleService.updateDateTimeDate(date);
+    public void updateDate(LocalDate d) {
+        smartHomeSimulatorModuleService.updateDateTimeDate(d);
         mainController.update();
+        mainController.updateContextInfo();
     }
 
 }

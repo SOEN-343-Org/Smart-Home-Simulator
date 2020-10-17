@@ -114,12 +114,12 @@
                     </padding>
                     <children>
                         <Label alignment="CENTER" prefHeight="24.0" prefWidth="158.0" text="Set date and Time"/>
-                        <DatePicker fx:id="datePicker" onMouseExited="#updateDate"/>
+                        <DatePicker fx:id="datePicker"/>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                             <children>
-                                <TextField fx:id="hours" onMouseExited="#updateTimeHours"/>
+                                <TextField fx:id="hours" onAction="#updateTimeHours"/>
                                 <Label prefHeight="17.0" prefWidth="24.0" text=":"/>
-                                <TextField fx:id="minutes" onMouseExited="#updateTimeMinutes"/>
+                                <TextField fx:id="minutes" onAction="#updateTimeMinutes"/>
                             </children>
                         </HBox>
                     </children>

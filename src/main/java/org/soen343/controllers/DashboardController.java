@@ -48,6 +48,10 @@ public class DashboardController extends Controller {
         houseLayoutController.drawLayout();
     }
 
+    public void updateContextInfo() {
+        simulationInfoController.setContextBox();
+    }
+
     public void enterSimulationContext() {
         simulationContextController.initializeController();
         simulationContext.setVisible(true);
