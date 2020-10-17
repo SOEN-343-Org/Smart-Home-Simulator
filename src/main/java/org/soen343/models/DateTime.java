@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class DateTime {
     private int hours;
     private int minutes;
+    private int seconds;
     private LocalDate date;
 
     public DateTime() {
@@ -36,5 +37,13 @@ public class DateTime {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public int getSeconds() {
+        return seconds;
+    }
+
+    public void setSeconds(int seconds) {
+        this.seconds = seconds;
     }
 }

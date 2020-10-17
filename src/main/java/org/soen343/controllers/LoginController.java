@@ -26,96 +26,108 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LoginController extends Controller {
-    @FXML private TextField tfUsernameSignUp;
-    @FXML private TextField tfPassSignUp;
-    @FXML private TextField tfUsernameLogIn;
-    @FXML private PasswordField tfPassLogIn;
-    @FXML private Label invalidLogInLabel;
-    @FXML private Label invalidSignUpLabel;
-    @FXML private Pane signUpPane;
-    @FXML private Pane logInPane;
-
     Connection connection;
     Statement statement;
+    @FXML
+    private TextField tfUsernameSignUp;
+    @FXML
+    private TextField tfPassSignUp;
+    @FXML
+    private TextField tfUsernameLogIn;
+    @FXML
+    private PasswordField tfPassLogIn;
+    @FXML
+    private Label invalidLogInLabel;
+    @FXML
+    private Label invalidSignUpLabel;
+    @FXML
+    private Pane signUpPane;
+    @FXML
+    private Pane logInPane;
+
+    private static Parent loadFXML() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("DashboardView" + ".fxml"));
+        return fxmlLoader.load();
+    }
 
     @Override
     void initializeController() {
-        //not sure what this is
     }
-    public void initialize(){
+
+    public void initialize() {
         try {
             connection = DBConnection.getConnection();
             statement = connection.createStatement();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
             System.exit(0);
         }
     }
 
-    public void btnSwitchSignUpAction(){
+    public void btnSwitchSignUpAction() {
         setFieldsToBlanks();
         signUpPane.toFront();
     }
 
-    public void btnSwitchLogInAction(){
+    public void btnSwitchLogInAction() {
         setFieldsToBlanks();
         logInPane.toFront();
     }
 
-    public void btnLogInAction(ActionEvent actionEvent){
-        if(!tfUsernameLogIn.getText().isBlank() && !tfPassLogIn.getText().isBlank()){
+    public void btnLogInAction(ActionEvent actionEvent) {
+        if (!tfUsernameLogIn.getText().isBlank() && !tfPassLogIn.getText().isBlank()) {
             validateLogin(actionEvent);
-        }else {
+        } else {
             invalidLogInLabel.setText("Please enter your username and password");
         }
     }
 
-    public void btnSignUpAction(ActionEvent actionEvent){
-        if(!tfUsernameSignUp.getText().isBlank() && !tfPassSignUp.getText().isBlank()){
+    public void btnSignUpAction(ActionEvent actionEvent) {
+        if (!tfUsernameSignUp.getText().isBlank() && !tfPassSignUp.getText().isBlank()) {
             validateSignUp(actionEvent);
-        }else {
+        } else {
             invalidSignUpLabel.setText("Please enter a username and password");
         }
     }
 
-    public void validateSignUp(ActionEvent actionEvent){
+    public void validateSignUp(ActionEvent actionEvent) {
         try {
             String usernameExistsQuery = SQLQueriesBuilder.usernameExists(tfUsernameSignUp.getText());
             ResultSet queryResult = statement.executeQuery(usernameExistsQuery);
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, usernameExistsQuery);
-            while (queryResult.next()){
-                if (queryResult.getInt(1)==1){
+            while (queryResult.next()) {
+                if (queryResult.getInt(1) == 1) {
                     invalidSignUpLabel.setText("This username is already in use");
-                }else {
-                    String addUserQuery = SQLQueriesBuilder.addUser(tfUsernameSignUp.getText(),tfPassSignUp.getText());
+                } else {
+                    String addUserQuery = SQLQueriesBuilder.addUser(tfUsernameSignUp.getText(), tfPassSignUp.getText());
                     Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, addUserQuery);
                     statement.executeUpdate(addUserQuery);
                     changeScene(actionEvent);
                     break;
                 }
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
             System.exit(0);
         }
     }
 
-    public void validateLogin(ActionEvent actionEvent){
+    public void validateLogin(ActionEvent actionEvent) {
         try {
             String usernameExistsQuery = SQLQueriesBuilder.usernameExists(tfUsernameLogIn.getText());
             String userExistsQuery = SQLQueriesBuilder.userExists(tfUsernameLogIn.getText(), tfPassLogIn.getText());
 
             ResultSet queryResult = statement.executeQuery(usernameExistsQuery);
             //always 1 result
-            while(queryResult.next()){
-                if(queryResult.getInt(1)==0){
+            while (queryResult.next()) {
+                if (queryResult.getInt(1) == 0) {
                     invalidLogInLabel.setText("User does not exist. Please sign up");
-                }else{
+                } else {
                     queryResult = statement.executeQuery(userExistsQuery);
-                    while (queryResult.next()){
-                        if(queryResult.getInt(1)==0){
+                    while (queryResult.next()) {
+                        if (queryResult.getInt(1) == 0) {
                             invalidLogInLabel.setText("Invalid password. Please try again");
-                        }else {
+                        } else {
                             invalidLogInLabel.setText("IT WORKED. REMOVE LATER");
                             User.setUsername(tfUsernameLogIn.getText());
                             changeScene(actionEvent);
@@ -123,18 +135,19 @@ public class LoginController extends Controller {
                     }
                 }
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
             System.exit(0);
         }
     }
 
-    public void changeScene(ActionEvent actionEvent){
+    public void changeScene(ActionEvent actionEvent) {
         try {
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(loadFXML(), 1200, 900);
-            stage.setScene(scene);stage.show();
-        }catch (IOException e) {
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
             System.exit(0);
         }
@@ -147,10 +160,5 @@ public class LoginController extends Controller {
         tfPassLogIn.setText("");
         invalidSignUpLabel.setText("");
         invalidLogInLabel.setText("");
-    }
-
-    private static Parent loadFXML() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("DashboardView" + ".fxml"));
-        return fxmlLoader.load();
     }
 }

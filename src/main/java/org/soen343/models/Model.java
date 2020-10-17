@@ -18,20 +18,15 @@ public class Model {
     public House house;
     public DateTime dateTime;
     public boolean simulationRunning;
-    public boolean simulationStarted;
-
 
     /**
      * Default constructor for Model object
      */
     public Model() {
         house = HouseLayoutUtil.ReadHouseLayoutFile();
-        simulationStarted = false;
         connection = DBConnection.getConnection();
         simulationRunning = false;
         dateTime = new DateTime();
-
-        connection = DBConnection.getConnection();
     }
 
     public boolean updateIndividualRole(String newRole, Integer idSelected) {
@@ -60,7 +55,8 @@ public class Model {
                         username);
                 house.individuals.put(individual.getId(), individual);
             }
-            User.setCurrentIndividual((Individual) house.individuals.values().toArray()[0]); //TODO: remove this for proper login logic
+
+            User.setCurrentIndividual(null);
             return true;
 
         } catch (SQLException e) {

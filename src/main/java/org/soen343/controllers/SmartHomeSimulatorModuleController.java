@@ -17,11 +17,9 @@ import java.util.ArrayList;
 public class SmartHomeSimulatorModuleController extends Controller {
 
     @FXML
+    private TextField time;
+    @FXML
     private DatePicker datePicker;
-    @FXML
-    private TextField hours;
-    @FXML
-    private TextField minutes;
     @FXML
     private ChoiceBox<String> locationChoices;
     @FXML
@@ -86,10 +84,10 @@ public class SmartHomeSimulatorModuleController extends Controller {
                 onSelectRow();
             }
         });
-        setTableAndComboChoice();
+        update();
     }
 
-    private void setTableAndComboChoice() {
+    public void update() {
         ArrayList<String> roomsName = smartHomeSimulatorModuleService.getHouseRoomsName();
 
         locationChoicesAdd.setItems(FXCollections.observableArrayList(roomsName));
@@ -103,7 +101,6 @@ public class SmartHomeSimulatorModuleController extends Controller {
 
         ArrayList<Individual> individualsList = smartHomeSimulatorModuleService.getIndividuals();
         Individual currentUserIndividual = smartHomeSimulatorModuleService.getCurrentUserIndividual();
-
         nameChoices.setItems(FXCollections.observableArrayList(individualsList));
         nameChoices.setValue(currentUserIndividual);
 
@@ -131,7 +128,6 @@ public class SmartHomeSimulatorModuleController extends Controller {
         } else {
             //TODO: inform user name cannot be empty
         }
-        setTableAndComboChoice();
         mainController.update();
     }
 
@@ -145,7 +141,6 @@ public class SmartHomeSimulatorModuleController extends Controller {
         } else {
             //TODO: inform user name cannot be empty
         }
-        setTableAndComboChoice();
         mainController.update();
     }
 
@@ -157,42 +152,45 @@ public class SmartHomeSimulatorModuleController extends Controller {
         } else {
             //TODO: inform id has to be a number
         }
-        setTableAndComboChoice();
         mainController.update();
     }
 
     public void onCurrentIndividualUpdate(ActionEvent actionEvent) {
         String location = locationChoices.getSelectionModel().getSelectedItem();
         Individual individual = nameChoices.getSelectionModel().getSelectedItem();
+        System.out.println(individual);
+        smartHomeSimulatorModuleService.updateUserIndividual(individual);
         smartHomeSimulatorModuleService.updateIndividualLocation(individual, location);
-        setTableAndComboChoice();
         mainController.update();
     }
 
     @FXML
-    private void updateTimeHours(MouseEvent mouseEvent) {
-        String h = hours.getText();
-        if (isInteger(h)) {
-            int hours = Integer.parseInt(h);
-            smartHomeSimulatorModuleService.updateDateTimeHours(hours);
-        }
-        mainController.update();
-    }
-
-    @FXML
-    private void updateTimeMinutes(MouseEvent mouseEvent) {
-        String m = minutes.getText();
-        if (isInteger(m)) {
-            int minutes = Integer.parseInt(m);
-            smartHomeSimulatorModuleService.updateDateTimeMinutes(minutes);
-        }
-        mainController.update();
-    }
-
-    public void updateDate(MouseEvent mouseEvent) {
+    private void updateDate(MouseEvent mouseEvent) {
         LocalDate date = datePicker.getValue();
         smartHomeSimulatorModuleService.updateDateTimeDate(date);
         mainController.update();
     }
 
+    @FXML
+    private void updateDateTime(ActionEvent actionEvent) {
+
+        if (datePicker.getValue() != null) {
+            LocalDate date = datePicker.getValue();
+            smartHomeSimulatorModuleService.updateDateTimeDate(date);
+        }
+        if (!time.getText().isBlank()) {
+            String t = time.getText();
+            String[] timeArray = t.split(":");
+            if (timeArray.length == 3 && timeArray[0].length() == 2 && isInteger(timeArray[0]) && timeArray[1].length() == 2 && isInteger(timeArray[1]) && timeArray[2].length() == 2 && isInteger(timeArray[2])) {
+                int h = Integer.parseInt(timeArray[0]);
+                int m = Integer.parseInt(timeArray[1]);
+                int s = Integer.parseInt(timeArray[2]);
+
+                if (h >= 0 && h < 24 && m >= 0 && m < 60 && s >= 0 && s < 60) {
+                    smartHomeSimulatorModuleService.updateTime(h, m, s);
+                }
+            }
+        }
+        mainController.update();
+    }
 }

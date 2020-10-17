@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -25,7 +26,11 @@
                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
                             </children>
                         </HBox>
-                        <TextField alignment="CENTER" layoutX="91.0" layoutY="240.0" prefHeight="45.0" prefWidth="204.0" text="Smarthome+" />
+                  <ImageView fitHeight="281.0" fitWidth="373.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/logo_transparent.png" />
+                     </image>
+                  </ImageView>
                     </children>
                 </Pane>
             </left>
@@ -36,7 +41,7 @@
                             <children>
                                 <TextField fx:id="tfUsernameLogIn" layoutX="85.0" layoutY="195.0" prefHeight="50.0" prefWidth="260.0" promptText="Username" />
                                 <Button fx:id="btnLogIn" layoutX="265.0" layoutY="355.0" mnemonicParsing="false" onAction="#btnLogInAction" prefHeight="20.0" prefWidth="74.0" text="Login" />
-                                <Button fx:id="btnSwitchSignUp" layoutX="90.0" layoutY="438.0" mnemonicParsing="false" onAction="#btnSwitchSignUpAction" prefHeight="25.0" prefWidth="247.0" style="-fx-background-color: #ffff;" text="Don't have an account? Create one here" />
+                                <Button fx:id="btnSwitchSignUp" layoutX="90.0" layoutY="438.0" mnemonicParsing="false" onAction="#btnSwitchSignUpAction" prefHeight="25.0" prefWidth="247.0" style="-fx-background-color: #ffff;" text="Don't have an account? Create one here" textFill="#0f2be1" underline="true" />
                                 <TextField layoutX="66.0" layoutY="123.0" style="-fx-background-color: #ffffff;" text="Login">
                                     <font>
                                         <Font name="System Bold" size="24.0" />
@@ -56,7 +61,7 @@
                                     </font>
                                 </TextField>
                         <Label fx:id="invalidSignUpLabel" alignment="CENTER" layoutX="85.0" layoutY="331.0" prefHeight="17.0" prefWidth="258.0" textFill="RED" />
-                        <Button fx:id="btnSwitchLogIn" layoutX="85.0" layoutY="438.0" mnemonicParsing="false" onAction="#btnSwitchLogInAction" prefHeight="25.0" prefWidth="247.0" style="-fx-background-color: #ffff;" text="Already have an account? Log in here" />
+                        <Button fx:id="btnSwitchLogIn" layoutX="85.0" layoutY="438.0" mnemonicParsing="false" onAction="#btnSwitchLogInAction" prefHeight="25.0" prefWidth="247.0" style="-fx-background-color: #ffff;" text="Already have an account? Log in here" textFill="#0f2be1" underline="true" />
                         <PasswordField fx:id="tfPassSignUp" layoutX="85.0" layoutY="271.0" prefHeight="50.0" prefWidth="260.0" promptText="Password" />
                             </children>
                         </Pane>

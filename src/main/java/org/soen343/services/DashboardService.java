@@ -8,9 +8,7 @@ public class DashboardService extends Service {
 
     }
 
-    //TODO: Add login logic to get the good username and this should be done directly after logging in
     public void populateIndividuals() {
         model.setIndividualsFromUser(User.getUsername());
     }
-
 }

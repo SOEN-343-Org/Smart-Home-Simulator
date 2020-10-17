@@ -24,7 +24,10 @@ public abstract class Service {
     }
 
     public String getCurrentUserLocation() {
-        return User.getCurrentIndividual().getLocation();
+        if (User.getCurrentIndividual() != null) {
+            return User.getCurrentIndividual().getLocation();
+        }
+        return "outside";
     }
 
     public ArrayList<Individual> getIndividuals() {
@@ -41,7 +44,9 @@ public abstract class Service {
 
     public void updateIndividualLocation(Individual individual, String location) {
         //TODO: Log that we update location of that individual
-        individual.setLocation(location);
+        if (individual != null) {
+            individual.setLocation(location);
+        }
     }
 
 
