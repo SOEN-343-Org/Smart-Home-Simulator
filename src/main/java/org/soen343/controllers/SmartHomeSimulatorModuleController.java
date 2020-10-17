@@ -21,6 +21,8 @@ public class SmartHomeSimulatorModuleController extends Controller {
     @FXML
     private DatePicker datePicker;
     @FXML
+    private TextField outsideTemp;
+    @FXML
     private ChoiceBox<String> locationChoices;
     @FXML
     private ChoiceBox<Individual> nameChoices;
@@ -62,10 +64,6 @@ public class SmartHomeSimulatorModuleController extends Controller {
         }
         // only got here if we didn't return false
         return true;
-    }
-
-    @FXML
-    public void initialize() {
     }
 
     public void initializeController() {
@@ -131,7 +129,8 @@ public class SmartHomeSimulatorModuleController extends Controller {
         mainController.update();
     }
 
-    public void onAddIndividual(ActionEvent actionEvent) {
+    @FXML
+    private void onAddIndividual(ActionEvent actionEvent) {
         if (!addedName.getText().isBlank()) {
             String name = addedName.getText();
             String role = roleChoicesAdd.getSelectionModel().getSelectedItem();
@@ -144,7 +143,8 @@ public class SmartHomeSimulatorModuleController extends Controller {
         mainController.update();
     }
 
-    public void onRemoveIndividual(ActionEvent actionEvent) {
+    @FXML
+    private void onRemoveIndividual(ActionEvent actionEvent) {
         if (isInteger(idToRemove.getText())) {
             int individualId = Integer.parseInt(idToRemove.getText());
             boolean success = smartHomeSimulatorModuleService.RemoveIndividual(individualId);
@@ -155,21 +155,15 @@ public class SmartHomeSimulatorModuleController extends Controller {
         mainController.update();
     }
 
-    public void onCurrentIndividualUpdate(ActionEvent actionEvent) {
+    @FXML
+    private void onCurrentIndividualUpdate(ActionEvent actionEvent) {
         String location = locationChoices.getSelectionModel().getSelectedItem();
         Individual individual = nameChoices.getSelectionModel().getSelectedItem();
-        System.out.println(individual);
         smartHomeSimulatorModuleService.updateUserIndividual(individual);
         smartHomeSimulatorModuleService.updateIndividualLocation(individual, location);
         mainController.update();
     }
 
-    @FXML
-    private void updateDate(MouseEvent mouseEvent) {
-        LocalDate date = datePicker.getValue();
-        smartHomeSimulatorModuleService.updateDateTimeDate(date);
-        mainController.update();
-    }
 
     @FXML
     private void updateDateTime(ActionEvent actionEvent) {
@@ -193,4 +187,15 @@ public class SmartHomeSimulatorModuleController extends Controller {
         }
         mainController.update();
     }
+
+    @FXML
+    private void updateOutsideTemp(ActionEvent ae) {
+        String t = outsideTemp.getText();
+        if (isInteger(t)) {
+            int temp = Integer.parseInt(t);
+            smartHomeSimulatorModuleService.updateOutsideTemp(temp);
+        }
+        mainController.update();
+    }
+
 }

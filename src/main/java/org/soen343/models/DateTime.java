@@ -6,7 +6,7 @@ public class DateTime {
     private int hours;
     private int minutes;
     private int seconds;
-    private LocalDate date;
+    private LocalDate date = LocalDate.now();
 
     public DateTime() {
     }
@@ -44,6 +44,8 @@ public class DateTime {
     }
 
     public void setSeconds(int seconds) {
-        this.seconds = seconds;
+        if (0 <= seconds && seconds <= 59) {
+            this.seconds = seconds;
+        }
     }
 }

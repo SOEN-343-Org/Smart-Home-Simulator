@@ -17,9 +17,9 @@
         <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="450.0">
             <children>
                 <Label alignment="CENTER" prefHeight="24.0" prefWidth="137.0" text="Manage profiles" />
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                <HBox alignment="CENTER" prefHeight="146.0" prefWidth="450.0">
                     <children>
-                        <TableView fx:id="individualsTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0">
+                        <TableView fx:id="individualsTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="400.0">
                             <columns>
                                 <TableColumn fx:id="column1" editable="false" prefWidth="75.0" text="ID" />
                                 <TableColumn fx:id="column2" onEditCommit="#onEditName" prefWidth="75.0" text="Name" />
@@ -100,13 +100,27 @@
                         <Label alignment="CENTER" prefHeight="24.0" prefWidth="179.0" text="Set date and Time" />
                         <DatePicker fx:id="datePicker" />
                         <TextField fx:id="time" text="HH:mm:ss" />
-                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="147.0" text="Set" onAction="#updateDateTime"/>
+                  <Button mnemonicParsing="false" onAction="#updateDateTime" prefHeight="25.0" prefWidth="103.0" text="Set" />
 
                     </children>
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
                 </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="19.0" prefWidth="450.0" spacing="15.0">
+               <children>
+                  <Label prefHeight="17.0" prefWidth="144.0" text="Set Outside Temperature">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding></Label>
+                  <TextField fx:id="outsideTemp" prefHeight="25.0" prefWidth="73.0" />
+                  <Label prefHeight="25.0" prefWidth="19.0" text="°C" />
+                  <Button mnemonicParsing="false" onAction="#updateOutsideTemp" prefHeight="25.0" prefWidth="48.0" text="Set" />
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </HBox>
             </children>
         </VBox>
     </children>

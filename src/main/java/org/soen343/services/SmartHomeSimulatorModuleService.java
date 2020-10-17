@@ -46,4 +46,6 @@ public class SmartHomeSimulatorModuleService extends Service {
         model.dateTime.setMinutes(m);
         model.dateTime.setSeconds(s);
     }
+
+    public void updateOutsideTemp(Integer temp) { model.outsideTemp.setTemperature(temp); }
 }
