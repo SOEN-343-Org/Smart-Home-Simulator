@@ -17,6 +17,7 @@ public class Model {
     public House house;
     public User user;
     public DateTime dateTime;
+    public OutsideTemperature outsideTemp;
     public boolean simulationRunning;
 
 
@@ -28,6 +29,7 @@ public class Model {
         simulationRunning = false;
         user = new User("test123");
         dateTime = new DateTime();
+        outsideTemp = new OutsideTemperature();
 
         try {
             connection = DBConnection.getConnection();

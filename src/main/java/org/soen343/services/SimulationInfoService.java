@@ -21,5 +21,7 @@ public class SimulationInfoService extends Service {
     public Integer getContextHours() { return model.dateTime.getHours(); }
     public Integer getContextMin() { return model.dateTime.getMinutes(); }
 
+    public Integer getOutsideTemp() { return model.outsideTemp.getTemperature(); }
+
 
 }

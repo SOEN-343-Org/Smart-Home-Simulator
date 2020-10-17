@@ -23,6 +23,8 @@ public class SmartHomeSimulatorModuleController extends Controller {
     @FXML
     private TextField minutes;
     @FXML
+    private TextField outsideTemp;
+    @FXML
     private ChoiceBox<String> locationChoices;
     @FXML
     private ChoiceBox<Individual> nameChoices;
@@ -198,6 +200,16 @@ public class SmartHomeSimulatorModuleController extends Controller {
     public void updateDate(LocalDate d) {
         smartHomeSimulatorModuleService.updateDateTimeDate(d);
         mainController.update();
+        mainController.updateContextInfo();
+    }
+
+    @FXML
+    private void updateOutsideTemp(ActionEvent ae) {
+        String t = outsideTemp.getText();
+        if (isInteger(t)) {
+            int temp = Integer.parseInt(t);
+            smartHomeSimulatorModuleService.updateOutsideTemp(temp);
+        }
         mainController.updateContextInfo();
     }
 

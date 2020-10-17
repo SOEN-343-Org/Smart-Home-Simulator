@@ -52,8 +52,10 @@ public class SimulationInfoController extends Controller {
         hours = hours.length() == 1 ? "0" + hours : hours;
         min = min.length() == 1 ? "0" + min : min;
         String formattedTime = hours + " : " + min;
-
         chosenDate.setText(formattedDate);
-        chosenTime.setText(formattedTime);
+        chosenTime.setText(formattedTime + " h");
+
+        String temp = Integer.toString(simulationInfoService.getOutsideTemp());
+        outsideTemp.setText(temp + " °C");
     }
 }

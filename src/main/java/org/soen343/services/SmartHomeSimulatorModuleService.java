@@ -38,4 +38,6 @@ public class SmartHomeSimulatorModuleService extends Service {
     public void updateDateTimeDate(LocalDate date) {
         model.dateTime.setDate(date);
     }
+
+    public void updateOutsideTemp(Integer temp) { model.outsideTemp.setTemperature(temp); }
 }
