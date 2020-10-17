@@ -159,7 +159,6 @@ public class SmartHomeSimulatorModuleController extends Controller {
     private void onCurrentIndividualUpdate(ActionEvent actionEvent) {
         String location = locationChoices.getSelectionModel().getSelectedItem();
         Individual individual = nameChoices.getSelectionModel().getSelectedItem();
-        System.out.println(individual);
         smartHomeSimulatorModuleService.updateUserIndividual(individual);
         smartHomeSimulatorModuleService.updateIndividualLocation(individual, location);
         mainController.update();
