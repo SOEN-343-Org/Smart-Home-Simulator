@@ -1,6 +1,7 @@
 package org.soen343.models;
 
 import org.soen343.connection.DBConnection;
+import org.soen343.connection.SQLQueriesBuilder;
 import org.soen343.util.HouseLayoutUtil;
 
 import java.sql.*;
@@ -35,10 +36,8 @@ public class Model {
 
     public boolean updateIndividualRole(String newRole, Integer idSelected) {
         try {
-            connection.createStatement().executeUpdate(
-                    "UPDATE individuals" +
-                            " SET role = '" + newRole +
-                            "' WHERE individualId = " + idSelected);
+            String updateUserQuery = SQLQueriesBuilder.updateRole(newRole, idSelected);
+            connection.createStatement().executeUpdate(updateUserQuery);
             house.individuals.get(idSelected).setRole(newRole);
             return true;
         } catch (SQLException e) {
@@ -50,7 +49,8 @@ public class Model {
 
     public boolean setIndividualsFromUser(String username) {
         try {
-            ResultSet rs = connection.createStatement().executeQuery("select * from individuals where username='" + username + "'");
+            String getIndividualsQuery = SQLQueriesBuilder.getIndividuals(username);
+            ResultSet rs = connection.createStatement().executeQuery(getIndividualsQuery);
 
             while (rs.next()) {
                 Individual individual = new Individual(rs.getInt("individualId"),
@@ -71,11 +71,8 @@ public class Model {
 
     public boolean updateIndividualName(String newName, int idSelected) {
         try {
-            connection.createStatement().executeUpdate(
-                    "update individuals" +
-                            " set name = '" + newName +
-                            "' where individualId = " + idSelected);
-
+            String updateIndividualNameQuery = SQLQueriesBuilder.updateIndividualName(newName, idSelected);
+            connection.createStatement().executeUpdate(updateIndividualNameQuery);
             house.individuals.get(idSelected).setName(newName);
             return true;
 
@@ -88,10 +85,8 @@ public class Model {
     public boolean addIndividual(String name, String role, String username, String location) {
         int generatedKey = 0;
         try {
-            String sqlStatement = "INSERT into individuals" +
-                    " (name,role,username) VALUES ('" + name + "','" +
-                    role + "','" + username + "')";
-            PreparedStatement ps = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
+            String addIndividualQuery = SQLQueriesBuilder.addIndividual(name, role, username);
+            PreparedStatement ps = connection.prepareStatement(addIndividualQuery, Statement.RETURN_GENERATED_KEYS);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
 
@@ -112,8 +107,8 @@ public class Model {
 
     public boolean removeIndividual(int idToRemove) {
         try {
-            connection.createStatement().executeUpdate("DELETE from individuals" +
-                    " where individualId=" + idToRemove);
+            String removeIndividualQuery = SQLQueriesBuilder.removeIndividual(idToRemove);
+            connection.createStatement().executeUpdate(removeIndividualQuery);
             house.individuals.remove(idToRemove);
             return true;
 

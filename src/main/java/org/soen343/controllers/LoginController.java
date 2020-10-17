@@ -40,13 +40,7 @@ public class LoginController extends Controller {
 
     @Override
     void initializeController() {
-        try {
-            connection = DBConnection.getConnection();
-            statement = connection.createStatement();
-        }catch (SQLException e){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
-            System.exit(0);
-        }
+        //not sure what this is
     }
     public void initialize(){
         try {

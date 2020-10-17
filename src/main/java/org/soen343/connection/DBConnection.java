@@ -16,21 +16,20 @@ public class DBConnection {
      * Gets connection to MySQL DB.
      *
      * @return Connection connection
-     * @throws SQLException the sql exception
      */
     public static Connection getConnection(){
 
-        String hostName = "sql9.freemysqlhosting.net";
-        String port = "3306";
-        String dbName = "sql9370834";
-        String url = "jdbc:mysql://" + hostName + ":" + port + "/" + dbName;
-        String username = "sql9370834";
-        String password = "48zb95EinY";
+        final String HOSTNAME = "sql9.freemysqlhosting.net";
+        final String PORT = "3306";
+        final String DB_NAME = "sql9370834";
+        final String URL = "jdbc:mysql://" + HOSTNAME + ":" + PORT + "/" + DB_NAME;
+        final String USERNAME = "sql9370834";
+        final String PASSWORD = "48zb95EinY";
 
         System.out.println("Connecting database...");
 
         try {
-            Connection connection = DriverManager.getConnection(url, username, password);
+            Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             System.out.println("Database connected!");
             return connection;
         }
