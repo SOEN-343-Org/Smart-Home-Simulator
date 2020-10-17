@@ -46,10 +46,19 @@ public class House {
     /**
      * Gets all the rooms in the house
      *
-     * @return Array of rooms
+     * @return ArrayList of rooms
      */
     public ArrayList<Room> getRooms() {
         return new ArrayList<>(rooms.values());
+    }
+
+    /**
+     * Gets all the individuals in the house
+     *
+     * @return ArrayList of Individual
+     */
+    public ArrayList<Individual> getIndividuals() {
+        return new ArrayList<>(individuals.values());
     }
 
     /**

@@ -38,12 +38,22 @@ public class LoginController extends Controller {
     Connection connection;
     Statement statement;
 
+    @Override
+    void initializeController() {
+        try {
+            connection = DBConnection.getConnection();
+            statement = connection.createStatement();
+        }catch (SQLException e){
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
+            System.exit(0);
+        }
+    }
     public void initialize(){
         try {
             connection = DBConnection.getConnection();
             statement = connection.createStatement();
         }catch (SQLException e){
-            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
             System.exit(0);
         }
     }
@@ -91,7 +101,7 @@ public class LoginController extends Controller {
                 }
             }
         }catch (SQLException e){
-            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
             System.exit(0);
         }
     }
@@ -131,7 +141,7 @@ public class LoginController extends Controller {
             Scene scene = new Scene(loadFXML(), 1200, 900);
             stage.setScene(scene);stage.show();
         }catch (IOException e) {
-            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
             System.exit(0);
         }
     }

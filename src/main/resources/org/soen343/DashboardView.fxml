@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
@@ -9,7 +9,7 @@
             fx:controller="org.soen343.controllers.DashboardController">
     <children>
         <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                  minWidth="-Infinity" prefHeight="900.0" prefWidth="1200.0">
+                  minWidth="-Infinity" prefHeight="900.0" prefWidth="1200.0" style="-fx-background-color: white;">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="392.0" minWidth="10.0" prefWidth="217.0"/>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="732.0" minWidth="10.0" prefWidth="447.0"/>
@@ -30,10 +30,35 @@
                             minWidth="-Infinity" source="OutputConsoleView.fxml" GridPane.columnIndex="1"
                             GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2"
                             GridPane.valignment="CENTER"/>
-                <fx:include fx:id="smartHomeCore" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                            minWidth="-Infinity" prefHeight="510.0" prefWidth="450.0" source="SmartHomeCoreView.fxml"
-                            GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1"
-                            GridPane.valignment="CENTER"/>
+                <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                         prefHeight="510.0" prefWidth="450.0" style="-fx-border-color: black; -fx-border-width: 5;"
+                         tabClosingPolicy="UNAVAILABLE" tabMaxHeight="20.0" tabMaxWidth="200.0" tabMinHeight="20.0"
+                         tabMinWidth="50.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <tabs>
+                        <Tab closable="false" text="SHS">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                    <children>
+                                        <fx:include fx:id="smartHomeSimulatorModule" maxHeight="-Infinity" maxWidth="-Infinity"
+                                                    minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0"
+                                                    prefWidth="450.0" source="SmartHomeSimulatorModuleView.fxml"
+                                                    GridPane.columnIndex="1" GridPane.halignment="CENTER"
+                                                    GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </Tab>
+                        <Tab closable="false" text="SHC">
+                            <content>
+                                <fx:include fx:id="smartHomeCoreModule" maxHeight="-Infinity" maxWidth="-Infinity"
+                                            minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0"
+                                            prefWidth="450.0" source="SmartHomeCoreModuleView.fxml" GridPane.columnIndex="1"
+                                            GridPane.halignment="CENTER" GridPane.rowIndex="1"
+                                            GridPane.valignment="CENTER"/>
+                            </content>
+                        </Tab>
+                    </tabs>
+                </TabPane>
                 <Label alignment="CENTER" prefHeight="35.0" prefWidth="324.0" text="SMART HOME SIMULATOR"
                        GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
                     <font>
@@ -54,9 +79,7 @@
                 </Label>
             </children>
         </GridPane>
-
-        <fx:include fx:id="individual" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                    prefHeight="900.0" prefWidth="1200.0" source="IndividualView.fxml"/>
+        <fx:include source="SimulationContextView.fxml" fx:id="simulationContext"/>
     </children>
 
 </AnchorPane>

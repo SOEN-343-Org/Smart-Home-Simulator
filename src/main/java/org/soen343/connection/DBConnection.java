@@ -1,7 +1,5 @@
 package org.soen343.connection;
 
-import org.soen343.controllers.IndividualController;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -37,7 +35,7 @@ public class DBConnection {
             return connection;
         }
         catch (SQLException e){
-            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
             System.exit(0);
         }
         return null;
