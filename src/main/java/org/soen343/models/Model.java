@@ -29,13 +29,6 @@ public class Model {
         simulationRunning = false;
         dateTime = new DateTime();
         outsideTemp = new OutsideTemperature();
-
-        try {
-            connection = DBConnection.getConnection();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            System.exit(0);
-        }
     }
 
     public boolean updateIndividualRole(String newRole, Integer idSelected) {
@@ -121,5 +114,15 @@ public class Model {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, e);
         }
         return false;
+    }
+
+    public boolean setSimulationIsRunning() {
+        Individual ind = User.getCurrentIndividual();
+        if (ind == null) {
+            System.out.println("Cannot start simulation, profile not selected");
+            return false;
+        }
+        simulationRunning = !simulationRunning;
+        return true;
     }
 }

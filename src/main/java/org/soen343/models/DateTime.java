@@ -44,6 +44,8 @@ public class DateTime {
     }
 
     public void setSeconds(int seconds) {
-        this.seconds = seconds;
+        if (0 <= seconds && seconds <= 59) {
+            this.seconds = seconds;
+        }
     }
 }
