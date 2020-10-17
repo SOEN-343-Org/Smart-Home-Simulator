@@ -4,15 +4,14 @@ package org.soen343.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.soen343.App;
 import org.soen343.connection.DBConnection;
 import org.soen343.connection.SQLQueriesBuilder;
@@ -27,19 +26,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LoginController extends Controller {
-    @FXML private Button btnSignUp;
     @FXML private TextField tfUsernameSignUp;
     @FXML private TextField tfPassSignUp;
     @FXML private TextField tfUsernameLogIn;
     @FXML private PasswordField tfPassLogIn;
-    @FXML private Button btnLogIn;
-    @FXML private Button btnSwitchSignUp;
-    @FXML private Button btnSwitchLogIn;
     @FXML private Label invalidLogInLabel;
     @FXML private Label invalidSignUpLabel;
     @FXML private Pane signUpPane;
     @FXML private Pane logInPane;
-    DashboardController mainController;
+
     Connection connection;
     Statement statement;
 
@@ -53,28 +48,19 @@ public class LoginController extends Controller {
         }
     }
 
-    public void btnSwitchSignUpAction(ActionEvent actionEvent){
-        tfUsernameSignUp.setText("");
-        tfPassSignUp.setText("");
-        tfUsernameLogIn.setText("");
-        tfPassLogIn.setText("");
-        invalidSignUpLabel.setText("");
-        invalidLogInLabel.setText("");
+    public void btnSwitchSignUpAction(){
+        setFieldsToBlanks();
         signUpPane.toFront();
     }
-    public void btnSwitchLogInAction(ActionEvent actionEvent){
-        tfUsernameSignUp.setText("");
-        tfPassSignUp.setText("");
-        tfUsernameLogIn.setText("");
-        tfPassLogIn.setText("");
-        invalidSignUpLabel.setText("");
-        invalidLogInLabel.setText("");
+
+    public void btnSwitchLogInAction(){
+        setFieldsToBlanks();
         logInPane.toFront();
     }
 
     public void btnLogInAction(ActionEvent actionEvent){
         if(!tfUsernameLogIn.getText().isBlank() && !tfPassLogIn.getText().isBlank()){
-            validateLogin();
+            validateLogin(actionEvent);
         }else {
             invalidLogInLabel.setText("Please enter your username and password");
         }
@@ -82,13 +68,13 @@ public class LoginController extends Controller {
 
     public void btnSignUpAction(ActionEvent actionEvent){
         if(!tfUsernameSignUp.getText().isBlank() && !tfPassSignUp.getText().isBlank()){
-            validateSignUp();
+            validateSignUp(actionEvent);
         }else {
             invalidSignUpLabel.setText("Please enter a username and password");
         }
     }
 
-    public void validateSignUp(){
+    public void validateSignUp(ActionEvent actionEvent){
         try {
             String usernameExistsQuery = SQLQueriesBuilder.usernameExists(tfUsernameSignUp.getText());
             ResultSet queryResult = statement.executeQuery(usernameExistsQuery);
@@ -100,7 +86,7 @@ public class LoginController extends Controller {
                     String addUserQuery = SQLQueriesBuilder.addUser(tfUsernameSignUp.getText(),tfPassSignUp.getText());
                     Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, addUserQuery);
                     statement.executeUpdate(addUserQuery);
-                    //CHANGE SCENES HERE TO DASHBOARDVIEW
+                    changeScene(actionEvent);
                     break;
                 }
             }
@@ -110,7 +96,7 @@ public class LoginController extends Controller {
         }
     }
 
-    public void validateLogin(){
+    public void validateLogin(ActionEvent actionEvent){
         try {
             String usernameExistsQuery = SQLQueriesBuilder.usernameExists(tfUsernameLogIn.getText());
             String userExistsQuery = SQLQueriesBuilder.userExists(tfUsernameLogIn.getText(), tfPassLogIn.getText());
@@ -128,8 +114,7 @@ public class LoginController extends Controller {
                         }else {
                             invalidLogInLabel.setText("IT WORKED. REMOVE LATER");
                             User.setUsername(tfUsernameLogIn.getText());
-                            changeScene();
-                            //CHANGE SCENE HERE TO DASHBOARDVIEW
+                            changeScene(actionEvent);
                         }
                     }
                 }
@@ -140,18 +125,28 @@ public class LoginController extends Controller {
         }
     }
 
-    //not sure
-    public void changeScene(){
+    public void changeScene(ActionEvent actionEvent){
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("DashboardView.fxml"));
-            Stage dashboardStage = new Stage();
-            dashboardStage.initStyle(StageStyle.UNDECORATED);
-            dashboardStage.setScene(new Scene(root,1200, 900));
-            dashboardStage.show();
-
-        }catch (IOException e){
-
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(loadFXML(), 1200, 900);
+            stage.setScene(scene);stage.show();
+        }catch (IOException e) {
+            Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
+            System.exit(0);
         }
     }
 
+    private void setFieldsToBlanks() {
+        tfUsernameSignUp.setText("");
+        tfPassSignUp.setText("");
+        tfUsernameLogIn.setText("");
+        tfPassLogIn.setText("");
+        invalidSignUpLabel.setText("");
+        invalidLogInLabel.setText("");
+    }
+
+    private static Parent loadFXML() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("DashboardView" + ".fxml"));
+        return fxmlLoader.load();
+    }
 }
