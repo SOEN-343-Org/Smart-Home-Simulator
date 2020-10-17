@@ -1,16 +1,16 @@
-CREATE DATABASE homeDatabase;
+CREATE DATABASE sql9370834;
 
-CREATE TABLE homeDatabase.users
+CREATE TABLE sql9370834.users
 (
 username CHAR(60) NOT NULL PRIMARY KEY,
 password VARCHAR(36) NOT NULL
 );
 
-CREATE TABLE homeDatabase.individuals
+CREATE TABLE sql9370834.individuals
 (
-individualId INT(30) NOT NULL PRIMARY KEY,
+individualId INT(30) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 name char(36) NOT NULL,
 role char(60) NOT NULL,
 username CHAR(60)  NOT NULL,
-FOREIGN KEY (username) REFERENCES homeDatabase.users(username)
+FOREIGN KEY (username) REFERENCES sql9370834.users(username)
 );

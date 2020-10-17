@@ -1,26 +1,24 @@
 package org.soen343.models;
 
 public class User {
-    private String name;
-    private Individual currentIndividual;
 
-    public User(String name) {
-        this.name = name;
+    public static String username;
+    public static Individual currentIndividual;
+
+
+    public static String getUsername() {
+        return username;
     }
 
-    public String getName() {
-        return name;
+    public static void setUsername(String name) {
+        username = name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Individual getCurrentIndividual() {
+    public static Individual getCurrentIndividual() {
         return currentIndividual;
     }
 
-    public void setCurrentIndividual(Individual currentIndividual) {
-        this.currentIndividual = currentIndividual;
+    public static void setCurrentIndividual(Individual individual) {
+        currentIndividual = individual;
     }
 }

@@ -45,6 +45,7 @@ public class DashboardController extends Controller {
     }
 
     public void update() {
+        smartHomeSimulatorModuleController.update();
         houseLayoutController.drawLayout();
     }
 

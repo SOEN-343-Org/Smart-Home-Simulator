@@ -3,6 +3,7 @@ package org.soen343.services;
 import org.soen343.models.Individual;
 import org.soen343.models.Model;
 import org.soen343.models.Room;
+import org.soen343.models.User;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,10 @@ public abstract class Service {
     }
 
     public String getCurrentUserLocation() {
-        return model.user.getCurrentIndividual().getLocation();
+        if (User.getCurrentIndividual() != null) {
+            return User.getCurrentIndividual().getLocation();
+        }
+        return "outside";
     }
 
     public ArrayList<Individual> getIndividuals() {
@@ -35,12 +39,14 @@ public abstract class Service {
     }
 
     public Individual getCurrentUserIndividual() {
-        return model.user.getCurrentIndividual();
+        return User.getCurrentIndividual();
     }
 
     public void updateIndividualLocation(Individual individual, String location) {
         //TODO: Log that we update location of that individual
-        individual.setLocation(location);
+        if (individual != null) {
+            individual.setLocation(location);
+        }
     }
 
 

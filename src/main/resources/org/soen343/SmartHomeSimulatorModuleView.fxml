@@ -17,9 +17,9 @@
         <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="450.0">
             <children>
                 <Label alignment="CENTER" prefHeight="24.0" prefWidth="137.0" text="Manage profiles" />
-                <HBox alignment="CENTER" prefHeight="124.0" prefWidth="450.0">
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <TableView fx:id="individualsTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="119.0" prefWidth="448.0">
+                        <TableView fx:id="individualsTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0">
                             <columns>
                                 <TableColumn fx:id="column1" editable="false" prefWidth="75.0" text="ID" />
                                 <TableColumn fx:id="column2" onEditCommit="#onEditName" prefWidth="75.0" text="Name" />
@@ -71,13 +71,16 @@
                                 <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
                                         <Label alignment="CENTER" prefHeight="25.0" prefWidth="55.0" text="Location:" />
-                                        <ChoiceBox fx:id="locationChoices" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="85.0" />
+                                        <ChoiceBox fx:id="locationChoices" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="82.0" />
                                     </children>
                                 </HBox>
-                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                <HBox alignment="TOP_RIGHT" prefHeight="37.0" prefWidth="115.0">
                                     <children>
-                                        <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onCurrentIndividualUpdate" prefHeight="25.0" prefWidth="104.0" text="Set Information" />
+                                        <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onCurrentIndividualUpdate" prefHeight="25.0" prefWidth="117.0" text="Set Current Profile" />
                                     </children>
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin>
                                 </HBox>
                             </children>
                             <padding>
@@ -89,20 +92,16 @@
                         <Insets top="5.0" />
                     </padding>
                 </VBox>
-                <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="74.0" prefWidth="450.0" spacing="25.0">
+                <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="450.0" spacing="15.0">
                     <padding>
                         <Insets left="10.0" right="20.0" />
                     </padding>
                     <children>
-                        <Label alignment="CENTER" prefHeight="24.0" prefWidth="158.0" text="Set Date and Time" />
+                        <Label alignment="CENTER" prefHeight="24.0" prefWidth="179.0" text="Set date and Time" />
                         <DatePicker fx:id="datePicker" />
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                            <children>
-                                <TextField fx:id="hours" onAction="#updateTimeHours" />
-                                <Label prefHeight="17.0" prefWidth="24.0" text=":" />
-                                <TextField fx:id="minutes" onAction="#updateTimeMinutes" />
-                            </children>
-                        </HBox>
+                        <TextField fx:id="time" text="HH:mm:ss" />
+                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="147.0" text="Set" onAction="#updateDateTime"/>
+
                     </children>
                     <VBox.margin>
                         <Insets />
