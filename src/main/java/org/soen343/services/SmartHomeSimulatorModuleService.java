@@ -1,5 +1,8 @@
 package org.soen343.services;
 
+import org.soen343.models.Individual;
+import org.soen343.models.User;
+
 import java.time.LocalDate;
 
 public class SmartHomeSimulatorModuleService extends Service {
@@ -15,7 +18,7 @@ public class SmartHomeSimulatorModuleService extends Service {
     }
 
     public boolean addNewIndividual(String name, String role, String location) {
-        String username = model.user.getName();
+        String username = User.getUsername();
         boolean success = model.addIndividual(name, role, username, location);
         //TODO: Log that we added a new individual
         return success;
@@ -27,15 +30,20 @@ public class SmartHomeSimulatorModuleService extends Service {
         return success;
     }
 
-    public void updateDateTimeHours(int hours) {
-        model.dateTime.setHours(hours);
-    }
-
-    public void updateDateTimeMinutes(int minutes) {
-        model.dateTime.setMinutes(minutes);
-    }
-
     public void updateDateTimeDate(LocalDate date) {
         model.dateTime.setDate(date);
+    }
+
+    public void updateUserIndividual(Individual individual) {
+        if (individual != null) {
+            User.setCurrentIndividual(individual);
+            //TODO: Log that we set the user's individual
+        }
+    }
+
+    public void updateTime(int h, int m, int s) {
+        model.dateTime.setHours(h);
+        model.dateTime.setMinutes(m);
+        model.dateTime.setSeconds(s);
     }
 }
