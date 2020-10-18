@@ -103,7 +103,7 @@ public class LoginController extends Controller {
     }
 
     /**
-     * On signup button click validate signup
+     * On signup button click, validate signup
      *
      * @param actionEvent
      */
