@@ -90,7 +90,7 @@ public class Model {
                 generatedKey = rs.getInt(1);
             }
 
-            Individual ind = new Individual(generatedKey, name, role, location, username);
+           Individual ind = new Individual(generatedKey, name, role, location, username);
             house.individuals.put(generatedKey, ind);
             System.out.println("Inserted record's ID : " + generatedKey);
             return true;
