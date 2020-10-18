@@ -45,6 +45,12 @@ public class LoginController extends Controller {
     @FXML
     private Pane logInPane;
 
+    /**
+     * Load FXML file
+     *
+     * @return fxmlLoader.load()
+     * @throws IOException
+     */
     private static Parent loadFXML() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("DashboardView" + ".fxml"));
         return fxmlLoader.load();
@@ -54,6 +60,9 @@ public class LoginController extends Controller {
     void initializeController() {
     }
 
+    /**
+     * Initialize database connection
+     */
     public void initialize() {
         try {
             connection = DBConnection.getConnection();
@@ -64,16 +73,27 @@ public class LoginController extends Controller {
         }
     }
 
+    /**
+     * Switch to sign up page
+     */
     public void btnSwitchSignUpAction() {
         setFieldsToBlanks();
         signUpPane.toFront();
     }
 
+    /**
+     * Switch to login page
+     */
     public void btnSwitchLogInAction() {
         setFieldsToBlanks();
         logInPane.toFront();
     }
 
+    /**
+     * On login button click, validate login
+     *
+     * @param actionEvent
+     */
     public void btnLogInAction(ActionEvent actionEvent) {
         if (!tfUsernameLogIn.getText().isBlank() && !tfPassLogIn.getText().isBlank()) {
             validateLogin(actionEvent);
@@ -82,6 +102,11 @@ public class LoginController extends Controller {
         }
     }
 
+    /**
+     * On signup button click validate signup
+     *
+     * @param actionEvent
+     */
     public void btnSignUpAction(ActionEvent actionEvent) {
         if (!tfUsernameSignUp.getText().isBlank() && !tfPassSignUp.getText().isBlank()) {
             validateSignUp(actionEvent);
@@ -90,6 +115,11 @@ public class LoginController extends Controller {
         }
     }
 
+    /**
+     * Verify in database if username has been taken
+     *
+     * @param actionEvent
+     */
     public void validateSignUp(ActionEvent actionEvent) {
         try {
             String usernameExistsQuery = SQLQueriesBuilder.usernameExists(tfUsernameSignUp.getText());
@@ -112,6 +142,11 @@ public class LoginController extends Controller {
         }
     }
 
+    /**
+     * Verify in database that username and password entered are correct
+     *
+     * @param actionEvent
+     */
     public void validateLogin(ActionEvent actionEvent) {
         try {
             String usernameExistsQuery = SQLQueriesBuilder.usernameExists(tfUsernameLogIn.getText());
@@ -141,6 +176,11 @@ public class LoginController extends Controller {
         }
     }
 
+    /**
+     * After successful login, change scene from login to dashboard
+     *
+     * @param actionEvent
+     */
     public void changeScene(ActionEvent actionEvent) {
         try {
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -153,6 +193,9 @@ public class LoginController extends Controller {
         }
     }
 
+    /**
+     * Setting default parameters to blank
+     */
     private void setFieldsToBlanks() {
         tfUsernameSignUp.setText("");
         tfPassSignUp.setText("");
