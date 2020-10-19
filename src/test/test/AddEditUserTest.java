@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Assertions;
 
 import org.soen343.models.Model;
 import org.soen343.services.Service;
-import org.soen343.services.SmartHomeSimulatorModuleService;
 
 
 public class AddEditUserTest extends Service {

@@ -8,7 +8,7 @@ import org.soen343.services.SmartHomeSimulatorModuleService;
 
 import java.time.LocalDate;
 
-public class SetDateTimeTest {
+public class EditSetDateTimeTest {
 
     public static Model model;
     public static SmartHomeSimulatorModuleService smartHomeSimulatorModuleService;
