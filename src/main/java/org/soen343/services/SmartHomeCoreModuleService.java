@@ -9,6 +9,11 @@ public class SmartHomeCoreModuleService extends Service {
     public SmartHomeCoreModuleService() {
     }
 
+    /**
+     * Update window state
+     *
+     * @param windowId
+     */
     public void updateWindowState(int windowId) {
         //TODO: Log that we open/close that window
         Window window = model.house.getWindowById(windowId);
@@ -16,6 +21,11 @@ public class SmartHomeCoreModuleService extends Service {
         window.setOpen(!state);
     }
 
+    /**
+     * Update door state
+     *
+     * @param doorId
+     */
     public void updateDoorState(int doorId) {
         //TODO: Log that we open/close that door
         Door door = model.house.getDoorById(doorId);
@@ -23,6 +33,11 @@ public class SmartHomeCoreModuleService extends Service {
         door.setOpen(!state);
     }
 
+    /**
+     * Update light state
+     *
+     * @param lightId
+     */
     public void updateLightState(int lightId) {
         //TODO: Log that we open/close that light
         Light light = model.house.getLightById(lightId);

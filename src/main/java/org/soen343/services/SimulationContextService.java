@@ -7,6 +7,11 @@ public class SimulationContextService extends Service {
     public SimulationContextService() {
     }
 
+    /**
+     * Update window state
+     *
+     * @param windowId
+     */
     public void updateWindowBlockState(int windowId) {
         //TODO: Log that we block that window
         Window window = model.house.getWindowById(windowId);
