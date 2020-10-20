@@ -24,10 +24,20 @@ public abstract class Service {
         return model.simulationRunning;
     }
 
+    /**
+     * Get room name
+     *
+     * @return roomsName
+     */
     public ArrayList<String> getHouseRoomsName() {
         return model.house.roomsName;
     }
 
+    /**
+     * Get current user location
+     *
+     * @return location
+     */
     public String getCurrentUserLocation() {
         if (User.getCurrentIndividual() != null) {
             return User.getCurrentIndividual().getLocation();
@@ -35,18 +45,39 @@ public abstract class Service {
         return "outside";
     }
 
+    /**
+     * Get array of individuals
+     *
+     * @return individuals
+     */
     public ArrayList<Individual> getIndividuals() {
         return model.house.getIndividuals();
     }
 
+    /**
+     * Get house rooms
+     *
+     * @return rooms
+     */
     public ArrayList<Room> getHouseRooms() {
         return model.house.getRooms();
     }
 
+    /**
+     * Get current user individual
+     *
+     * @return current individual
+     */
     public Individual getCurrentUserIndividual() {
         return User.getCurrentIndividual();
     }
 
+    /**
+     * Update individual location
+     *
+     * @param individual
+     * @param location
+     */
     public void updateIndividualLocation(Individual individual, String location) {
         //TODO: Log that we update location of that individual
         if (individual != null) {
