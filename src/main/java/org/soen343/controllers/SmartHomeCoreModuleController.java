@@ -26,6 +26,9 @@ public class SmartHomeCoreModuleController extends Controller {
     public void initialize() {
     }
 
+    /**
+     * Initialize smart home core controller module controller
+     */
     public void initializeController() {
 
         smartHomeCoreModuleService = new SmartHomeCoreModuleService();

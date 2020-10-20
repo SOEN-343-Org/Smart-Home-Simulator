@@ -54,6 +54,11 @@ public class SmartHomeSimulatorModuleController extends Controller {
 
     private SmartHomeSimulatorModuleService smartHomeSimulatorModuleService;
 
+    /**
+     * Parse s into integer
+     * @param s
+     * @return false
+     */
     public static boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
@@ -66,6 +71,9 @@ public class SmartHomeSimulatorModuleController extends Controller {
         return true;
     }
 
+    /**
+     * Initialize smart home simulation module
+     */
     public void initializeController() {
 
         smartHomeSimulatorModuleService = new SmartHomeSimulatorModuleService();
@@ -85,6 +93,9 @@ public class SmartHomeSimulatorModuleController extends Controller {
         update();
     }
 
+    /**
+     * Update location, role, location, name, individuals table
+     */
     public void update() {
         ArrayList<String> roomsName = smartHomeSimulatorModuleService.getHouseRoomsName();
 
@@ -107,7 +118,9 @@ public class SmartHomeSimulatorModuleController extends Controller {
 
     }
 
-
+    /**
+     * Check selected item and get selected item
+     */
     private void onSelectRow() {
         // check the table's selected item and get selected item
         if (individualsTable.getSelectionModel().getSelectedItem() != null) {

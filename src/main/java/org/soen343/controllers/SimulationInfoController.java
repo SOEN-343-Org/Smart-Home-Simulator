@@ -40,10 +40,18 @@ public class SimulationInfoController extends Controller {
         startStopToggle.setSelected(status);
     }
 
+    /**
+     * Open simulation context view
+     *
+     * @param actionEvent
+     */
     public void openSimulationContextView(ActionEvent actionEvent) {
         mainController.enterSimulationContext();
     }
 
+    /**
+     * Update profile name, role, chosen location and format time
+     */
     public void update() {
         profileName.setText(simulationInfoService.getIndividualName());
         role.setText(simulationInfoService.getIndividualRole());

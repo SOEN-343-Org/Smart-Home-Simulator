@@ -22,6 +22,9 @@ public class DashboardController extends Controller {
     @FXML
     private AnchorPane simulationContext;
 
+    /**
+     * Initialize controllers
+     */
     public void initialize() {
         DashboardService dashboardService = new DashboardService();
         dashboardService.populateIndividuals();
@@ -44,17 +47,26 @@ public class DashboardController extends Controller {
         update();
     }
 
+    /**
+     * Update
+     */
     public void update() {
         smartHomeSimulatorModuleController.update();
         simulationInfoController.update();
         houseLayoutController.drawLayout();
     }
 
+    /**
+     * Enter simulation
+     */
     public void enterSimulationContext() {
         simulationContextController.initializeController();
         simulationContext.setVisible(true);
     }
 
+    /**
+     * Exit simulation
+     */
     public void exitSimulationContext() {
         update();
         simulationContext.setVisible(false);

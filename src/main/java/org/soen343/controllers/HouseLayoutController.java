@@ -58,6 +58,9 @@ public class HouseLayoutController extends Controller {
         gc = canvas.getGraphicsContext2D();
     }
 
+    /**
+     * Initialize house layout controller
+     */
     public void initializeController() {
         layout = houseLayoutService.getHouseLayout();
 
@@ -69,6 +72,9 @@ public class HouseLayoutController extends Controller {
         safeZoneW = (int) Math.round((canvas.getWidth() - (roomSize * layout[0].length)) / 2);
     }
 
+    /**
+     * Draw null layout
+     */
     private void drawNullLayout() {
         gc.setLineWidth(8.0);
         gc.strokeRect(0, 0, width, height);
@@ -80,12 +86,20 @@ public class HouseLayoutController extends Controller {
         gc.strokeText(text.getText(), (width - textSize) / 2, height / 2.0);
     }
 
-
+    /**
+     * Create door
+     *
+     * @param object
+     * @return object door
+     */
     private boolean isDoor(Object object) {
         // Not the best and prettiest way but there is no place to put this yet.
         return object instanceof Door;
     }
 
+    /**
+     * Draw layout
+     */
     public void drawLayout() {
         if (nullHouse) {
             drawNullLayout();

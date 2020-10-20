@@ -43,6 +43,9 @@ public class SimulationContextController extends Controller {
     public void initialize() {
     }
 
+    /**
+     * Initialize context controller
+     */
     public void initializeController() {
 
         simulationContextService = new SimulationContextService();
@@ -97,7 +100,9 @@ public class SimulationContextController extends Controller {
         setTableAndComboChoice();
     }
 
-
+    /**
+     * Set table with rooms, locations and individual list
+     */
     private void setTableAndComboChoice() {
         ArrayList<String> roomsName = simulationContextService.getHouseRoomsName();
         String currentUserLocation = simulationContextService.getCurrentUserLocation();
@@ -143,6 +148,11 @@ public class SimulationContextController extends Controller {
         mainController.update();
     }
 
+    /**
+     * Exit simulation
+     *
+     * @param actionEvent
+     */
     public void exitSimulationContext(ActionEvent actionEvent) {
         mainController.exitSimulationContext();
     }
