@@ -85,7 +85,6 @@ public class Model {
             PreparedStatement ps = connection.prepareStatement(addIndividualQuery, Statement.RETURN_GENERATED_KEYS);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
-
             if (rs.next()) {
                 generatedKey = rs.getInt(1);
             }
