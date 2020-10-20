@@ -8,6 +8,9 @@ public class DashboardService extends Service {
 
     }
 
+    /**
+     * Populate individuals
+     */
     public void populateIndividuals() {
         model.setIndividualsFromUser(User.getUsername());
     }

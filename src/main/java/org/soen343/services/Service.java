@@ -15,6 +15,11 @@ public abstract class Service {
 
     }
 
+    /**
+     * Check if simulation is running
+     *
+     * @return simulationRunning
+     */
     public boolean SimulationIsRunning() {
         return model.simulationRunning;
     }
