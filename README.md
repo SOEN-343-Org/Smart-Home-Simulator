@@ -5,7 +5,8 @@ Users can open/close doors, windows and lights, place individuals in various roo
 
 ## To build Smart-Home-Simulator
 Prerequisites:
-- [Java SE](https://www.oracle.com/java/technologies/javase-downloads.html) with version above 7.
+- [Java SE](https://www.oracle.com/java/technologies/javase-downloads.html) with version above 7 (currently on 15).
+- [JavaFX](https://gluonhq.com/products/javafx/) version 11.
 - [IntelliJ IDEA](https://www.jetbrains.com/idea/) or any other java IDE (We used IntelliJ IDEA to code)
 
 How-to:
