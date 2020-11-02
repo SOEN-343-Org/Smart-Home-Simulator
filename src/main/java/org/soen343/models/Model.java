@@ -2,6 +2,9 @@ package org.soen343.models;
 
 import org.soen343.connection.DBConnection;
 import org.soen343.connection.SQLQueriesBuilder;
+import org.soen343.models.house.House;
+import org.soen343.models.house.Individual;
+import org.soen343.models.parameters.SimulationParameters;
 import org.soen343.util.HouseLayoutUtil;
 
 import java.sql.*;
@@ -15,20 +18,26 @@ public class Model {
 
 
     private static Connection connection;
-    public House house;
-    public DateTime dateTime;
-    public OutsideTemperature outsideTemp;
-    public boolean simulationRunning;
+
+    private static House house;
+
+    private static SimulationParameters simulationParameters;
 
     /**
-     * Default constructor for Model object
+     * Set the Model objects
      */
-    public Model() {
+    public static void setModelParameters() {
         house = HouseLayoutUtil.ReadHouseLayoutFile();
         connection = DBConnection.getConnection();
-        simulationRunning = false;
-        dateTime = new DateTime();
-        outsideTemp = new OutsideTemperature();
+        simulationParameters = new SimulationParameters();
+    }
+
+    public static House getHouse() {
+        return house;
+    }
+
+    public static SimulationParameters getSimulationParameters() {
+        return simulationParameters;
     }
 
     public boolean updateIndividualRole(String newRole, Integer idSelected) {
@@ -43,8 +52,7 @@ public class Model {
         return false;
     }
 
-
-    public boolean setIndividualsFromUser(String username) {
+    public static boolean setIndividualsFromUser(String username) {
         try {
             String getIndividualsQuery = SQLQueriesBuilder.getIndividuals(username);
             ResultSet rs = connection.createStatement().executeQuery(getIndividualsQuery);
@@ -67,7 +75,7 @@ public class Model {
         return false;
     }
 
-    public boolean updateIndividualName(String newName, int idSelected) {
+    public static boolean updateIndividualName(String newName, int idSelected) {
         try {
             String updateIndividualNameQuery = SQLQueriesBuilder.updateIndividualName(newName, idSelected);
             connection.createStatement().executeUpdate(updateIndividualNameQuery);
@@ -80,7 +88,7 @@ public class Model {
         return false;
     }
 
-    public boolean addIndividual(String name, String role, String username, String location) {
+    public static boolean addIndividual(String name, String role, String username, String location) {
         int generatedKey = 0;
         try {
             String addIndividualQuery = SQLQueriesBuilder.addIndividual(name, role, username);
@@ -91,7 +99,7 @@ public class Model {
                 generatedKey = rs.getInt(1);
             }
 
-           Individual ind = new Individual(generatedKey, name, role, location, username);
+            Individual ind = new Individual(generatedKey, name, role, location, username);
             house.individuals.put(generatedKey, ind);
             System.out.println("Inserted record's ID : " + generatedKey);
             return true;
@@ -102,7 +110,7 @@ public class Model {
         return false;
     }
 
-    public boolean removeIndividual(int idToRemove) {
+    public static boolean removeIndividual(int idToRemove) {
         try {
             String removeIndividualQuery = SQLQueriesBuilder.removeIndividual(idToRemove);
             connection.createStatement().executeUpdate(removeIndividualQuery);
@@ -113,15 +121,5 @@ public class Model {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, e);
         }
         return false;
-    }
-
-    public boolean setSimulationIsRunning() {
-        Individual ind = User.getCurrentIndividual();
-        if (ind == null) {
-            System.out.println("Cannot start simulation, profile not selected");
-            return false;
-        }
-        simulationRunning = !simulationRunning;
-        return true;
     }
 }

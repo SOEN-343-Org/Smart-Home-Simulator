@@ -1,9 +1,11 @@
 package org.soen343.models;
 
+import org.soen343.models.house.Individual;
+
 public class User {
 
-    public static String username;
-    public static Individual currentIndividual;
+    private static String username;
+    private static Individual currentIndividual;
 
     /**
      * Get username
