@@ -109,6 +109,10 @@ public class SmartHomeSimulatorModuleController extends Controller {
 
         Individual currentUserIndividual = User.getCurrentIndividual();
         locationChoices.setItems(FXCollections.observableArrayList(roomsName));
+        ArrayList<Individual> individualsList = Model.getHouse().getIndividuals();
+        individualsTable.setItems(FXCollections.observableArrayList(individualsList));
+        nameChoices.setItems(FXCollections.observableArrayList(individualsList));
+        individualsTable.refresh();
 
         if (currentUserIndividual == null) {
             locationChoices.setValue("outside");
@@ -118,11 +122,6 @@ public class SmartHomeSimulatorModuleController extends Controller {
             locationChoices.setValue(currentUserLocation);
             nameChoices.setValue(currentUserIndividual);
         }
-        ArrayList<Individual> individualsList = Model.getHouse().getIndividuals();
-        individualsTable.setItems(FXCollections.observableArrayList(individualsList));
-        nameChoices.setItems(FXCollections.observableArrayList(individualsList));
-        individualsTable.refresh();
-
     }
 
     /**
