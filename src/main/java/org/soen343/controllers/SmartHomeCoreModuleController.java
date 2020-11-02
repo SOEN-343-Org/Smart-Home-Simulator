@@ -6,11 +6,12 @@ import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.CheckBoxTreeCell;
-import org.soen343.models.Door;
-import org.soen343.models.Light;
-import org.soen343.models.Room;
-import org.soen343.models.Window;
-import org.soen343.services.SmartHomeCoreModuleService;
+import org.soen343.models.Model;
+import org.soen343.models.house.Door;
+import org.soen343.models.house.Light;
+import org.soen343.models.house.Room;
+import org.soen343.models.house.Window;
+import org.soen343.services.modules.SHCModule;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,8 +20,9 @@ import java.util.Set;
 public class SmartHomeCoreModuleController extends Controller {
     @FXML
     public TreeView<String> openCloseTreeView;
-    SmartHomeCoreModuleService smartHomeCoreModuleService;
     private Set<TreeItem<String>> openCloseSelected;
+
+    private SHCModule shcModule;
 
     @FXML
     public void initialize() {
@@ -31,13 +33,13 @@ public class SmartHomeCoreModuleController extends Controller {
      */
     public void initializeController() {
 
-        smartHomeCoreModuleService = new SmartHomeCoreModuleService();
+        shcModule = SHCModule.getInstance();
 
         // OPEN AND CLOSE of DOORS LIGHTS AND WINDOWS
         CheckBoxTreeItem<String> root = new CheckBoxTreeItem<>("Rooms");
         root.setExpanded(true);
 
-        ArrayList<Room> rooms = smartHomeCoreModuleService.getHouseRooms();
+        ArrayList<Room> rooms = Model.getHouse().getRooms();
 
         for (Room room : rooms) {
             CheckBoxTreeItem<String> superItem = new CheckBoxTreeItem<>(room.getName());
@@ -94,14 +96,15 @@ public class SmartHomeCoreModuleController extends Controller {
         });
     }
 
+    @Override
+    void update() {
+
+    }
+
 
     @FXML
     private void openClose(ActionEvent actionEvent) {
 
-        if (!smartHomeCoreModuleService.SimulationIsRunning()) {
-            // Simulation is not on
-            return;
-        }
         HashSet<Integer> doorsToUpdate = new HashSet<>();
         HashSet<Integer> windowsToUpdate = new HashSet<>();
         HashSet<Integer> lightsToUpdate = new HashSet<>();
@@ -124,15 +127,8 @@ public class SmartHomeCoreModuleController extends Controller {
             }
         }
 
-        for (int doorId : doorsToUpdate) {
-            smartHomeCoreModuleService.updateDoorState(doorId);
-        }
-        for (int windowId : windowsToUpdate) {
-            smartHomeCoreModuleService.updateWindowState(windowId);
-        }
-        for (int lightId : lightsToUpdate) {
-            smartHomeCoreModuleService.updateLightState(lightId);
-        }
-        mainController.update();
+        shcModule.updateDoorState(doorsToUpdate);
+        shcModule.updateWindowState(windowsToUpdate);
+        shcModule.updateLightState(lightsToUpdate);
     }
 }
