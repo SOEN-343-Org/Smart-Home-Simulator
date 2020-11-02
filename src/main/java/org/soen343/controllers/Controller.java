@@ -1,6 +1,8 @@
 package org.soen343.controllers;
 
-public abstract class Controller {
+import org.soen343.services.Observable;
+
+public abstract class Controller implements Observer{
 
     DashboardController mainController;
 
@@ -13,4 +15,11 @@ public abstract class Controller {
     }
 
     abstract void initializeController();
+
+    abstract void update();
+
+    @Override
+    public void update(Observable observable) {
+        this.update();
+    }
 }
