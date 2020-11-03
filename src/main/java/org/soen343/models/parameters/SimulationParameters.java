@@ -1,7 +1,7 @@
 package org.soen343.models.parameters;
 
 public class SimulationParameters {
-    private static DateTime dateTime;
+    public static DateTime dateTime;
     private static int outsideTemp;
     private static boolean simulationRunning;
 
