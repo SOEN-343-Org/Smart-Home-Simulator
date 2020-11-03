@@ -1,16 +1,27 @@
 package org.soen343.controllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.text.Text;
 import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.Individual;
+import org.soen343.models.parameters.SimulationParameters;
 import org.soen343.services.DashboardService;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class SimulationInfoController extends Controller {
 
@@ -29,11 +40,20 @@ public class SimulationInfoController extends Controller {
     @FXML
     private Label chosenTime;
 
+    @FXML
+    public Text currentDate;
+    public Text currentTime;
+    public Text currentMultiplier;
+    public Slider slider;
+
     private DashboardService dashboardService;
+    private Timer timer;
 
     public void initializeController() {
         dashboardService = DashboardService.getInstance();
         update();
+        //initializing the listener
+        addListenerToMultiplierSlider();
     }
 
     @FXML
@@ -71,21 +91,45 @@ public class SimulationInfoController extends Controller {
             String getLocation = User.getCurrentIndividual().getLocation();
             chosenLocation.setText(getLocation);
         }
-        // Format Date and Time
-        LocalDate date = Model.getSimulationParameters().getDateTime().getDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
-        String formattedDate = date.format(formatter);
-        String hours = Integer.toString(Model.getSimulationParameters().getDateTime().getHours());
-        String min = Integer.toString(Model.getSimulationParameters().getDateTime().getMinutes());
-        String sec = Integer.toString(Model.getSimulationParameters().getDateTime().getSeconds());
-        hours = hours.length() == 1 ? "0" + hours : hours;
-        min = min.length() == 1 ? "0" + min : min;
-        sec = sec.length() == 1 ? "0" + sec : sec;
-        String formattedTime = hours + " : " + min + " : " + sec;
-        chosenDate.setText(formattedDate);
-        chosenTime.setText(formattedTime);
 
         String temp = Integer.toString(Model.getSimulationParameters().getOutsideTemp());
         outsideTemp.setText(temp + " °C");
+    }
+
+    public void updateTime(Calendar calendar) {
+        Date date = calendar.getTime();
+        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
+        currentTime.setText(timeFormat.format(date));
+        currentDate.setText(dateFormat.format(date));
+    }
+    private void startAnimatedTime() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> updateTime(Model.getSimulationParameters().getDateTime().getDate()));
+            }
+        },0, (long) (Duration.ofSeconds(1).toMillis()/Model.getSimulationParameters().getDateTime().getClockSpeedMultiplier()));
+    }
+
+    private void stopAnimatedTime() {
+        timer.cancel();
+    }
+
+    private void changeAnimatedTime() {
+        stopAnimatedTime();
+        startAnimatedTime();
+    }
+
+    private void addListenerToMultiplierSlider() {
+        slider.valueProperty().addListener(
+                (observableValue, oldValue, newValue) -> {
+                    double multiplier = Math.round((Double) newValue);
+                    Model.getSimulationParameters().getDateTime().setClockSpeedMultiplier(multiplier);
+                    currentMultiplier.setText(String.valueOf(multiplier));
+                    changeAnimatedTime();
+                }
+        );
     }
 }
