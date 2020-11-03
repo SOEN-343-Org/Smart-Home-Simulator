@@ -110,4 +110,13 @@ public class House {
         return "House of dimension (" + layout.length + " by " + layout[0].length + ")\nRooms=\n" + rooms;
     }
 
+    public Room getRoomByName(String location) {
+        ArrayList<Room> rooms = getRooms();
+        for (Room room : rooms) {
+            if (room.getName().equals(location)) {
+                return room;
+            }
+        }
+        return null;
+    }
 }

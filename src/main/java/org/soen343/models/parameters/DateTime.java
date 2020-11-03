@@ -4,16 +4,16 @@ import java.time.LocalDate;
 
 public class DateTime {
 
-    private int hours;
-    private int minutes;
-    private int seconds;
+    private int hours = 12;
+    private int minutes = 0;
+    private int seconds = 0;
     private LocalDate date = LocalDate.now();
 
     public DateTime() {
     }
 
     /**
-     *Get hours
+     * Get hours
      *
      * @return int hours
      */
