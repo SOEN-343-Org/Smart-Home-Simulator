@@ -13,10 +13,7 @@ public class DateTime {
     private double clockSpeedMultiplier;
     private Timeline clock;
     private Calendar date;
-    private int hours = 12;
-    private int minutes = 0;
-    private int seconds = 0;
-    private LocalDate date1 = LocalDate.now();
+
 
 
     public DateTime() {
@@ -76,15 +73,6 @@ public class DateTime {
 
     public double getClockSpeedMultiplier() {
         return clockSpeedMultiplier;
-    }
-
-    /**
-     * Get hours
-     *
-     * @return int hours
-     */
-    public int getHours() {
-        return hours;
     }
 }
 
