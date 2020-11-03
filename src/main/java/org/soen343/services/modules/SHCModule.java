@@ -1,11 +1,11 @@
 package org.soen343.services.modules;
 
 import org.soen343.models.Model;
-import org.soen343.models.house.Door;
-import org.soen343.models.house.Light;
-import org.soen343.models.house.Window;
+import org.soen343.models.User;
+import org.soen343.models.house.*;
 import org.soen343.services.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class SHCModule extends Service {
@@ -34,8 +34,12 @@ public class SHCModule extends Service {
 
             //TODO: Log that we open/close that window
             Window window = Model.getHouse().getWindowById(id);
-            boolean state = window.isOpen();
-            window.setOpen(!state);
+            if (window.isBlocked()) {
+                //TODO: LOG that window is blocked
+            } else {
+                boolean state = window.isOpen();
+                window.setOpen(!state);
+            }
         }
         this.notifyObservers(this);
     }
@@ -78,5 +82,48 @@ public class SHCModule extends Service {
             light.setOpen(!state);
         }
         this.notifyObservers(this);
+    }
+
+    public boolean setAutoMode() {
+        if (!Model.getSimulationParameters().isSimulationRunning()) {
+            // Simulation is not on
+            //TODO: LOG IT
+            return false;
+        }
+        if (User.getCurrentIndividual() != null) {
+            Model.getSimulationParameters().setAutoMode();
+            //TODO: LOG IT
+            return true;
+        }
+        //TODO: LOG IT
+        return false;
+    }
+
+    public void autoOpenLights(String location) {
+        if (location.equals("outside")) return;
+        Room room = Model.getHouse().getRoomByName(location);
+        for (Light light : room.getLights()) {
+            //TODO: Log that we open that light
+            light.setOpen(true);
+        }
+    }
+
+    public void autoCloseLights(String location) {
+        if (location.equals("outside")) return;
+
+        ArrayList<Individual> individuals = Model.getHouse().getIndividuals();
+        for (Individual ind : individuals) {
+            if (ind.getLocation().equals(location)) {
+                // An individual is still in the room so we dont close the lights
+                return;
+            }
+        }
+
+        Room room = Model.getHouse().getRoomByName(location);
+
+        for (Light light : room.getLights()) {
+            //TODO: Log that we close that light
+            light.setOpen(false);
+        }
     }
 }

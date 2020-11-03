@@ -8,7 +8,6 @@ import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import org.soen343.models.Model;
-import org.soen343.models.User;
 import org.soen343.models.house.Individual;
 import org.soen343.models.house.Room;
 import org.soen343.models.house.Window;
@@ -105,19 +104,11 @@ public class SimulationContextController extends Controller {
     @Override
     void update() {
         ArrayList<String> roomsName = Model.getHouse().roomsName;
-        String currentUserLocation = "outside";
-        if (User.getCurrentIndividual() != null) {
-            currentUserLocation = User.getCurrentIndividual().getLocation();
-        }
         locationChoices.setItems(FXCollections.observableArrayList(roomsName));
-        locationChoices.setValue(currentUserLocation);
-
+        locationChoices.setValue("outside");
         ArrayList<Individual> individualsList = Model.getHouse().getIndividuals();
-        Individual currentUserIndividual = User.getCurrentIndividual();
-
         nameChoices.setItems(FXCollections.observableArrayList(individualsList));
-        nameChoices.setValue(currentUserIndividual);
-
+        nameChoices.setValue(null);
         individualsTable.setItems(FXCollections.observableArrayList(individualsList));
         individualsTable.refresh();
     }
