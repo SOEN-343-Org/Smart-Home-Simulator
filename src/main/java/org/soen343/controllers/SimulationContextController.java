@@ -7,9 +7,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import org.soen343.models.Individual;
-import org.soen343.models.Room;
-import org.soen343.models.Window;
+import org.soen343.models.Model;
+import org.soen343.models.User;
+import org.soen343.models.house.Individual;
+import org.soen343.models.house.Room;
+import org.soen343.models.house.Window;
 import org.soen343.services.SimulationContextService;
 
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ public class SimulationContextController extends Controller {
      */
     public void initializeController() {
 
-        simulationContextService = new SimulationContextService();
+        simulationContextService = SimulationContextService.getInstance();
 
         column1.setCellValueFactory(new PropertyValueFactory<>("id"));
         column2.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -61,7 +63,7 @@ public class SimulationContextController extends Controller {
         CheckBoxTreeItem<String> root2 = new CheckBoxTreeItem<>("Rooms");
         root2.setExpanded(true);
 
-        ArrayList<Room> rooms = simulationContextService.getHouseRooms();
+        ArrayList<Room> rooms = Model.getHouse().getRooms();
 
         for (Room room : rooms) {
 
@@ -78,7 +80,7 @@ public class SimulationContextController extends Controller {
         }
         blockUnblockTreeView.setRoot(root2);
 
-        blockUnblockTreeView.setCellFactory(CheckBoxTreeCell.<String>forTreeView());
+        blockUnblockTreeView.setCellFactory(CheckBoxTreeCell.forTreeView());
         blockUnblockSelected = new HashSet<>();
         root2.addEventHandler(CheckBoxTreeItem.checkBoxSelectionChangedEvent(), (CheckBoxTreeItem.TreeModificationEvent<String> evt) -> {
             CheckBoxTreeItem<String> item = evt.getTreeItem();
@@ -97,20 +99,21 @@ public class SimulationContextController extends Controller {
                 }
             }
         });
-        setTableAndComboChoice();
+        update();
     }
 
-    /**
-     * Set table with rooms, locations and individual list
-     */
-    private void setTableAndComboChoice() {
-        ArrayList<String> roomsName = simulationContextService.getHouseRoomsName();
-        String currentUserLocation = simulationContextService.getCurrentUserLocation();
+    @Override
+    void update() {
+        ArrayList<String> roomsName = Model.getHouse().roomsName;
+        String currentUserLocation = "outside";
+        if (User.getCurrentIndividual() != null) {
+            currentUserLocation = User.getCurrentIndividual().getLocation();
+        }
         locationChoices.setItems(FXCollections.observableArrayList(roomsName));
         locationChoices.setValue(currentUserLocation);
 
-        ArrayList<Individual> individualsList = simulationContextService.getIndividuals();
-        Individual currentUserIndividual = simulationContextService.getCurrentUserIndividual();
+        ArrayList<Individual> individualsList = Model.getHouse().getIndividuals();
+        Individual currentUserIndividual = User.getCurrentIndividual();
 
         nameChoices.setItems(FXCollections.observableArrayList(individualsList));
         nameChoices.setValue(currentUserIndividual);
@@ -118,7 +121,6 @@ public class SimulationContextController extends Controller {
         individualsTable.setItems(FXCollections.observableArrayList(individualsList));
         individualsTable.refresh();
     }
-
 
     @FXML
     private void blockUnblock(ActionEvent actionEvent) {
@@ -133,10 +135,8 @@ public class SimulationContextController extends Controller {
                 }
             }
         }
-        for (int windowId : windowsToUpdate) {
-            simulationContextService.updateWindowBlockState(windowId);
-        }
-        mainController.update();
+        simulationContextService.updateWindowBlockState(windowsToUpdate);
+
     }
 
     @FXML
@@ -144,8 +144,6 @@ public class SimulationContextController extends Controller {
         String location = locationChoices.getSelectionModel().getSelectedItem();
         Individual individual = nameChoices.getSelectionModel().getSelectedItem();
         simulationContextService.updateIndividualLocation(individual, location);
-        setTableAndComboChoice();
-        mainController.update();
     }
 
     /**

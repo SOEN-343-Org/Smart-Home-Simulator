@@ -25,7 +25,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LoginController extends Controller {
+public class LoginController {
     Connection connection;
     Statement statement;
     @FXML
@@ -49,11 +49,7 @@ public class LoginController extends Controller {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("DashboardView" + ".fxml"));
         return fxmlLoader.load();
     }
-
-    @Override
-    void initializeController() {
-    }
-
+    
     public void initialize() {
         try {
             connection = DBConnection.getConnection();

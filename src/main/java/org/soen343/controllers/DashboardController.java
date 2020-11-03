@@ -2,7 +2,11 @@ package org.soen343.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
+import org.soen343.models.Model;
 import org.soen343.services.DashboardService;
+import org.soen343.services.SimulationContextService;
+import org.soen343.services.modules.SHCModule;
+import org.soen343.services.modules.SHSModule;
 
 public class DashboardController extends Controller {
 
@@ -26,8 +30,11 @@ public class DashboardController extends Controller {
      * Initialize controllers
      */
     public void initialize() {
-        DashboardService dashboardService = new DashboardService();
-        dashboardService.populateIndividuals();
+        Model.setModelParameters();
+
+        // Set the observer pattern of the modules onto the controllers
+        // Modules are static so we give them references to controller objects and they update the controllers accordingly
+        DashboardService.getInstance().populateIndividuals();
 
         simulationInfoController.setMainController(this);
         smartHomeSimulatorModuleController.setMainController(this);
@@ -42,25 +49,27 @@ public class DashboardController extends Controller {
         houseLayoutController.initializeController();
         simulationInfoController.initializeController();
 
+        // set observer pattern on views/controllers
+        SimulationContextService.getInstance().attachObserver(houseLayoutController).attachObserver(simulationContextController).attachObserver(simulationInfoController).attachObserver(smartHomeSimulatorModuleController);
+        SHSModule.getInstance().attachObserver(houseLayoutController).attachObserver(simulationContextController).attachObserver(simulationInfoController).attachObserver(smartHomeSimulatorModuleController);
+        SHCModule.getInstance().attachObserver(houseLayoutController).attachObserver(simulationContextController).attachObserver(simulationInfoController).attachObserver(smartHomeSimulatorModuleController);
+
         // hide simulation context window
         exitSimulationContext();
-        update();
+        houseLayoutController.update();
     }
 
     /**
      * Update
      */
+    @Override
     public void update() {
-        smartHomeSimulatorModuleController.update();
-        simulationInfoController.update();
-        houseLayoutController.drawLayout();
     }
 
     /**
      * Enter simulation
      */
     public void enterSimulationContext() {
-        simulationContextController.initializeController();
         simulationContext.setVisible(true);
     }
 
@@ -68,7 +77,6 @@ public class DashboardController extends Controller {
      * Exit simulation
      */
     public void exitSimulationContext() {
-        update();
         simulationContext.setVisible(false);
     }
 

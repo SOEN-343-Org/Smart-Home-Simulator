@@ -1,4 +1,4 @@
-package org.soen343.models;
+package org.soen343.models.house;
 
 public class Door {
 

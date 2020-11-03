@@ -1,20 +1,48 @@
 package org.soen343.services;
 
-import org.soen343.models.Window;
+import org.soen343.models.Model;
+import org.soen343.models.house.Individual;
+import org.soen343.models.house.Window;
+
+import java.util.HashSet;
 
 public class SimulationContextService extends Service {
 
-    public SimulationContextService() {
+    private static SimulationContextService simulationContextService = null;
+
+    public static SimulationContextService getInstance() {
+        if (simulationContextService == null) {
+            simulationContextService = new SimulationContextService();
+        }
+        return simulationContextService;
     }
 
     /**
      * Update window state
      *
-     * @param windowId
+     * @param windows
      */
-    public void updateWindowBlockState(int windowId) {
+    public void updateWindowBlockState(HashSet<Integer> windows) {
         //TODO: Log that we block that window
-        Window window = model.house.getWindowById(windowId);
-        window.setBlocked(!window.isBlocked());
+
+        for (int id : windows) {
+            Window window = Model.getHouse().getWindowById(id);
+            window.setBlocked(!window.isBlocked());
+        }
+        this.notifyObservers(this);
+    }
+
+    /**
+     * Update individual location
+     *
+     * @param individual
+     * @param location
+     */
+    public void updateIndividualLocation(Individual individual, String location) {
+        //TODO: Log that we update location of that individual
+        if (individual != null) {
+            individual.setLocation(location);
+            this.notifyObservers(this);
+        }
     }
 }

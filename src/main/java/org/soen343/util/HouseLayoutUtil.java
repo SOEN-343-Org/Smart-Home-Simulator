@@ -3,7 +3,7 @@ package org.soen343.util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.soen343.models.*;
+import org.soen343.models.house.*;
 
 import java.io.InputStream;
 

@@ -8,8 +8,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
-import org.soen343.models.Individual;
-import org.soen343.services.SmartHomeSimulatorModuleService;
+import org.soen343.models.Model;
+import org.soen343.models.User;
+import org.soen343.models.house.Individual;
+import org.soen343.services.modules.SHSModule;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -52,10 +54,11 @@ public class SmartHomeSimulatorModuleController extends Controller {
 
     private int idSelected;
 
-    private SmartHomeSimulatorModuleService smartHomeSimulatorModuleService;
+    private SHSModule shsModule;
 
     /**
      * Parse s into integer
+     *
      * @param s
      * @return false
      */
@@ -76,7 +79,7 @@ public class SmartHomeSimulatorModuleController extends Controller {
      */
     public void initializeController() {
 
-        smartHomeSimulatorModuleService = new SmartHomeSimulatorModuleService();
+        shsModule = SHSModule.getInstance();
 
         column1.setCellValueFactory(new PropertyValueFactory<>("id"));
         column2.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -97,25 +100,28 @@ public class SmartHomeSimulatorModuleController extends Controller {
      * Update location, role, location, name, individuals table
      */
     public void update() {
-        ArrayList<String> roomsName = smartHomeSimulatorModuleService.getHouseRoomsName();
+        ArrayList<String> roomsName = Model.getHouse().roomsName;
 
         locationChoicesAdd.setItems(FXCollections.observableArrayList(roomsName));
         locationChoicesAdd.setValue("outside");
         roleChoicesAdd.setItems(roles);
         roleChoicesAdd.setValue("Family Adult");
 
-        String currentUserLocation = smartHomeSimulatorModuleService.getCurrentUserLocation();
+        Individual currentUserIndividual = User.getCurrentIndividual();
         locationChoices.setItems(FXCollections.observableArrayList(roomsName));
-        locationChoices.setValue(currentUserLocation);
-
-        ArrayList<Individual> individualsList = smartHomeSimulatorModuleService.getIndividuals();
-        Individual currentUserIndividual = smartHomeSimulatorModuleService.getCurrentUserIndividual();
-        nameChoices.setItems(FXCollections.observableArrayList(individualsList));
-        nameChoices.setValue(currentUserIndividual);
-
+        ArrayList<Individual> individualsList = Model.getHouse().getIndividuals();
         individualsTable.setItems(FXCollections.observableArrayList(individualsList));
+        nameChoices.setItems(FXCollections.observableArrayList(individualsList));
         individualsTable.refresh();
 
+        if (currentUserIndividual == null) {
+            locationChoices.setValue("outside");
+            nameChoices.setValue(null);
+        } else {
+            String currentUserLocation = currentUserIndividual.getLocation();
+            locationChoices.setValue(currentUserLocation);
+            nameChoices.setValue(currentUserIndividual);
+        }
     }
 
     /**
@@ -134,12 +140,11 @@ public class SmartHomeSimulatorModuleController extends Controller {
     private void onEditName(TableColumn.CellEditEvent cellEditEvent) {
         String newName = cellEditEvent.getNewValue().toString();
         if (!newName.isBlank()) {
-            boolean success = smartHomeSimulatorModuleService.updateIndividualName(newName, idSelected);
+            boolean success = shsModule.updateIndividualName(newName, idSelected);
             // We could notify the user that the name has been successfully updated
         } else {
             //TODO: inform user name cannot be empty
         }
-        mainController.update();
     }
 
     @FXML
@@ -148,33 +153,30 @@ public class SmartHomeSimulatorModuleController extends Controller {
             String name = addedName.getText();
             String role = roleChoicesAdd.getSelectionModel().getSelectedItem();
             String location = locationChoicesAdd.getSelectionModel().getSelectedItem();
-            boolean success = smartHomeSimulatorModuleService.addNewIndividual(name, role, location);
+            boolean success = shsModule.addNewIndividual(name, role, location);
             // We could notify the user that the individual has been successfully added
         } else {
             //TODO: inform user name cannot be empty
         }
-        mainController.update();
     }
 
     @FXML
     private void onRemoveIndividual(ActionEvent actionEvent) {
         if (isInteger(idToRemove.getText())) {
             int individualId = Integer.parseInt(idToRemove.getText());
-            boolean success = smartHomeSimulatorModuleService.RemoveIndividual(individualId);
+            boolean success = shsModule.removeIndividual(individualId);
             // We could notify the user that the individual has been successfully removed or could not be deleted
         } else {
             //TODO: inform id has to be a number
         }
-        mainController.update();
     }
 
     @FXML
     private void onCurrentIndividualUpdate(ActionEvent actionEvent) {
         String location = locationChoices.getSelectionModel().getSelectedItem();
         Individual individual = nameChoices.getSelectionModel().getSelectedItem();
-        smartHomeSimulatorModuleService.updateUserIndividual(individual);
-        smartHomeSimulatorModuleService.updateIndividualLocation(individual, location);
-        mainController.update();
+        shsModule.updateUserIndividual(individual);
+        shsModule.updateIndividualLocation(individual, location);
     }
 
 
@@ -183,7 +185,7 @@ public class SmartHomeSimulatorModuleController extends Controller {
 
         if (datePicker.getValue() != null) {
             LocalDate date = datePicker.getValue();
-            smartHomeSimulatorModuleService.updateDateTimeDate(date);
+            shsModule.updateDateTimeDate(date);
         }
         if (!time.getText().isBlank()) {
             String t = time.getText();
@@ -194,11 +196,10 @@ public class SmartHomeSimulatorModuleController extends Controller {
                 int s = Integer.parseInt(timeArray[2]);
 
                 if (h >= 0 && h < 24 && m >= 0 && m < 60 && s >= 0 && s < 60) {
-                    smartHomeSimulatorModuleService.updateTime(h, m, s);
+                    shsModule.updateTime(h, m, s);
                 }
             }
         }
-        mainController.update();
     }
 
     @FXML
@@ -206,9 +207,8 @@ public class SmartHomeSimulatorModuleController extends Controller {
         String t = outsideTemp.getText();
         if (isInteger(t)) {
             int temp = Integer.parseInt(t);
-            smartHomeSimulatorModuleService.updateOutsideTemp(temp);
+            shsModule.updateOutsideTemp(temp);
         }
-        mainController.update();
     }
 
 }

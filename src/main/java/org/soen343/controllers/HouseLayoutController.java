@@ -7,8 +7,8 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import org.soen343.models.*;
-import org.soen343.services.HouseLayoutService;
+import org.soen343.models.Model;
+import org.soen343.models.house.*;
 
 import java.util.ArrayList;
 
@@ -36,13 +36,9 @@ public class HouseLayoutController extends Controller {
     private Image closedLight;
     private Image individual;
 
-    private HouseLayoutService houseLayoutService;
-
     @FXML
     public void initialize() {
         // Initialization code can go here.
-
-        houseLayoutService = new HouseLayoutService();
 
         grass = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/grass.jpg")));
         floor = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/floor.jpg")));
@@ -62,7 +58,7 @@ public class HouseLayoutController extends Controller {
      * Initialize house layout controller
      */
     public void initializeController() {
-        layout = houseLayoutService.getHouseLayout();
+        layout = Model.getHouse().getLayout();
 
         if (layout == null) {
             nullHouse = true;
@@ -70,6 +66,11 @@ public class HouseLayoutController extends Controller {
         }
         roomSize = (int) Math.round((canvas.getHeight() - (2 * safeZoneH)) / layout.length);
         safeZoneW = (int) Math.round((canvas.getWidth() - (roomSize * layout[0].length)) / 2);
+    }
+
+    @Override
+    void update() {
+        drawLayout();
     }
 
     /**
@@ -106,7 +107,7 @@ public class HouseLayoutController extends Controller {
             return;
         }
 
-        ArrayList<Individual> individuals = houseLayoutService.getIndividuals();
+        ArrayList<Individual> individuals = Model.getHouse().getIndividuals();
 
         gc.drawImage(grass, 0, 0, width, height);
 

@@ -4,14 +4,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
-import org.soen343.services.SimulationInfoService;
+import org.soen343.models.Model;
+import org.soen343.models.User;
+import org.soen343.models.house.Individual;
+import org.soen343.services.DashboardService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class SimulationInfoController extends Controller {
 
-    SimulationInfoService simulationInfoService;
     @FXML
     private ToggleButton startStopToggle;
     @FXML
@@ -27,15 +29,17 @@ public class SimulationInfoController extends Controller {
     @FXML
     private Label chosenTime;
 
+    private DashboardService dashboardService;
+
     public void initializeController() {
-        simulationInfoService = new SimulationInfoService();
+        dashboardService = DashboardService.getInstance();
         update();
     }
 
     @FXML
     private void startSimulation(ActionEvent actionEvent) {
-        boolean success = simulationInfoService.setSimulationRunning();
-        boolean status = simulationInfoService.getSimulationStatus();
+        boolean success = dashboardService.setSimulationRunning();
+        boolean status = Model.getSimulationParameters().isSimulationRunning();
         startStopToggle.setText(status ? "ON" : "OFF");
         startStopToggle.setSelected(status);
     }
@@ -52,18 +56,28 @@ public class SimulationInfoController extends Controller {
     /**
      * Update profile name, role, chosen location and format time
      */
+    @Override
     public void update() {
-        profileName.setText(simulationInfoService.getIndividualName());
-        role.setText(simulationInfoService.getIndividualRole());
-        chosenLocation.setText(simulationInfoService.getIndividualLocation());
-
+        Individual user = User.getCurrentIndividual();
+        if (user == null) {
+            profileName.setText("Profile not set");
+            role.setText("Profile not set");
+            chosenLocation.setText("Profile not set");
+        } else {
+            String getName = User.getCurrentIndividual().getName();
+            profileName.setText(getName != null ? getName : "Profile not set");
+            String getRole = User.getCurrentIndividual().getRole();
+            role.setText(getRole != null ? getRole : "Profile not set");
+            String getLocation = User.getCurrentIndividual().getLocation();
+            chosenLocation.setText(getLocation);
+        }
         // Format Date and Time
-        LocalDate date = simulationInfoService.getContextDate();
+        LocalDate date = Model.getSimulationParameters().getDateTime().getDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
         String formattedDate = date.format(formatter);
-        String hours = Integer.toString(simulationInfoService.getContextHours());
-        String min = Integer.toString(simulationInfoService.getContextMin());
-        String sec = Integer.toString(simulationInfoService.getContextSec());
+        String hours = Integer.toString(Model.getSimulationParameters().getDateTime().getHours());
+        String min = Integer.toString(Model.getSimulationParameters().getDateTime().getMinutes());
+        String sec = Integer.toString(Model.getSimulationParameters().getDateTime().getSeconds());
         hours = hours.length() == 1 ? "0" + hours : hours;
         min = min.length() == 1 ? "0" + min : min;
         sec = sec.length() == 1 ? "0" + sec : sec;
@@ -71,7 +85,7 @@ public class SimulationInfoController extends Controller {
         chosenDate.setText(formattedDate);
         chosenTime.setText(formattedTime);
 
-        String temp = Integer.toString(simulationInfoService.getOutsideTemp());
+        String temp = Integer.toString(Model.getSimulationParameters().getOutsideTemp());
         outsideTemp.setText(temp + " °C");
     }
 }
