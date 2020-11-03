@@ -105,6 +105,15 @@ public class House {
         return null;
     }
 
+    public ArrayList<Light> getAllLights() {
+        ArrayList<Room> rooms = getRooms();
+        ArrayList<Light> lights = new ArrayList<>();
+        for (Room room : rooms) {
+            lights.addAll(room.getLights());
+        }
+        return lights;
+    }
+
     @Override
     public String toString() {
         return "House of dimension (" + layout.length + " by " + layout[0].length + ")\nRooms=\n" + rooms;
