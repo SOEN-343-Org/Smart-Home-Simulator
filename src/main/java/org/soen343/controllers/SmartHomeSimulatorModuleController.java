@@ -62,7 +62,7 @@ public class SmartHomeSimulatorModuleController extends Controller {
      * @param s
      * @return false
      */
-    public static boolean isInteger(String s) {
+    private boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
         } catch (NumberFormatException e) {

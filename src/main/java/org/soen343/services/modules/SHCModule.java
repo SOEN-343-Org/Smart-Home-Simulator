@@ -87,10 +87,10 @@ public class SHCModule extends Service {
     public boolean setAutoMode() {
         if (!Model.getSimulationParameters().isSimulationRunning()) {
             // Simulation is not on
-            //TODO: LOG IT
+            //TODO: TO REMOVE WHEN PANEL WILL BE DISABLED
             return false;
         }
-        if (User.getCurrentIndividual() != null) {
+        if (User.getCurrentIndividual() != null) { //TODO: ALL THESE CHECKS WILL ALSO GO BECAUSE THE SIMULATION WILL BE ON THEREFOERE A PROFILE HAS BEEN SELECTED
             Model.getSimulationParameters().setAutoMode();
             //TODO: LOG IT
             return true;
@@ -124,6 +124,13 @@ public class SHCModule extends Service {
         for (Light light : room.getLights()) {
             //TODO: Log that we close that light
             light.setOpen(false);
+        }
+    }
+
+    public void closeAllLights() {
+        for (Light l : Model.getHouse().getAllLights()) {
+            //TODO: Log we close light
+            l.setOpen(false);
         }
     }
 }
