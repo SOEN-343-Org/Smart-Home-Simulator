@@ -4,6 +4,8 @@ import javafx.animation.Animation;
 import javafx.util.Duration;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+
+import java.time.LocalDate;
 import java.util.Calendar;
 
 public class DateTime {
@@ -11,11 +13,17 @@ public class DateTime {
     private double clockSpeedMultiplier;
     private Timeline clock;
     private Calendar date;
+    private int hours = 12;
+    private int minutes = 0;
+    private int seconds = 0;
+    private LocalDate date1 = LocalDate.now();
+
 
     public DateTime() {
         initializeClock();
-        clockSpeedMultiplier=1;
+        clockSpeedMultiplier = 1;
         date = Calendar.getInstance();
+
     }
 
     private void initializeClock() {
@@ -28,14 +36,14 @@ public class DateTime {
     /**
      * Starts Clock
      */
-    public void startTime(){
+    public void startTime() {
         clock.play();
     }
 
     /**
      * Stops Clock
      */
-    public void stopTime(){
+    public void stopTime() {
         clock.pause();
     }
 
@@ -47,12 +55,13 @@ public class DateTime {
     public void setDate(Calendar calendar) {
         this.date = calendar;
     }
+
     /**
-     *Get Date
+     * Get Date
      *
      * @return date
      */
-    public Calendar getDate(){
+    public Calendar getDate() {
         return date;
     }
 
@@ -60,6 +69,7 @@ public class DateTime {
         this.clockSpeedMultiplier = clockSpeedMultiplier;
         changeClockSpeed();
     }
+
     private void changeClockSpeed() {
         clock.setRate(clockSpeedMultiplier);
     }
@@ -68,7 +78,15 @@ public class DateTime {
         return clockSpeedMultiplier;
     }
 
+    /**
+     * Get hours
+     *
+     * @return int hours
+     */
+    public int getHours() {
+        return hours;
     }
+}
 
 
 
