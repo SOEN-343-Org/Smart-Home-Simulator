@@ -1,92 +1,75 @@
 package org.soen343.models.parameters;
 
-import java.time.LocalDate;
+import javafx.animation.Animation;
+import javafx.util.Duration;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import java.util.Calendar;
 
 public class DateTime {
 
-    private int hours;
-    private int minutes;
-    private int seconds;
-    private LocalDate date = LocalDate.now();
+    private double clockSpeedMultiplier;
+    private Timeline clock;
+    private Calendar date;
 
     public DateTime() {
+        initializeClock();
+        clockSpeedMultiplier=1;
+        date = Calendar.getInstance();
+    }
+
+    private void initializeClock() {
+        clock = new Timeline(new KeyFrame(Duration.ZERO, e -> date.add(Calendar.SECOND, 1)),
+                new KeyFrame(Duration.seconds(1))
+        );
+        clock.setCycleCount(Animation.INDEFINITE);
     }
 
     /**
-     *Get hours
-     *
-     * @return int hours
+     * Starts Clock
      */
-    public int getHours() {
-        return hours;
+    public void startTime(){
+        clock.play();
     }
 
     /**
-     * Set hours
-     *
-     * @param hours
+     * Stops Clock
      */
-    public void setHours(int hours) {
-        if (0 <= hours && hours <= 23) {
-            this.hours = hours;
-        }
+    public void stopTime(){
+        clock.pause();
     }
 
     /**
-     * Get hours
+     * Set Date
      *
-     * @return int minutes
+     * @param calendar
      */
-    public int getMinutes() {
-        return minutes;
+    public void setDate(Calendar calendar) {
+        this.date = calendar;
     }
-
     /**
-     * Set minutes
+     *Get Date
      *
-     * @param minutes
+     * @return date
      */
-    public void setMinutes(int minutes) {
-        if (0 <= minutes && minutes <= 59) {
-            this.minutes = minutes;
-        }
-    }
-
-    /**
-     * Get date
-     *
-     * @return int date
-     */
-    public LocalDate getDate() {
+    public Calendar getDate(){
         return date;
     }
 
-    /**
-     * Set date
-     *
-     * @param date
-     */
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setClockSpeedMultiplier(double clockSpeedMultiplier) {
+        this.clockSpeedMultiplier = clockSpeedMultiplier;
+        changeClockSpeed();
+    }
+    private void changeClockSpeed() {
+        clock.setRate(clockSpeedMultiplier);
     }
 
-    /**
-     * Get seconds
-     *
-     * @return int seconds
-     */
-    public int getSeconds() {
-        return seconds;
+    public double getClockSpeedMultiplier() {
+        return clockSpeedMultiplier;
     }
 
-    /**
-     * Set seconds
-     *
-     * @param seconds
-     */
-    public void setSeconds(int seconds) {
-        if (0 <= seconds && seconds <= 59) {
-            this.seconds = seconds;
-        }
     }
-}
+
+
+
+
