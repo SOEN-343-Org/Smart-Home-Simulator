@@ -1,6 +1,6 @@
 package org.soen343.models.house;
 
-public class Door implements Components{
+public class Door implements Components {
 
     private final int id;
     private boolean open;
@@ -51,6 +51,6 @@ public class Door implements Components{
 
     @Override
     public String toString() {
-        return this.getName() + ", state: " + (open ? "opened" : "closed");
+        return this.getName();
     }
 }

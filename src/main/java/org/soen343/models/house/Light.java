@@ -1,6 +1,6 @@
 package org.soen343.models.house;
 
-public class Light implements Components{
+public class Light implements Components {
 
     private final int id;
     private boolean open;
@@ -53,7 +53,7 @@ public class Light implements Components{
 
     @Override
     public String toString() {
-        return this.getName() + ", state: " + (open ? "opened" : "closed");
+        return this.getName();
     }
 
 }

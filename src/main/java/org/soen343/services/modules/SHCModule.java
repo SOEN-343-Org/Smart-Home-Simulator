@@ -5,6 +5,8 @@ import org.soen343.models.User;
 import org.soen343.models.house.*;
 import org.soen343.services.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -36,9 +38,11 @@ public class SHCModule extends Service {
             Window window = Model.getHouse().getWindowById(id);
             if (window.isBlocked()) {
                 //TODO: LOG that window is blocked
+                System.out.println(window + " is blocked");
             } else {
                 boolean state = window.isOpen();
                 window.setOpen(!state);
+                System.out.println((!state ? "Opened" : "Closed") + window);
             }
         }
         this.notifyObservers(this);
@@ -60,6 +64,7 @@ public class SHCModule extends Service {
             Door door = Model.getHouse().getDoorById(id);
             boolean state = door.isOpen();
             door.setOpen(!state);
+            System.out.println((!state ? "Opened" : "Closed") + door);
         }
         this.notifyObservers(this);
     }
@@ -71,15 +76,17 @@ public class SHCModule extends Service {
      */
     public void updateLightState(HashSet<Integer> lights) {
         if (!Model.getSimulationParameters().isSimulationRunning()) {
-            // Simulation is not on
+            // Simulation is not on//TODO: TO REMOVE WHEN PANEL WILL BE DISABLED
             //TODO: LOG IT
             return;
         }
         for (int id : lights) {
             //TODO: Log that we open/close that light
+
             Light light = Model.getHouse().getLightById(id);
             boolean state = light.isOpen();
             light.setOpen(!state);
+            System.out.println((!state ? "Opened" : "Closed") + light);
         }
         this.notifyObservers(this);
     }
@@ -95,6 +102,7 @@ public class SHCModule extends Service {
             //TODO: LOG IT
             return true;
         }
+        System.out.println("Auto mode set to " + Model.getSimulationParameters().isAutoModeOn());
         //TODO: LOG IT
         return false;
     }
@@ -103,8 +111,11 @@ public class SHCModule extends Service {
         if (location.equals("outside")) return;
         Room room = Model.getHouse().getRoomByName(location);
         for (Light light : room.getLights()) {
-            //TODO: Log that we open that light
-            light.setOpen(true);
+            if (!light.isOpen()) {
+                //TODO: Log that we open that light
+                light.setOpen(true);
+                System.out.println("Opened " + light + " because of auto mode");
+            }
         }
     }
 
@@ -122,15 +133,88 @@ public class SHCModule extends Service {
         Room room = Model.getHouse().getRoomByName(location);
 
         for (Light light : room.getLights()) {
-            //TODO: Log that we close that light
-            light.setOpen(false);
+            if (light.isOpen()) {
+                //TODO: Log that we close that light
+                light.setOpen(false);
+                System.out.println("Closed " + light + " because of auto mode");
+            }
         }
     }
 
     public void closeAllLights() {
         for (Light l : Model.getHouse().getAllLights()) {
-            //TODO: Log we close light
-            l.setOpen(false);
+            if (l.isOpen()) {
+                //TODO: Log we close light
+                l.setOpen(false);
+                System.out.println("Closed " + l);
+            }
+        }
+    }
+
+    public void awayOpenLights() {
+        boolean needUpdate = false;
+        for (Light l : Model.getSimulationParameters().getAwayModeParameters().getOpenLights()) {
+            if (!l.isOpen()) {
+                //TODO: Log we open light
+                System.out.println("Opened " + l + " because of away mode");
+                l.setOpen(true);
+                needUpdate = true;
+            }
+        }
+        if (needUpdate)
+            notifyObservers(this);
+    }
+
+    public void awayCloseLights() {
+        boolean needUpdate = false;
+        for (Light l : Model.getSimulationParameters().getAwayModeParameters().getOpenLights()) {
+            if (l.isOpen()) {
+                //TODO: Log we close light
+                System.out.println("Closed " + l + " because of awaymode");
+                l.setOpen(false);
+                needUpdate = true;
+            }
+        }
+        if (needUpdate)
+            notifyObservers(this);
+    }
+
+    public void alertAuthorities() {
+        //TODO: Log that we have alerted the authorities.
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        System.out.println("[SHC Module] [" + dateFormat.format(Model.getSimulationParameters().getDateTime().getCalendar().getTime()) + " " + timeFormat.format(Model.getSimulationParameters().getDateTime().getCalendar().getTime()) + "] Authorities have been alerted");
+    }
+
+    public void intrusionDetectedDuringAwayMode() {
+        //TODO: Log that we have alerted the authorities.
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        System.out.println("[SHC Module] [" + dateFormat.format(Model.getSimulationParameters().getDateTime().getCalendar().getTime()) + " " + timeFormat.format(Model.getSimulationParameters().getDateTime().getCalendar().getTime()) + "] Intrusion detected");
+    }
+
+    public void closeAllWindows() {
+        for (Window w : Model.getHouse().getAllWindows()) {
+            if (w.isOpen()) {
+                if (!w.isBlocked()) {
+                    //TODO: Log we close window
+                    w.setOpen(false);
+                    System.out.println("Closed " + w);
+                } else {
+                    System.out.println("Could not close " + w + " because it is blocked");
+                }
+            }
+        }
+    }
+
+    public void closeAllDoors() {
+        for (Door d : Model.getHouse().getAllDoors()) {
+            //TODO: Log we close door
+            if (d.isOpen()) {
+                d.setOpen(false);
+                System.out.println("Closed " + d);
+            }
+
         }
     }
 }

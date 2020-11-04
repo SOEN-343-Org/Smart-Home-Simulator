@@ -1,10 +1,13 @@
 package org.soen343;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
@@ -43,6 +46,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        stage.setOnCloseRequest(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
         scene = new Scene(loadFXML("LoginView"), 1200, 900);
         stage.setScene(scene);
         stage.show();
