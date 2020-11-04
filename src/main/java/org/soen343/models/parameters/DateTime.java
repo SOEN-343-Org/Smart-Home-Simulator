@@ -1,92 +1,53 @@
 package org.soen343.models.parameters;
 
-import java.time.LocalDate;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+
+import java.util.Calendar;
 
 public class DateTime {
 
-    private int hours = 12;
-    private int minutes = 0;
-    private int seconds = 0;
-    private LocalDate date = LocalDate.now();
+    private Calendar calendar;
+    private Timeline time;
 
     public DateTime() {
+        calendar = Calendar.getInstance();
+        initializeTime();
     }
 
-    /**
-     * Get hours
-     *
-     * @return int hours
-     */
-    public int getHours() {
-        return hours;
+    public Calendar getCalendar() {
+        return calendar;
     }
 
-    /**
-     * Set hours
-     *
-     * @param hours
-     */
-    public void setHours(int hours) {
-        if (0 <= hours && hours <= 23) {
-            this.hours = hours;
-        }
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
     }
 
-    /**
-     * Get hours
-     *
-     * @return int minutes
-     */
-    public int getMinutes() {
-        return minutes;
+    public Timeline getTime() {
+        return time;
     }
 
-    /**
-     * Set minutes
-     *
-     * @param minutes
-     */
-    public void setMinutes(int minutes) {
-        if (0 <= minutes && minutes <= 59) {
-            this.minutes = minutes;
-        }
+    public void setTime(Timeline time) {
+        this.time = time;
     }
 
-    /**
-     * Get date
-     *
-     * @return int date
-     */
-    public LocalDate getDate() {
-        return date;
+    public void startTime() {
+        time.play();
     }
 
-    /**
-     * Set date
-     *
-     * @param date
-     */
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void stopTime() {
+        time.pause();
     }
 
-    /**
-     * Get seconds
-     *
-     * @return int seconds
-     */
-    public int getSeconds() {
-        return seconds;
+
+    private void initializeTime() {
+        time = new Timeline(new KeyFrame(Duration.ZERO, e -> calendar.add(Calendar.SECOND, 1)),
+                new KeyFrame(Duration.seconds(1))
+        );
+        time.setCycleCount(Animation.INDEFINITE);
     }
 
-    /**
-     * Set seconds
-     *
-     * @param seconds
-     */
-    public void setSeconds(int seconds) {
-        if (0 <= seconds && seconds <= 59) {
-            this.seconds = seconds;
-        }
-    }
+
 }

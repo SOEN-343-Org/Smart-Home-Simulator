@@ -1,5 +1,6 @@
 package org.soen343.controllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -9,8 +10,13 @@ import org.soen343.models.User;
 import org.soen343.models.house.Individual;
 import org.soen343.services.DashboardService;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class SimulationInfoController extends Controller {
 
@@ -30,6 +36,7 @@ public class SimulationInfoController extends Controller {
     private Label chosenTime;
 
     private DashboardService dashboardService;
+    private Timer clockTimer = new Timer();
 
     public void initializeController() {
         dashboardService = DashboardService.getInstance();
@@ -42,6 +49,13 @@ public class SimulationInfoController extends Controller {
         boolean status = Model.getSimulationParameters().isSimulationRunning();
         startStopToggle.setText(status ? "ON" : "OFF");
         startStopToggle.setSelected(status);
+        if (status) {
+            Model.getSimulationParameters().getDateTime().startTime();
+            startAnimatedTime();
+        } else {
+            Model.getSimulationParameters().getDateTime().stopTime();
+            stopAnimatedTime();
+        }
     }
 
     /**
@@ -72,20 +86,41 @@ public class SimulationInfoController extends Controller {
             chosenLocation.setText(getLocation);
         }
         // Format Date and Time
-        LocalDate date = Model.getSimulationParameters().getDateTime().getDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
-        String formattedDate = date.format(formatter);
-        String hours = Integer.toString(Model.getSimulationParameters().getDateTime().getHours());
-        String min = Integer.toString(Model.getSimulationParameters().getDateTime().getMinutes());
-        String sec = Integer.toString(Model.getSimulationParameters().getDateTime().getSeconds());
-        hours = hours.length() == 1 ? "0" + hours : hours;
-        min = min.length() == 1 ? "0" + min : min;
-        sec = sec.length() == 1 ? "0" + sec : sec;
-        String formattedTime = hours + " : " + min + " : " + sec;
-        chosenDate.setText(formattedDate);
-        chosenTime.setText(formattedTime);
+        Date date = Model.getSimulationParameters().getDateTime().getCalendar().getTime();
+        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
+        chosenDate.setText(timeFormat.format(date));
+        chosenTime.setText(dateFormat.format(date));
 
         String temp = Integer.toString(Model.getSimulationParameters().getOutsideTemp());
         outsideTemp.setText(temp + " °C");
+    }
+
+    public void updateTime(Calendar calendar) {
+        Date date = Model.getSimulationParameters().getDateTime().getCalendar().getTime();
+        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
+        chosenDate.setText(timeFormat.format(date));
+        chosenTime.setText(dateFormat.format(date));
+        System.out.println(chosenTime);
+    }
+
+    private void startAnimatedTime() {
+        clockTimer = new Timer();
+        clockTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> updateTime(Model.getSimulationParameters().getDateTime().getCalendar()));
+            }
+        }, 0, (long) (Duration.ofSeconds(1).toMillis()));
+    }
+
+    private void stopAnimatedTime() {
+        clockTimer.cancel();
+    }
+
+    private void changeAnimatedTime() {
+        stopAnimatedTime();
+        startAnimatedTime();
     }
 }
