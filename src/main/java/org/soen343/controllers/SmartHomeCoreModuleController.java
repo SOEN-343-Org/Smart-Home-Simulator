@@ -19,12 +19,6 @@ public class SmartHomeCoreModuleController extends Controller {
     @FXML
     private Pane smartHomeCoreModule;
     @FXML
-    private Button doorsButton;
-    @FXML
-    private Button windowsButton;
-    @FXML
-    private Button lightsButton;
-    @FXML
     private ToggleButton autoModeButton;
     @FXML
     private TreeView<String> doorsTreeView;
@@ -175,24 +169,10 @@ public class SmartHomeCoreModuleController extends Controller {
     }
 
     public void disableButtons(){
-//        autoModeButton.setDisable(true);
-//        doorsTreeView.setDisable(true);
-//        windowsTreeView.setDisable(true);
-//        lightsTreeView.setDisable(true);
-//        doorsButton.setDisable(true);
-//        lightsButton.setDisable(true);
-//        windowsButton.setDisable(true);
         smartHomeCoreModule.setDisable(true);
     }
 
     public void enableButtons(){
-//        autoModeButton.setDisable(false);
-//        doorsTreeView.setDisable(false);
-//        windowsTreeView.setDisable(false);
-//        lightsTreeView.setDisable(false);
-//        doorsButton.setDisable(false);
-//        lightsButton.setDisable(false);
-//        windowsButton.setDisable(false);
         smartHomeCoreModule.setDisable(false);
     }
 
