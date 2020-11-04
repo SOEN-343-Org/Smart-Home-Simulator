@@ -166,7 +166,7 @@ public class SHCModule extends Service {
                     System.out.println("[SHC Module] [Away Mode] Closed and Locked " + w.getName());
                     needUpdate = true;
                 } else {
-                    System.out.println("[SHC Module] [Away Mode] Could not close " + w + " because it is blocked");
+                    System.out.println("[SHC Module] [Away Mode] Could not close " + w.getName() + " because it is blocked");
                 }
             }
         }

@@ -98,7 +98,7 @@ public class SHSModule extends Service {
      */
     public void updateDate(LocalDate date) {
         Model.getSimulationParameters().getDateTime().setDate(date);
-        System.out.println("[SHS Module] Updated Simulation's Date to " + DateTimeFormatter.ofPattern("MM/dd/yy").format(date));
+        System.out.println("[SHS Module] Updated Simulation's Date to " + DateTimeFormatter.ofPattern("yyyy-MM-dd").format(date));
         notifyObservers(this);
     }
 

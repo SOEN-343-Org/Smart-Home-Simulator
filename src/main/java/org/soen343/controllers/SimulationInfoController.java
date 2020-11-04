@@ -101,7 +101,7 @@ public class SimulationInfoController extends Controller {
     public void updateTime() {
         Date date = Model.getSimulationParameters().getDateTime().getDate().getTime();
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
+        DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
         chosenTime.setText(timeFormat.format(date));
         chosenDate.setText(dateFormat.format(date));
     }

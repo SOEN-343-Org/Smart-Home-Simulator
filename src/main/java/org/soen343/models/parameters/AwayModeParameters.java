@@ -1,5 +1,6 @@
 package org.soen343.models.parameters;
 
+import org.soen343.models.Model;
 import org.soen343.models.house.Light;
 
 import java.util.ArrayList;
@@ -41,11 +42,11 @@ public class AwayModeParameters {
     }
 
     public void setLightsOpenFrom(Date lightsOpenFrom) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(lightsOpenFrom);
-        AwayModeParameters.lightsOpenFrom.set(Calendar.HOUR, c.get(Calendar.HOUR));
-        AwayModeParameters.lightsOpenFrom.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
-        AwayModeParameters.lightsOpenFrom.set(Calendar.SECOND, c.get(Calendar.SECOND));
+        Calendar c = (Calendar) Model.getSimulationParameters().getDateTime().getDate().clone();
+        AwayModeParameters.lightsOpenFrom.setTime(lightsOpenFrom);
+        AwayModeParameters.lightsOpenFrom.set(Calendar.YEAR, c.get(Calendar.YEAR));
+        AwayModeParameters.lightsOpenFrom.set(Calendar.MONTH, c.get(Calendar.MONTH));
+        AwayModeParameters.lightsOpenFrom.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH));
     }
 
     public Date getLightsOpenTo() {
@@ -53,11 +54,11 @@ public class AwayModeParameters {
     }
 
     public void setLightsOpenTo(Date lightsOpenTo) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(lightsOpenTo);
-        AwayModeParameters.lightsOpenTo.set(Calendar.HOUR, c.get(Calendar.HOUR));
-        AwayModeParameters.lightsOpenTo.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
-        AwayModeParameters.lightsOpenTo.set(Calendar.SECOND, c.get(Calendar.SECOND));
+        Calendar c = (Calendar) Model.getSimulationParameters().getDateTime().getDate().clone();
+        AwayModeParameters.lightsOpenTo.setTime(lightsOpenTo);
+        AwayModeParameters.lightsOpenTo.set(Calendar.YEAR, c.get(Calendar.YEAR));
+        AwayModeParameters.lightsOpenTo.set(Calendar.MONTH, c.get(Calendar.MONTH));
+        AwayModeParameters.lightsOpenTo.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH));
     }
 
     public ArrayList<Light> getOpenLights() {

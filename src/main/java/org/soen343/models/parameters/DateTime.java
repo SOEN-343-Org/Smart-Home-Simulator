@@ -48,7 +48,7 @@ public class DateTime {
     public void setTime(Date date) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        this.date.set(Calendar.HOUR, c.get(Calendar.HOUR));
+        this.date.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY));
         this.date.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
         this.date.set(Calendar.SECOND, c.get(Calendar.SECOND));
     }
@@ -64,7 +64,7 @@ public class DateTime {
 
     public void setDate(LocalDate date) {
         this.date.set(Calendar.YEAR, date.getYear());
-        this.date.set(Calendar.MONTH, date.getMonthValue());
+        this.date.set(Calendar.MONTH, date.getMonthValue() - 1);
         this.date.set(Calendar.DAY_OF_MONTH, date.getDayOfMonth());
     }
 
