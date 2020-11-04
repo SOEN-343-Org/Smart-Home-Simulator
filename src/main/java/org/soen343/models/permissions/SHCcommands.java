@@ -38,7 +38,7 @@ public class SHCcommands extends CommandsContract {
                 "within the house to access Auto Mode Commands.";
 
         contract.add(new Command("Open / Close Windows", windowPermissions));
-        contract.add(new Command("(un)lock Doors", doorPermissions));
+        contract.add(new Command("(Un)Lock Doors", doorPermissions));
         contract.add(new Command("Turn On / Off Lights", lightPermissions));
         contract.add(new Command("Turn On / Off Auto Mode", autoModePermissions));
 
