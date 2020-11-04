@@ -6,6 +6,7 @@ import org.soen343.models.house.Individual;
 import org.soen343.services.Service;
 
 import java.time.LocalDate;
+import java.util.Calendar;
 
 public class SHSModule extends Service {
 
@@ -80,7 +81,7 @@ public class SHSModule extends Service {
      *
      * @param date
      */
-    public void updateDateTimeDate(LocalDate date) {
+    public void updateDateTimeDate(Calendar date) {
         Model.getSimulationParameters().getDateTime().setDate(date);
         notifyObservers(this);
     }
@@ -105,12 +106,12 @@ public class SHSModule extends Service {
      * @param m
      * @param s
      */
-    public void updateTime(int h, int m, int s) {
-        Model.getSimulationParameters().getDateTime().setHours(h);
-        Model.getSimulationParameters().getDateTime().setMinutes(m);
-        Model.getSimulationParameters().getDateTime().setSeconds(s);
-        notifyObservers(this);
-    }
+//    public void updateTime(int h, int m, int s) {
+//        Model.getSimulationParameters().getDateTime().setHours(h);
+//        Model.getSimulationParameters().getDateTime().setMinutes(m);
+//        Model.getSimulationParameters().getDateTime().setSeconds(s);
+//        notifyObservers(this);
+//    }
 
     /**
      * Update outside temperature

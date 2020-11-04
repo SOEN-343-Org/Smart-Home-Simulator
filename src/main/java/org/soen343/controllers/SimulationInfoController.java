@@ -10,14 +10,11 @@ import javafx.scene.text.Text;
 import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.Individual;
-import org.soen343.models.parameters.SimulationParameters;
 import org.soen343.services.DashboardService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;

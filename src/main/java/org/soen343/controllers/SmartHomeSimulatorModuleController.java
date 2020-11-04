@@ -15,6 +15,7 @@ import org.soen343.services.modules.SHSModule;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class SmartHomeSimulatorModuleController extends Controller {
 
@@ -180,27 +181,27 @@ public class SmartHomeSimulatorModuleController extends Controller {
     }
 
 
-    @FXML
-    private void updateDateTime(ActionEvent actionEvent) {
-
-        if (datePicker.getValue() != null) {
-            LocalDate date = datePicker.getValue();
-            shsModule.updateDateTimeDate(date);
-        }
-        if (!time.getText().isBlank()) {
-            String t = time.getText();
-            String[] timeArray = t.split(":");
-            if (timeArray.length == 3 && timeArray[0].length() == 2 && isInteger(timeArray[0]) && timeArray[1].length() == 2 && isInteger(timeArray[1]) && timeArray[2].length() == 2 && isInteger(timeArray[2])) {
-                int h = Integer.parseInt(timeArray[0]);
-                int m = Integer.parseInt(timeArray[1]);
-                int s = Integer.parseInt(timeArray[2]);
-
-                if (h >= 0 && h < 24 && m >= 0 && m < 60 && s >= 0 && s < 60) {
-                    shsModule.updateTime(h, m, s);
-                }
-            }
-        }
-    }
+//    @FXML
+//    private void updateDateTime(ActionEvent actionEvent) {
+//
+//        if (datePicker.getValue() != null) {
+//            LocalDate date = datePicker.getValue();
+//            shsModule.updateDateTimeDate(date);
+//        }
+//        if (!time.getText().isBlank()) {
+//            String t = time.getText();
+//            String[] timeArray = t.split(":");
+//            if (timeArray.length == 3 && timeArray[0].length() == 2 && isInteger(timeArray[0]) && timeArray[1].length() == 2 && isInteger(timeArray[1]) && timeArray[2].length() == 2 && isInteger(timeArray[2])) {
+//                int h = Integer.parseInt(timeArray[0]);
+//                int m = Integer.parseInt(timeArray[1]);
+//                int s = Integer.parseInt(timeArray[2]);
+//
+//                if (h >= 0 && h < 24 && m >= 0 && m < 60 && s >= 0 && s < 60) {
+//                    shsModule.updateTime(h, m, s);
+//                }
+//            }
+//        }
+//    }
 
     @FXML
     private void updateOutsideTemp(ActionEvent ae) {
