@@ -3,6 +3,7 @@ package org.soen343.services.modules;
 import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.*;
+import org.soen343.services.ConsoleOutputService;
 import org.soen343.services.Service;
 
 import java.util.ArrayList;
@@ -31,7 +32,8 @@ public class SHCModule extends Service {
         for (int id : windows) {
             Window window = Model.getHouse().getWindowById(id);
             if (window.isBlocked()) {
-                System.out.println("[SHC Module] " + window.getName() + " is blocked");
+                ConsoleOutputService.getInstance().infoLog("[SHC Module] " + window.getName() + " is blocked");
+                //System.out.println("[SHC Module] " + window.getName() + " is blocked");
             } else {
                 boolean state = window.isOpen();
                 window.setOpen(!state);

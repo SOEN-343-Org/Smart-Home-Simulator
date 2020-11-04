@@ -1,15 +1,17 @@
 package org.soen343.services;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+
+import org.soen343.models.Model;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Formatter;
-import javafx.application.Application;
 
-public class ConsoleOutputService extends Service{
+public class ConsoleOutputService extends Service {
 
+    private static ConsoleOutputService consoleOutputService = null;
     private Formatter file;
     private String log;
-    private static ConsoleOutputService consoleOutputService = null;
+    private String level;
 
     public static ConsoleOutputService getInstance() {
         if (consoleOutputService == null) {
@@ -20,6 +22,32 @@ public class ConsoleOutputService extends Service{
 
     public String getLog() {
         return log;
+    }
+
+
+    public void infoLog(String message) {
+        level = "INFO";
+        log(message);
+    }
+
+    public void criticalLog(String message) {
+        level = "CRITICAL";
+        log(message);
+    }
+
+    public void errorLog(String message) {
+        level = "ERROR";
+        log(message);
+    }
+
+    private String getTime() {
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        return timeFormat.format(Model.getSimulationParameters().getDateTime().getDate().getTime());
+    }
+
+    private void log(String message) {
+        log  = "[" + getTime() + "] " + getLevel() + " " + message;
+        notifyObservers(this);
     }
 
     /*
@@ -39,25 +67,25 @@ public class ConsoleOutputService extends Service{
     Model.getSimulationParameters.getDateTime.getDate
     look at simulation parameters
      */
-    public void log(String message) {
-        log = message;
-        notifyObservers(this);
-    }
 
-    public void openFile(){
+
+    private void openFile() {
         try {
             file = new Formatter("consoleOutput.txt");
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             System.out.println("The is an error");
         }
     }
 
-    public void writeToFile() {
+    private void writeToFile() {
         file.format("\n", "output file");
     }
 
-    public void closeFile(){
+    private void closeFile() {
         file.close();
+    }
+
+    public String getLevel() {
+        return level;
     }
 }
