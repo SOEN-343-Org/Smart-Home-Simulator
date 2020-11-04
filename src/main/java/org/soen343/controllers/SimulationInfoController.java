@@ -56,6 +56,13 @@ public class SimulationInfoController extends Controller {
         boolean status = Model.getSimulationParameters().isSimulationRunning();
         startStopToggle.setText(status ? "ON" : "OFF");
         startStopToggle.setSelected(status);
+        if (status) {
+            Model.getSimulationParameters().getDateTime().startTime();
+            startAnimatedTime();
+        } else {
+            Model.getSimulationParameters().getDateTime().stopTime();
+            stopAnimatedTime();
+        }
     }
 
     /**
