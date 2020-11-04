@@ -23,8 +23,17 @@ public class ConsoleOutputService extends Service{
     }
 
     /*
-    public void log (String message, level)
 
+    public info() {
+        return log()
+    }
+    public critical {
+
+
+    public error
+
+    public void log (String message, level)
+            level + message
     time date
 
     Model.getSimulationParameters.getDateTime.getDate

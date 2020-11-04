@@ -3,6 +3,7 @@ package org.soen343.services.modules;
 import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.Individual;
+import org.soen343.services.ConsoleOutputService;
 import org.soen343.services.Service;
 
 import java.text.SimpleDateFormat;
@@ -86,6 +87,7 @@ public class SHSModule extends Service {
     public void updateUserIndividual(Individual individual) {
         if (individual != null) {
             User.setCurrentIndividual(individual);
+            ConsoleOutputService.getInstance().log(,);
             System.out.println("[SHS Module] Logged into individual #" + individual.getId() + " " + individual.getName());
             notifyObservers(this);
         }

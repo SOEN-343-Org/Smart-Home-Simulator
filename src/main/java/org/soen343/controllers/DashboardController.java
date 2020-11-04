@@ -3,6 +3,7 @@ package org.soen343.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import org.soen343.models.Model;
+import org.soen343.services.ConsoleOutputService;
 import org.soen343.services.DashboardService;
 import org.soen343.services.SimulationContextService;
 import org.soen343.services.modules.SHCModule;
@@ -25,7 +26,8 @@ public class DashboardController extends Controller {
     private SimulationContextController simulationContextController;
     @FXML
     private SmartHomeSecurityModuleController smartHomeSecurityModuleController;
-
+    @FXML
+    private ConsoleOutputController consoleOutputController;
 
     // UI element to change view
     @FXML
@@ -47,6 +49,7 @@ public class DashboardController extends Controller {
         smartHomeSecurityModuleController.setMainController(this);
         simulationContextController.setMainController(this);
         simulationInfoController.setMainController(this);
+        consoleOutputController.setMainController(this);
 
         // initialize controllers
         simulationContextController.initializeController();
@@ -55,6 +58,7 @@ public class DashboardController extends Controller {
         smartHomeSecurityModuleController.initializeController();
         houseLayoutController.initializeController();
         simulationInfoController.initializeController();
+        consoleOutputController.initializeController();
 
         // set observer pattern on views/controllers
         SimulationContextService.getInstance().attachObserver(houseLayoutController); // To update the blocked window in the
@@ -68,7 +72,7 @@ public class DashboardController extends Controller {
                 .attachObserver(smartHomeSimulatorModuleController) // To update individual location
                 .attachObserver(smartHomeCoreModuleController) // To update the visibility of the SHC tab
                 .attachObserver(smartHomeSecurityModuleController); // To update the visibility of the SHP tab
-
+        ConsoleOutputService.getInstance().attachObserver(consoleOutputController);
         // hide simulation context window
         exitSimulationContext();
         houseLayoutController.update();
