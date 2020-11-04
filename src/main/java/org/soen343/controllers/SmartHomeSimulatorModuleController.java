@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.Individual;
@@ -19,6 +20,8 @@ import java.util.logging.Logger;
 
 public class SmartHomeSimulatorModuleController extends Controller {
 
+    @FXML
+    private Pane smartHomeSimulationModule;
     @FXML
     private Button addProfileButton;
     @FXML
@@ -231,37 +234,39 @@ public class SmartHomeSimulatorModuleController extends Controller {
     }
 
     public void disableButtons(){
-        time.setDisable(true);
-        datePicker.setDisable(true);
-        outsideTemp.setDisable(true);
-        locationChoices.setDisable(true);
-        nameChoices.setDisable(true);
-        idToRemove.setDisable(true);
-        addedName.setDisable(true);
-        roleChoicesAdd.setDisable(true);
-        locationChoicesAdd.setDisable(true);
-        addProfileButton.setDisable(true);
-        updateIndividualButton.setDisable(true);
-        updateTempButton.setDisable(true);
-        updateTimeButton.setDisable(true);
-        removeProfileButton.setDisable(true);
+//        time.setDisable(true);
+//        datePicker.setDisable(true);
+//        outsideTemp.setDisable(true);
+//        locationChoices.setDisable(true);
+//        nameChoices.setDisable(true);
+//        idToRemove.setDisable(true);
+//        addedName.setDisable(true);
+//        roleChoicesAdd.setDisable(true);
+//        locationChoicesAdd.setDisable(true);
+//        addProfileButton.setDisable(true);
+//        updateIndividualButton.setDisable(true);
+//        updateTempButton.setDisable(true);
+//        updateTimeButton.setDisable(true);
+//        removeProfileButton.setDisable(true);
+        smartHomeSimulationModule.setDisable(true);
     }
 
     public void enableButtons(){
-        time.setDisable(false);
-        datePicker.setDisable(false);
-        outsideTemp.setDisable(false);
-        locationChoices.setDisable(false);
-        nameChoices.setDisable(false);
-        idToRemove.setDisable(false);
-        addedName.setDisable(false);
-        roleChoicesAdd.setDisable(false);
-        locationChoicesAdd.setDisable(false);
-        addProfileButton.setDisable(false);
-        updateIndividualButton.setDisable(false);
-        updateTempButton.setDisable(false);
-        updateTimeButton.setDisable(false);
-        removeProfileButton.setDisable(false);
+//        time.setDisable(false);
+//        datePicker.setDisable(false);
+//        outsideTemp.setDisable(false);
+//        locationChoices.setDisable(false);
+//        nameChoices.setDisable(false);
+//        idToRemove.setDisable(false);
+//        addedName.setDisable(false);
+//        roleChoicesAdd.setDisable(false);
+//        locationChoicesAdd.setDisable(false);
+//        addProfileButton.setDisable(false);
+//        updateIndividualButton.setDisable(false);
+//        updateTempButton.setDisable(false);
+//        updateTimeButton.setDisable(false);
+//        removeProfileButton.setDisable(false);
+        smartHomeSimulationModule.setDisable(false);
     }
 
 }
