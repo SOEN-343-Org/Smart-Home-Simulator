@@ -4,6 +4,7 @@ import org.soen343.models.Model;
 import org.soen343.models.house.Individual;
 import org.soen343.models.house.Window;
 import org.soen343.services.modules.SHCModule;
+import org.soen343.services.modules.SHPModule;
 
 import java.util.HashSet;
 
@@ -49,6 +50,11 @@ public class SimulationContextService extends Service {
             if (Model.getSimulationParameters().isAutoModeOn()) {
                 SHCModule.getInstance().autoCloseLights(oldLocation);
                 SHCModule.getInstance().autoOpenLights(location);
+            }
+
+            if (Model.getSimulationParameters().isAwayModeOn()) {
+                if (!location.equals("outside"))
+                    SHPModule.getInstance().intrusionDetectedDuringAwayMode();
             }
 
             this.notifyObservers(this);

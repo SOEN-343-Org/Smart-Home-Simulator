@@ -13,7 +13,6 @@ import org.soen343.services.DashboardService;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -87,7 +86,7 @@ public class SimulationInfoController extends Controller {
         }
         // Format Date and Time
         Date date = Model.getSimulationParameters().getDateTime().getCalendar().getTime();
-        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
         chosenDate.setText(timeFormat.format(date));
         chosenTime.setText(dateFormat.format(date));
@@ -96,13 +95,12 @@ public class SimulationInfoController extends Controller {
         outsideTemp.setText(temp + " °C");
     }
 
-    public void updateTime(Calendar calendar) {
+    public void updateTime() {
         Date date = Model.getSimulationParameters().getDateTime().getCalendar().getTime();
-        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
         chosenDate.setText(timeFormat.format(date));
         chosenTime.setText(dateFormat.format(date));
-        System.out.println(chosenTime);
     }
 
     private void startAnimatedTime() {
@@ -110,7 +108,10 @@ public class SimulationInfoController extends Controller {
         clockTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                Platform.runLater(() -> updateTime(Model.getSimulationParameters().getDateTime().getCalendar()));
+                Platform.runLater(() -> {
+                    dashboardService.updateTime();
+                    updateTime();
+                });
             }
         }, 0, (long) (Duration.ofSeconds(1).toMillis()));
     }

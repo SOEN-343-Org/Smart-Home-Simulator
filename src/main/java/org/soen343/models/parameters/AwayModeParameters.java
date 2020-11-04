@@ -8,6 +8,7 @@ import java.util.Date;
 
 public class AwayModeParameters {
     private static int timeBeforeCallingPoliceAfterBreakIn;
+    private static Calendar calendarForCallingPoliceAfterBreakIn;
     private static Calendar lightsOpenFrom;
     private static Calendar lightsOpenTo;
 
@@ -17,9 +18,13 @@ public class AwayModeParameters {
         timeBeforeCallingPoliceAfterBreakIn = 15;
         lightsOpenFrom = Calendar.getInstance();
         lightsOpenTo = Calendar.getInstance();
+        calendarForCallingPoliceAfterBreakIn = Calendar.getInstance();
         openLights = new ArrayList<>();
     }
 
+    public Date getDateForCallingPoliceAfterBreakIn() {
+        return calendarForCallingPoliceAfterBreakIn.getTime();
+    }
 
     public int getTimeBeforeCallingPoliceAfterBreakIn() {
         return timeBeforeCallingPoliceAfterBreakIn;
@@ -34,7 +39,11 @@ public class AwayModeParameters {
     }
 
     public void setLightsOpenFrom(Date lightsOpenFrom) {
-        AwayModeParameters.lightsOpenFrom.setTime(lightsOpenFrom);
+        Calendar c = Calendar.getInstance();
+        c.setTime(lightsOpenFrom);
+        AwayModeParameters.lightsOpenFrom.set(Calendar.HOUR, c.get(Calendar.HOUR));
+        AwayModeParameters.lightsOpenFrom.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
+        AwayModeParameters.lightsOpenFrom.set(Calendar.SECOND, c.get(Calendar.SECOND));
     }
 
     public Date getLightsOpenTo() {
@@ -42,7 +51,11 @@ public class AwayModeParameters {
     }
 
     public void setLightsOpenTo(Date lightsOpenTo) {
-        AwayModeParameters.lightsOpenTo.setTime(lightsOpenTo);
+        Calendar c = Calendar.getInstance();
+        c.setTime(lightsOpenTo);
+        AwayModeParameters.lightsOpenTo.set(Calendar.HOUR, c.get(Calendar.HOUR));
+        AwayModeParameters.lightsOpenTo.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
+        AwayModeParameters.lightsOpenTo.set(Calendar.SECOND, c.get(Calendar.SECOND));
     }
 
     public ArrayList<Light> getOpenLights() {
@@ -53,4 +66,7 @@ public class AwayModeParameters {
         openLights = lights;
     }
 
+    public void setDateBeforeCallingPolice(Calendar calendar) {
+        calendarForCallingPoliceAfterBreakIn = calendar;
+    }
 }

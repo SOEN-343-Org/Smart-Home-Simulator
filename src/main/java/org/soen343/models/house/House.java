@@ -128,4 +128,22 @@ public class House {
         }
         return null;
     }
+
+    public ArrayList<Window> getAllWindows() {
+        ArrayList<Room> rooms = getRooms();
+        ArrayList<Window> windows = new ArrayList<>();
+        for (Room room : rooms) {
+            windows.addAll(room.getWindows());
+        }
+        return windows;
+    }
+
+    public ArrayList<Door> getAllDoors() {
+        ArrayList<Room> rooms = getRooms();
+        ArrayList<Door> doors = new ArrayList<>();
+        for (Room room : rooms) {
+            doors.addAll(room.getDoors());
+        }
+        return doors;
+    }
 }

@@ -22,7 +22,7 @@
             <Button layoutX="400.0" layoutY="192.0" mnemonicParsing="false" onAction="#setLightsTime" text="Set" />
             <Label layoutX="21.0" layoutY="255.0" text="Time before alerting the authorities:" />
             <Button layoutX="400.0" layoutY="251.0" mnemonicParsing="false" onAction="#setTimeBeforeAlertingAuthorities" text="Set" />
-            <Label layoutX="336.0" layoutY="255.0" text="minutes" />
+            <Label layoutX="336.0" layoutY="255.0" text="seconds" />
             <Spinner fx:id="timeBeforeAlertingAuthoritiesSpinner" layoutX="224.0" layoutY="251.0" prefHeight="25.0" prefWidth="103.0" />
             <Label layoutX="270.0" layoutY="196.0" text="to" />
             <TextField fx:id="timeFrom" alignment="CENTER" layoutX="171.0" layoutY="192.0" prefHeight="25.0" prefWidth="88.0" text="00:00" />

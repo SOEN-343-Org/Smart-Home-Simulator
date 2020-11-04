@@ -28,7 +28,7 @@ public class SmartHomeSecurityModuleController extends Controller {
     @FXML
     private TreeView<String> lightsTree;
     @FXML
-    private Spinner timeBeforeAlertingAuthoritiesSpinner;
+    private Spinner<Integer> timeBeforeAlertingAuthoritiesSpinner;
     @FXML
     private TextField timeFrom;
     @FXML
@@ -57,7 +57,6 @@ public class SmartHomeSecurityModuleController extends Controller {
         });
     }
 
-
     @Override
     void initializeController() {
 
@@ -77,6 +76,7 @@ public class SmartHomeSecurityModuleController extends Controller {
         lightsTree.setShowRoot(false);
         lightsTree.setCellFactory(CheckBoxTreeCell.forTreeView());
 
+        timeBeforeAlertingAuthoritiesSpinner.setEditable(true);
         update();
     }
 
@@ -90,15 +90,18 @@ public class SmartHomeSecurityModuleController extends Controller {
             return;
         }
         smartHomeSecurityModule.setDisable(false);
+
         if (!Model.getSimulationParameters().isAwayModeOn()) {
             awayModeParamPane.setDisable(true);
             return;
         }
         awayModeParamPane.setDisable(false);
 
-        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         timeFrom.setText(timeFormat.format(Model.getSimulationParameters().getAwayModeParameters().getLightsOpenFrom()));
         timeTo.setText(timeFormat.format(Model.getSimulationParameters().getAwayModeParameters().getLightsOpenTo()));
+
+        timeBeforeAlertingAuthoritiesSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1439, Model.getSimulationParameters().getAwayModeParameters().getTimeBeforeCallingPoliceAfterBreakIn()));
 
     }
 
@@ -115,7 +118,6 @@ public class SmartHomeSecurityModuleController extends Controller {
 
         Date from = parseTime(timeFrom.getText());
         Date to = parseTime(timeTo.getText());
-
         if (from == null || to == null) {
             errorTime.setVisible(true);
             return;
@@ -125,9 +127,9 @@ public class SmartHomeSecurityModuleController extends Controller {
     }
 
     private Date parseTime(String t) {
-        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         try {
-            Date time = timeFormat.parse(t);
+            return timeFormat.parse(t);
         } catch (ParseException ignored) {
         }
         return null;
@@ -135,6 +137,8 @@ public class SmartHomeSecurityModuleController extends Controller {
 
 
     public void setTimeBeforeAlertingAuthorities(ActionEvent actionEvent) {
+        int time = timeBeforeAlertingAuthoritiesSpinner.getValue();
+        shpModule.setTimeBeforeAlertingPolice(time);
     }
 
     public void setAwayModeLights(ActionEvent actionEvent) {
