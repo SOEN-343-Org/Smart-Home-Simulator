@@ -17,9 +17,9 @@
         <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="450.0">
             <children>
                 <Label alignment="CENTER" prefHeight="24.0" prefWidth="137.0" text="Manage profiles" />
-                <HBox alignment="CENTER" prefHeight="146.0" prefWidth="450.0">
+                <HBox alignment="CENTER" prefHeight="116.0" prefWidth="450.0">
                     <children>
-                        <TableView fx:id="individualsTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="400.0">
+                        <TableView fx:id="individualsTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="110.0" prefWidth="400.0">
                             <columns>
                                 <TableColumn fx:id="column1" editable="false" prefWidth="75.0" text="ID" />
                                 <TableColumn fx:id="column2" onEditCommit="#onEditName" prefWidth="75.0" text="Name" />
@@ -119,6 +119,14 @@
                </children>
                <padding>
                   <Insets left="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="450.0">
+               <children>
+                  <Button fx:id="viewCommands" onAction="#openCommandsInfoView" mnemonicParsing="false" text="View Commands" />
+               </children>
+               <padding>
+                  <Insets left="15.0" />
                </padding>
             </HBox>
             </children>
