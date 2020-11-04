@@ -2,10 +2,7 @@ package org.soen343.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBoxTreeItem;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import org.soen343.models.Model;
 import org.soen343.models.house.Components;
@@ -17,6 +14,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SmartHomeCoreModuleController extends Controller {
+
+    @FXML
+    private Button doorsButton;
+    @FXML
+    private Button windowsButton;
+    @FXML
+    private Button lightsButton;
     @FXML
     private ToggleButton autoModeButton;
     @FXML
@@ -32,9 +36,6 @@ public class SmartHomeCoreModuleController extends Controller {
 
     private SHCModule shcModule;
 
-    @FXML
-    public void initialize() {
-    }
 
     /**
      * Initialize smart home core controller module controller
@@ -59,6 +60,15 @@ public class SmartHomeCoreModuleController extends Controller {
         addListener(windowsSelected, w);
         addListener(lightsSelected, l);
 
+        update();
+    }
+
+    public void update(){
+        if (Model.getSimulationParameters().isSimulationRunning()) {
+            enableButtons();
+        } else {
+            disableButtons();
+        }
     }
 
     private void addListener(Set<TreeItem<String>> h, CheckBoxTreeItem<String> root) {
@@ -111,13 +121,6 @@ public class SmartHomeCoreModuleController extends Controller {
         return root;
     }
 
-
-    @Override
-    void update() {
-
-    }
-
-
     @FXML
     private void openCloseDoors(ActionEvent actionEvent) {
 
@@ -167,4 +170,25 @@ public class SmartHomeCoreModuleController extends Controller {
         autoModeButton.setText(status ? "Auto Mode ON" : "Auto Mode OFF");
         autoModeButton.setSelected(status);
     }
+
+    public void disableButtons(){
+        autoModeButton.setDisable(true);
+        doorsTreeView.setDisable(true);
+        windowsTreeView.setDisable(true);
+        lightsTreeView.setDisable(true);
+        doorsButton.setDisable(true);
+        lightsButton.setDisable(true);
+        windowsButton.setDisable(true);
+    }
+
+    public void enableButtons(){
+        autoModeButton.setDisable(false);
+        doorsTreeView.setDisable(false);
+        windowsTreeView.setDisable(false);
+        lightsTreeView.setDisable(false);
+        doorsButton.setDisable(false);
+        lightsButton.setDisable(false);
+        windowsButton.setDisable(false);
+    }
+
 }

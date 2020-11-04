@@ -54,6 +54,7 @@ public class DashboardController extends Controller {
         SHSModule.getInstance().attachObserver(houseLayoutController).attachObserver(simulationContextController).attachObserver(simulationInfoController).attachObserver(smartHomeSimulatorModuleController);
         SHCModule.getInstance().attachObserver(houseLayoutController).attachObserver(simulationContextController).attachObserver(simulationInfoController).attachObserver(smartHomeSimulatorModuleController);
         DashboardService.getInstance().attachObserver(simulationContextController).attachObserver(smartHomeSimulatorModuleController);
+        DashboardService.getInstance().attachObserver(simulationContextController).attachObserver(smartHomeCoreModuleController);
 
         // hide simulation context window
         exitSimulationContext();
