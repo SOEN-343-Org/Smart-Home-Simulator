@@ -140,38 +140,58 @@ public class SHCModule extends Service {
         System.out.println("[SHC Module] [Away Mode] Authorities have been alerted");
     }
 
-    public void intrusionDetectedDuringAwayMode() {
-        System.out.println("[SHC Module] [Away Mode] Intruder detected");
+    public void intrusionDetectedDuringAwayMode(Individual individual) {
+        System.out.println("[SHC Module] [Away Mode] Intruder " + individual.getName() + " detected");
     }
 
     public void awayCloseLights(ArrayList<Light> lights) {
+        boolean needUpdate = false;
         for (Light l : lights) {
             if (l.isOpen()) {
                 l.setOpen(false);
                 System.out.println("[SHC Module] [Away Mode] Closed " + l.getName());
+                needUpdate = true;
             }
         }
+        if (needUpdate)
+            notifyObservers(this);
     }
 
     public void awayCloseWindows(ArrayList<Window> allWindows) {
+        boolean needUpdate = false;
         for (Window w : allWindows) {
             if (w.isOpen()) {
                 if (!w.isBlocked()) {
                     w.setOpen(false);
                     System.out.println("[SHC Module] [Away Mode] Closed and Locked " + w.getName());
+                    needUpdate = true;
                 } else {
                     System.out.println("[SHC Module] [Away Mode] Could not close " + w + " because it is blocked");
                 }
             }
         }
+        if (needUpdate)
+            notifyObservers(this);
     }
 
     public void awayCloseDoors(ArrayList<Door> allDoors) {
+        boolean needUpdate = false;
         for (Door d : allDoors) {
             if (d.isOpen()) {
                 d.setOpen(false);
                 System.out.println("[SHC Module] [Away Mode] Closed and Locked " + d.getName());
+                needUpdate = true;
             }
         }
+        if (needUpdate)
+            notifyObservers(this);
+    }
+
+    public void updateInIndividualLocation(String oldLocation, String location) {
+        if (Model.getSimulationParameters().isAutoModeOn()) {
+            SHCModule.getInstance().autoCloseLights(oldLocation);
+            SHCModule.getInstance().autoOpenLights(location);
+        }
+        notifyObservers(this);
     }
 }

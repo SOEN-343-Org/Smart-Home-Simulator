@@ -72,6 +72,7 @@ public class SHPModule extends Service {
             SHCModule.getInstance().awayCloseWindows(Model.getHouse().getAllWindows());
             SHCModule.getInstance().awayCloseDoors(Model.getHouse().getAllDoors());
         }
+        notifyObservers(this);
         return true;
     }
 
@@ -79,15 +80,15 @@ public class SHPModule extends Service {
         Model.getSimulationParameters().getAwayModeParameters().setTimeBeforeCallingPoliceAfterBreakIn(time);
     }
 
-    public void intrusionDetectedDuringAwayMode() {
-        SHCModule.getInstance().intrusionDetectedDuringAwayMode();
-        Calendar calendar = (Calendar) Model.getSimulationParameters().getDateTime().getCalendar().clone();
+    public void intrusionDetectedDuringAwayMode(Individual individual) {
+        SHCModule.getInstance().intrusionDetectedDuringAwayMode(individual);
+        Calendar calendar = (Calendar) Model.getSimulationParameters().getDateTime().getDate().clone();
         calendar.add(Calendar.SECOND, Model.getSimulationParameters().getAwayModeParameters().getTimeBeforeCallingPoliceAfterBreakIn());
         Model.getSimulationParameters().getAwayModeParameters().setDateBeforeCallingPolice(calendar);
 
         //TODO: log it
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        System.out.println("[SHP Module] [Away Mode] Alerting the authorities at" + timeFormat.format(calendar.getTime()));
+        System.out.println("[SHP Module] [Away Mode] Alerting the authorities at " + timeFormat.format(calendar.getTime()));
     }
 
     public void notifiesTimeUpdate() {
@@ -95,7 +96,7 @@ public class SHPModule extends Service {
             return;
         }
         // Away mode is on
-        Date currentDate = Model.getSimulationParameters().getDateTime().getCalendar().getTime();
+        Date currentDate = Model.getSimulationParameters().getDateTime().getDate().getTime();
         Date from = Model.getSimulationParameters().getAwayModeParameters().getLightsOpenFrom();
         Date to = Model.getSimulationParameters().getAwayModeParameters().getLightsOpenTo();
         if (currentDate.after(from) && currentDate.before(to)) {
@@ -111,5 +112,20 @@ public class SHPModule extends Service {
             // Time to alert the authorities
             SHCModule.getInstance().alertAuthorities();
         }
+    }
+
+    public void updateInIndividualLocation(Individual individual, String location) {
+        if (Model.getSimulationParameters().isAwayModeOn()) {
+            if (!location.equals("outside"))
+                SHPModule.getInstance().intrusionDetectedDuringAwayMode(individual);
+        }
+    }
+
+    public void resetAwayMode() {
+        Model.getSimulationParameters().setAwayMode();
+        // Simulation is off while away mode was on, so we turn away mode off and reset the alerting authorities clock.
+        Model.getSimulationParameters().getAwayModeParameters().setDateBeforeCallingPolice(null);
+        System.out.println("[SHP Module] [Away Mode] Away Mode shut down because Simulation stopped");
+        notifyObservers(this);
     }
 }

@@ -25,11 +25,10 @@ public class SimulationContextService extends Service {
      * @param windows
      */
     public void updateWindowBlockState(HashSet<Integer> windows) {
-        //TODO: Log that we block that window
-
         for (int id : windows) {
             Window window = Model.getHouse().getWindowById(id);
             window.setBlocked(!window.isBlocked());
+            System.out.println("[Simulation Context] " + (window.isBlocked() ? "Blocked " : "Unblocked ") + " " + window.getName());
         }
         this.notifyObservers(this);
     }
@@ -41,23 +40,15 @@ public class SimulationContextService extends Service {
      * @param location
      */
     public void updateIndividualLocation(Individual individual, String location) {
-        //TODO: Log that we update location of that individual
         if (individual != null) {
-
             String oldLocation = individual.getLocation();
             individual.setLocation(location);
+            System.out.println("[Simulation Context] Updated location of " + individual.getName() + " to " + location);
 
-            if (Model.getSimulationParameters().isAutoModeOn()) {
-                SHCModule.getInstance().autoCloseLights(oldLocation);
-                SHCModule.getInstance().autoOpenLights(location);
-            }
+            SHCModule.getInstance().updateInIndividualLocation(oldLocation, location);
 
-            if (Model.getSimulationParameters().isAwayModeOn()) {
-                if (!location.equals("outside"))
-                    SHPModule.getInstance().intrusionDetectedDuringAwayMode();
-            }
+            SHPModule.getInstance().updateInIndividualLocation(individual, location);
 
-            this.notifyObservers(this);
         }
     }
 }

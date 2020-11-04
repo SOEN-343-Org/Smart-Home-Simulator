@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import org.soen343.models.Model;
 import org.soen343.models.User;
@@ -21,6 +22,10 @@ import java.util.TimerTask;
 public class SimulationInfoController extends Controller {
 
     @FXML
+    public Slider slider;
+    @FXML
+    private Label currentMultiplier;
+    @FXML
     private ToggleButton startStopToggle;
     @FXML
     private Label profileName;
@@ -36,11 +41,14 @@ public class SimulationInfoController extends Controller {
     private Label chosenTime;
 
     private DashboardService dashboardService;
-    private Timer clockTimer = new Timer();
+
+    private Timer timer = new Timer();
 
     public void initializeController() {
         dashboardService = DashboardService.getInstance();
         update();
+        //initializing the listener
+        addListenerToMultiplierSlider();
     }
 
     @FXML
@@ -85,29 +93,23 @@ public class SimulationInfoController extends Controller {
             String getLocation = User.getCurrentIndividual().getLocation();
             chosenLocation.setText(getLocation);
         }
-        // Format Date and Time
-        Date date = Model.getSimulationParameters().getDateTime().getCalendar().getTime();
-        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
-        chosenDate.setText(timeFormat.format(date));
-        chosenTime.setText(dateFormat.format(date));
-
+        updateTime();
         String temp = Integer.toString(Model.getSimulationParameters().getOutsideTemp());
         outsideTemp.setText(temp + " °C");
     }
 
     public void updateTime() {
-        Date date = Model.getSimulationParameters().getDateTime().getCalendar().getTime();
+        Date date = Model.getSimulationParameters().getDateTime().getDate().getTime();
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
-        chosenDate.setText(timeFormat.format(date));
-        chosenTime.setText(dateFormat.format(date));
+        chosenTime.setText(timeFormat.format(date));
+        chosenDate.setText(dateFormat.format(date));
     }
 
     private void startAnimatedTime() {
-        clockTimer = new Timer();
+        timer = new Timer();
         SHPModule shpModule = SHPModule.getInstance();
-        clockTimer.scheduleAtFixedRate(new TimerTask() {
+        timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(() -> {
@@ -115,15 +117,30 @@ public class SimulationInfoController extends Controller {
                     updateTime();
                 });
             }
-        }, 0, (long) (Duration.ofSeconds(1).toMillis()));
+
+        }, 0, (long) (Duration.ofSeconds(1).toMillis() / Model.getSimulationParameters().getDateTime().getClockSpeedMultiplier()));
     }
 
     private void stopAnimatedTime() {
-        clockTimer.cancel();
+        timer.cancel();
     }
 
     private void changeAnimatedTime() {
-        stopAnimatedTime();
-        startAnimatedTime();
+        if (Model.getSimulationParameters().isSimulationRunning()) {
+            stopAnimatedTime();
+            startAnimatedTime();
+        }
+    }
+
+    private void addListenerToMultiplierSlider() {
+        slider.valueProperty().addListener(
+                (observableValue, oldValue, newValue) -> {
+                    double value = (double) newValue;
+                    double multiplier = ((double) (long) (value * 20 + 0.5)) / 20;
+                    Model.getSimulationParameters().getDateTime().setClockSpeedMultiplier(multiplier);
+                    currentMultiplier.setText("x " + multiplier);
+                    changeAnimatedTime();
+                }
+        );
     }
 }

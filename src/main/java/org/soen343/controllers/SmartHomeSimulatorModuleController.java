@@ -203,10 +203,9 @@ public class SmartHomeSimulatorModuleController extends Controller {
 
     @FXML
     private void updateDateTime(ActionEvent actionEvent) {
-
         if (datePicker.getValue() != null) {
             LocalDate date = datePicker.getValue();
-            shsModule.updateDateTimeDate(date);
+            shsModule.updateDate(date);
         }
         if (!time.getText().isBlank()) {
             String t = time.getText();
@@ -224,8 +223,8 @@ public class SmartHomeSimulatorModuleController extends Controller {
         } catch (ParseException ignored) {
         }
         return null;
-    }
 
+    }
 
     @FXML
     private void updateOutsideTemp(ActionEvent ae) {

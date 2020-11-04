@@ -18,12 +18,14 @@ public class AwayModeParameters {
         timeBeforeCallingPoliceAfterBreakIn = 15;
         lightsOpenFrom = Calendar.getInstance();
         lightsOpenTo = Calendar.getInstance();
-        calendarForCallingPoliceAfterBreakIn = Calendar.getInstance();
+        calendarForCallingPoliceAfterBreakIn = null;
         openLights = new ArrayList<>();
     }
 
     public Date getDateForCallingPoliceAfterBreakIn() {
-        return calendarForCallingPoliceAfterBreakIn.getTime();
+        if (calendarForCallingPoliceAfterBreakIn != null)
+            return calendarForCallingPoliceAfterBreakIn.getTime();
+        return null;
     }
 
     public int getTimeBeforeCallingPoliceAfterBreakIn() {

@@ -11,54 +11,77 @@ import java.util.Date;
 
 public class DateTime {
 
-    private Calendar calendar;
-    private Timeline time;
+    private double clockSpeedMultiplier;
+    private Timeline clock;
+    private Calendar date;
+
 
     public DateTime() {
-        calendar = Calendar.getInstance();
-        initializeTime();
+        initializeClock();
+        clockSpeedMultiplier = 1;
+        date = Calendar.getInstance();
+
     }
 
-    public Calendar getCalendar() {
-        return calendar;
-    }
-
-    public void setCalendarTime(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        calendar.set(Calendar.HOUR, c.get(Calendar.HOUR));
-        calendar.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
-        calendar.set(Calendar.SECOND, c.get(Calendar.SECOND));
-    }
-
-    public Timeline getTime() {
-        return time;
-    }
-
-    public void setTime(Timeline time) {
-        this.time = time;
-    }
-
-    public void startTime() {
-        time.play();
-    }
-
-    public void stopTime() {
-        time.pause();
-    }
-
-
-    private void initializeTime() {
-        time = new Timeline(new KeyFrame(Duration.ZERO, e -> calendar.add(Calendar.SECOND, 1)),
+    private void initializeClock() {
+        clock = new Timeline(new KeyFrame(Duration.ZERO, e -> date.add(Calendar.SECOND, 1)),
                 new KeyFrame(Duration.seconds(1))
         );
-        time.setCycleCount(Animation.INDEFINITE);
+        clock.setCycleCount(Animation.INDEFINITE);
+    }
+
+    /**
+     * Starts Clock
+     */
+    public void startTime() {
+        clock.play();
+    }
+
+    /**
+     * Stops Clock
+     */
+    public void stopTime() {
+        clock.pause();
     }
 
 
-    public void setCalendarDate(LocalDate date) {
-        calendar.set(Calendar.YEAR, date.getYear());
-        calendar.set(Calendar.MONTH, date.getMonthValue());
-        calendar.set(Calendar.DAY_OF_MONTH, date.getDayOfMonth());
+    public void setTime(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        this.date.set(Calendar.HOUR, c.get(Calendar.HOUR));
+        this.date.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
+        this.date.set(Calendar.SECOND, c.get(Calendar.SECOND));
+    }
+
+    /**
+     * Get Date
+     *
+     * @return date
+     */
+    public Calendar getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date.set(Calendar.YEAR, date.getYear());
+        this.date.set(Calendar.MONTH, date.getMonthValue());
+        this.date.set(Calendar.DAY_OF_MONTH, date.getDayOfMonth());
+    }
+
+    private void changeClockSpeed() {
+        clock.setRate(clockSpeedMultiplier);
+    }
+
+    public double getClockSpeedMultiplier() {
+        return clockSpeedMultiplier;
+    }
+
+    public void setClockSpeedMultiplier(double clockSpeedMultiplier) {
+        this.clockSpeedMultiplier = clockSpeedMultiplier;
+        changeClockSpeed();
     }
 }
+
+
+
+

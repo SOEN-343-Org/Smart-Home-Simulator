@@ -18,7 +18,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SmartHomeSecurityModuleController extends Controller {
-    public AnchorPane smartHomeSecurityModule;
+    @FXML
+    private AnchorPane smartHomeSecurityModule;
     @FXML
     private AnchorPane awayModeParamPane;
     @FXML
@@ -85,7 +86,7 @@ public class SmartHomeSecurityModuleController extends Controller {
 
         if (!Model.getSimulationParameters().isSimulationRunning()) {
             if (Model.getSimulationParameters().isAwayModeOn())
-                toggleAwayMode(null);
+                resetToggle();
             smartHomeSecurityModule.setDisable(true);
             return;
         }
@@ -103,6 +104,13 @@ public class SmartHomeSecurityModuleController extends Controller {
 
         timeBeforeAlertingAuthoritiesSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1439, Model.getSimulationParameters().getAwayModeParameters().getTimeBeforeCallingPoliceAfterBreakIn()));
 
+    }
+
+    private void resetToggle() {
+        shpModule.resetAwayMode();
+        boolean status = Model.getSimulationParameters().isAwayModeOn();
+        awayMode.setText(status ? "Away Mode ON" : "Away Mode OFF");
+        awayMode.setSelected(status);
     }
 
     public void toggleAwayMode(ActionEvent actionEvent) {

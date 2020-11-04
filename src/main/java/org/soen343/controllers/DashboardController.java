@@ -9,6 +9,7 @@ import org.soen343.services.modules.SHCModule;
 import org.soen343.services.modules.SHPModule;
 import org.soen343.services.modules.SHSModule;
 
+
 public class DashboardController extends Controller {
 
 
@@ -56,10 +57,18 @@ public class DashboardController extends Controller {
         simulationInfoController.initializeController();
 
         // set observer pattern on views/controllers
-        SimulationContextService.getInstance().attachObserver(houseLayoutController).attachObserver(simulationContextController).attachObserver(simulationInfoController).attachObserver(smartHomeSimulatorModuleController);
-        SHSModule.getInstance().attachObserver(houseLayoutController).attachObserver(simulationContextController).attachObserver(simulationInfoController).attachObserver(smartHomeSimulatorModuleController);
-        SHCModule.getInstance().attachObserver(houseLayoutController);
-        DashboardService.getInstance().attachObserver(simulationContextController).attachObserver(smartHomeSimulatorModuleController).attachObserver(smartHomeCoreModuleController).attachObserver(smartHomeSecurityModuleController);
+        SimulationContextService.getInstance().attachObserver(houseLayoutController); // To update the blocked window in the
+        SHSModule.getInstance().attachObserver(houseLayoutController) // To update individual location and more
+                .attachObserver(simulationContextController) // To update individual location in the table
+                .attachObserver(simulationInfoController) // To update time, date, temperature etc
+                .attachObserver(smartHomeSimulatorModuleController); // To update the SHS table
+        SHCModule.getInstance().attachObserver(houseLayoutController); // To update the modification to the house
+        SHPModule.getInstance().attachObserver(smartHomeSecurityModuleController); // To update the visibility of the away mode
+        DashboardService.getInstance().attachObserver(simulationContextController) // To update individual location
+                .attachObserver(smartHomeSimulatorModuleController) // To update individual location
+                .attachObserver(smartHomeCoreModuleController) // To update the visibility of the SHC tab
+                .attachObserver(smartHomeSecurityModuleController); // To update the visibility of the SHP tab
+
         // hide simulation context window
         exitSimulationContext();
         houseLayoutController.update();
@@ -91,3 +100,4 @@ public class DashboardController extends Controller {
 
     }
 }
+

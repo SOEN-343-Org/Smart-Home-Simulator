@@ -96,8 +96,8 @@ public class SHSModule extends Service {
      *
      * @param date
      */
-    public void updateDateTimeDate(LocalDate date) {
-        Model.getSimulationParameters().getDateTime().setCalendarDate(date);
+    public void updateDate(LocalDate date) {
+        Model.getSimulationParameters().getDateTime().setDate(date);
         System.out.println("[SHS Module] Updated Simulation's Date to " + DateTimeFormatter.ofPattern("MM/dd/yy").format(date));
         notifyObservers(this);
     }
@@ -106,7 +106,7 @@ public class SHSModule extends Service {
      * Update time
      */
     public void updateTime(Date date) {
-        Model.getSimulationParameters().getDateTime().setCalendarTime(date);
+        Model.getSimulationParameters().getDateTime().setTime(date);
         System.out.println("[SHS Module] Updated Simulation's Time to " + new SimpleDateFormat("HH:mm:ss").format(date));
         notifyObservers(this);
     }
@@ -121,4 +121,5 @@ public class SHSModule extends Service {
         System.out.println("[SHS Module] Updated outside temperature to " + temp + "°C");
         notifyObservers(this);
     }
+
 }
