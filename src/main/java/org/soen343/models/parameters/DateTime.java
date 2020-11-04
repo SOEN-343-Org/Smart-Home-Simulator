@@ -1,92 +1,87 @@
 package org.soen343.models.parameters;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+
 import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 
 public class DateTime {
 
-    private int hours = 12;
-    private int minutes = 0;
-    private int seconds = 0;
-    private LocalDate date = LocalDate.now();
+    private double clockSpeedMultiplier;
+    private Timeline clock;
+    private Calendar date;
+
 
     public DateTime() {
+        initializeClock();
+        clockSpeedMultiplier = 1;
+        date = Calendar.getInstance();
+
+    }
+
+    private void initializeClock() {
+        clock = new Timeline(new KeyFrame(Duration.ZERO, e -> date.add(Calendar.SECOND, 1)),
+                new KeyFrame(Duration.seconds(1))
+        );
+        clock.setCycleCount(Animation.INDEFINITE);
     }
 
     /**
-     * Get hours
-     *
-     * @return int hours
+     * Starts Clock
      */
-    public int getHours() {
-        return hours;
+    public void startTime() {
+        clock.play();
     }
 
     /**
-     * Set hours
-     *
-     * @param hours
+     * Stops Clock
      */
-    public void setHours(int hours) {
-        if (0 <= hours && hours <= 23) {
-            this.hours = hours;
-        }
+    public void stopTime() {
+        clock.pause();
+    }
+
+
+    public void setTime(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        this.date.set(Calendar.HOUR, c.get(Calendar.HOUR));
+        this.date.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
+        this.date.set(Calendar.SECOND, c.get(Calendar.SECOND));
     }
 
     /**
-     * Get hours
+     * Get Date
      *
-     * @return int minutes
+     * @return date
      */
-    public int getMinutes() {
-        return minutes;
-    }
-
-    /**
-     * Set minutes
-     *
-     * @param minutes
-     */
-    public void setMinutes(int minutes) {
-        if (0 <= minutes && minutes <= 59) {
-            this.minutes = minutes;
-        }
-    }
-
-    /**
-     * Get date
-     *
-     * @return int date
-     */
-    public LocalDate getDate() {
+    public Calendar getDate() {
         return date;
     }
 
-    /**
-     * Set date
-     *
-     * @param date
-     */
     public void setDate(LocalDate date) {
-        this.date = date;
+        this.date.set(Calendar.YEAR, date.getYear());
+        this.date.set(Calendar.MONTH, date.getMonthValue());
+        this.date.set(Calendar.DAY_OF_MONTH, date.getDayOfMonth());
     }
 
-    /**
-     * Get seconds
-     *
-     * @return int seconds
-     */
-    public int getSeconds() {
-        return seconds;
+    private void changeClockSpeed() {
+        clock.setRate(clockSpeedMultiplier);
     }
 
-    /**
-     * Set seconds
-     *
-     * @param seconds
-     */
-    public void setSeconds(int seconds) {
-        if (0 <= seconds && seconds <= 59) {
-            this.seconds = seconds;
-        }
+    public double getClockSpeedMultiplier() {
+        return clockSpeedMultiplier;
+    }
+
+    public void setClockSpeedMultiplier(double clockSpeedMultiplier) {
+        this.clockSpeedMultiplier = clockSpeedMultiplier;
+        changeClockSpeed();
     }
 }
+
+
+
+

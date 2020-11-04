@@ -8,6 +8,7 @@ import org.soen343.services.SimulationContextService;
 import org.soen343.services.modules.SHCModule;
 import org.soen343.services.modules.SHSModule;
 
+
 public class DashboardController extends Controller {
 
 
@@ -86,3 +87,4 @@ public class DashboardController extends Controller {
 
     }
 }
+
