@@ -41,11 +41,20 @@
                   </Label>
                </children>
             </HBox>
+            <HBox alignment="CENTER" prefHeight="38.0" prefWidth="685.0">
+               <children>
+                  <Label text="Strangers have no permissions no matter their location.">
+                     <font>
+                        <Font name="System Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <TableView fx:id="SHCtable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="596.0">
                             <columns>
-                                <TableColumn fx:id="SHCprofileColumn" prefWidth="165.0" text="Profile" />
+                                <TableColumn fx:id="shcCommandColumn" prefWidth="165.0" text="Commands" />
                                 <TableColumn fx:id="SHCpermissionsColumn" prefWidth="429.0" text="Permissions" />
                             </columns>
                             <columnResizePolicy>
@@ -66,11 +75,11 @@
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="245.0" prefWidth="685.0">
+            <HBox alignment="CENTER" prefHeight="147.0" prefWidth="685.0">
                <children>
-                  <TableView fx:id="SHPtable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="601.0">
+                  <TableView fx:id="SHPtable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="127.0" prefWidth="601.0">
                      <columns>
-                        <TableColumn fx:id="SHPprofileColumn" prefWidth="163.0" text="Profile" />
+                        <TableColumn fx:id="shpCommandColumn" prefWidth="163.0" text="Commands" />
                         <TableColumn fx:id="SHPpermissionsColumn" prefWidth="436.0" text="Permissions" />
                      </columns>
                      <columnResizePolicy>

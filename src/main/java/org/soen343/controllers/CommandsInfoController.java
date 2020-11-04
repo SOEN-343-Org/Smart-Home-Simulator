@@ -5,20 +5,18 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.soen343.models.permissions.PermissionsContract;
-import org.soen343.models.permissions.SHCpermissions;
-import org.soen343.models.permissions.SHPpermissions;
+import org.soen343.models.permissions.*;
 
 import java.util.ArrayList;
 
 public class CommandsInfoController{
 
     @FXML
-    private TableColumn SHCprofileColumn;
+    private TableColumn shcCommandColumn;
     @FXML
     private TableColumn SHCpermissionsColumn;
     @FXML
-    private TableColumn SHPprofileColumn;
+    private TableColumn shpCommandColumn;
     @FXML
     private TableColumn SHPpermissionsColumn;
     @FXML
@@ -34,24 +32,24 @@ public class CommandsInfoController{
     }
 
     private void setSHCTable() {
-        SHCprofileColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
+        shcCommandColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         SHCpermissionsColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
 
-        PermissionsContract p1 = new SHCpermissions();
-        ArrayList SHCPermissions = p1.getContract();
+        CommandsContract p1 = new SHCcommands();
+        ArrayList SHCCommands = p1.getContract();
 
-        SHCtable.setFixedCellSize(60.0);
-        SHCtable.setItems(FXCollections.observableArrayList(SHCPermissions));
+        SHCtable.setFixedCellSize(100.0);
+        SHCtable.setItems(FXCollections.observableArrayList(SHCCommands));
     }
 
     private void setSHPTable() {
-        SHPprofileColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
+        shpCommandColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         SHPpermissionsColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
 
-        PermissionsContract p2 = new SHPpermissions();
-        ArrayList SHPPermissions = p2.getContract();
+        CommandsContract p2 = new SHPcommands();
+        ArrayList SHPCommands = p2.getContract();
 
-        SHPtable.setFixedCellSize(60.0);
-        SHPtable.setItems(FXCollections.observableArrayList(SHPPermissions));
+        SHPtable.setFixedCellSize(100.0);
+        SHPtable.setItems(FXCollections.observableArrayList(SHPCommands));
     }
 }
