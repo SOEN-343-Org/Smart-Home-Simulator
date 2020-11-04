@@ -62,10 +62,11 @@ public class SimulationParameters implements Validator {
         simulationRunning = !simulationRunning;
     }
 
-<<<<<<< HEAD
+
     public AwayModeParameters getAwayModeParameters() {
         return awayModeParameters;
-=======
+    }
+
     @Override
     public boolean validate() {
         Rule r = new SHCRule();
@@ -73,6 +74,5 @@ public class SimulationParameters implements Validator {
         boolean isValid = autoModeRule.validate();
         if (isValid) return true;
         return false;
->>>>>>> validation done for SHC commands according to user role and location
     }
 }

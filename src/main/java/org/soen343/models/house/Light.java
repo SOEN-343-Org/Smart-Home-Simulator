@@ -1,14 +1,10 @@
 package org.soen343.models.house;
 
-<<<<<<< HEAD
-public class Light implements Components {
-=======
 import org.soen343.models.permissions.Rule;
 import org.soen343.models.permissions.SHCRule;
 import org.soen343.models.permissions.Validator;
 
 public class Light implements Components, Validator {
->>>>>>> validation done for SHC commands according to user role and location
 
     private final int id;
     private boolean open;
