@@ -105,6 +105,15 @@ public class House {
         return null;
     }
 
+    public ArrayList<Light> getAllLights() {
+        ArrayList<Room> rooms = getRooms();
+        ArrayList<Light> lights = new ArrayList<>();
+        for (Room room : rooms) {
+            lights.addAll(room.getLights());
+        }
+        return lights;
+    }
+
     @Override
     public String toString() {
         return "House of dimension (" + layout.length + " by " + layout[0].length + ")\nRooms=\n" + rooms;
@@ -118,5 +127,23 @@ public class House {
             }
         }
         return null;
+    }
+
+    public ArrayList<Window> getAllWindows() {
+        ArrayList<Room> rooms = getRooms();
+        ArrayList<Window> windows = new ArrayList<>();
+        for (Room room : rooms) {
+            windows.addAll(room.getWindows());
+        }
+        return windows;
+    }
+
+    public ArrayList<Door> getAllDoors() {
+        ArrayList<Room> rooms = getRooms();
+        ArrayList<Door> doors = new ArrayList<>();
+        for (Room room : rooms) {
+            doors.addAll(room.getDoors());
+        }
+        return doors;
     }
 }

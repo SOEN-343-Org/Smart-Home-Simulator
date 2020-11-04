@@ -1,6 +1,6 @@
 package org.soen343.models.house;
 
-public class Window implements Components{
+public class Window implements Components {
 
     private final int id;
     private boolean open;
@@ -73,6 +73,6 @@ public class Window implements Components{
 
     @Override
     public String toString() {
-        return this.getName() + ", state: " + (open ? "opened" : "closed") + (blocked ? " blocked" : " not blocked");
+        return this.getName() + ", state: " + (open ? "opened" : "closed") + (blocked ? "blocked" : "not blocked");
     }
 }

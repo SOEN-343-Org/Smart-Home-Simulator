@@ -25,20 +25,17 @@ public class SHCModule extends Service {
      * @param windows
      */
     public void updateWindowState(HashSet<Integer> windows) {
-        if (!Model.getSimulationParameters().isSimulationRunning()) {
-            // Simulation is not on
-            //TODO: LOG IT
-            return;
-        }
-        for (int id : windows) {
 
-            //TODO: Log that we open/close that window
+        //Check permissions:
+
+        for (int id : windows) {
             Window window = Model.getHouse().getWindowById(id);
             if (window.isBlocked()) {
-                //TODO: LOG that window is blocked
+                System.out.println("[SHC Module] " + window.getName() + " is blocked");
             } else {
                 boolean state = window.isOpen();
                 window.setOpen(!state);
+                System.out.println("[SHC Module] " + (!state ? "Opened " : "Closed ") + window.getName());
             }
         }
         this.notifyObservers(this);
@@ -50,16 +47,14 @@ public class SHCModule extends Service {
      * @param doors
      */
     public void updateDoorState(HashSet<Integer> doors) {
-        if (!Model.getSimulationParameters().isSimulationRunning()) {
-            // Simulation is not on
-            //TODO: LOG IT
-            return;
-        }
+
+        //Check permissions:
+
         for (int id : doors) {
-            //TODO: Log that we open/close that door
             Door door = Model.getHouse().getDoorById(id);
             boolean state = door.isOpen();
             door.setOpen(!state);
+            System.out.println("[SHC Module] " + (!state ? "Opened " : "Closed ") + door.getName());
         }
         this.notifyObservers(this);
     }
@@ -70,32 +65,28 @@ public class SHCModule extends Service {
      * @param lights
      */
     public void updateLightState(HashSet<Integer> lights) {
-        if (!Model.getSimulationParameters().isSimulationRunning()) {
-            // Simulation is not on
-            //TODO: LOG IT
-            return;
-        }
+
+        //Check permissions:
+
         for (int id : lights) {
-            //TODO: Log that we open/close that light
             Light light = Model.getHouse().getLightById(id);
             boolean state = light.isOpen();
             light.setOpen(!state);
+            System.out.println("[SHC Module] " + (!state ? "Opened " : "Closed ") + light.getName());
         }
         this.notifyObservers(this);
     }
 
     public boolean setAutoMode() {
-        if (!Model.getSimulationParameters().isSimulationRunning()) {
-            // Simulation is not on
-            //TODO: LOG IT
-            return false;
-        }
-        if (User.getCurrentIndividual() != null) {
+        //Check permissions:
+        Individual ind = User.getCurrentIndividual();
+        if (ind.getRole().equals("Family Adult") || ind.getRole().equals("Family Child")) {
             Model.getSimulationParameters().setAutoMode();
-            //TODO: LOG IT
+            System.out.println("[SHC Module] [Auto Mode] " + ind.getName() + " has set Auto mode to " + (Model.getSimulationParameters().isAutoModeOn() ? "ON" : "OFF"));
             return true;
         }
-        //TODO: LOG IT
+        // User does not have the permission
+        System.out.println("[SHC Module] [Auto Mode] " + ind.getName() + " does not have the permission to set auto mode");
         return false;
     }
 
@@ -103,8 +94,10 @@ public class SHCModule extends Service {
         if (location.equals("outside")) return;
         Room room = Model.getHouse().getRoomByName(location);
         for (Light light : room.getLights()) {
-            //TODO: Log that we open that light
-            light.setOpen(true);
+            if (!light.isOpen()) {
+                light.setOpen(true);
+                System.out.println("[SHC Module] [Auto Mode] Opened " + light.getName());
+            }
         }
     }
 
@@ -122,8 +115,83 @@ public class SHCModule extends Service {
         Room room = Model.getHouse().getRoomByName(location);
 
         for (Light light : room.getLights()) {
-            //TODO: Log that we close that light
-            light.setOpen(false);
+            if (light.isOpen()) {
+                light.setOpen(false);
+                System.out.println("[SHC Module] [Auto Mode] Closed " + light.getName());
+            }
         }
+    }
+
+
+    public void awayOpenLights(ArrayList<Light> lights) {
+        boolean needUpdate = false;
+        for (Light l : lights) {
+            if (!l.isOpen()) {
+                l.setOpen(true);
+                System.out.println("[SHC Module] [Away Mode] Opened " + l.getName());
+                needUpdate = true;
+            }
+        }
+        if (needUpdate)
+            notifyObservers(this);
+    }
+
+    public void alertAuthorities() {
+        System.out.println("[SHC Module] [Away Mode] Authorities have been alerted");
+    }
+
+    public void intrusionDetectedDuringAwayMode(Individual individual) {
+        System.out.println("[SHC Module] [Away Mode] Intruder " + individual.getName() + " detected");
+    }
+
+    public void awayCloseLights(ArrayList<Light> lights) {
+        boolean needUpdate = false;
+        for (Light l : lights) {
+            if (l.isOpen()) {
+                l.setOpen(false);
+                System.out.println("[SHC Module] [Away Mode] Closed " + l.getName());
+                needUpdate = true;
+            }
+        }
+        if (needUpdate)
+            notifyObservers(this);
+    }
+
+    public void awayCloseWindows(ArrayList<Window> allWindows) {
+        boolean needUpdate = false;
+        for (Window w : allWindows) {
+            if (w.isOpen()) {
+                if (!w.isBlocked()) {
+                    w.setOpen(false);
+                    System.out.println("[SHC Module] [Away Mode] Closed and Locked " + w.getName());
+                    needUpdate = true;
+                } else {
+                    System.out.println("[SHC Module] [Away Mode] Could not close " + w.getName() + " because it is blocked");
+                }
+            }
+        }
+        if (needUpdate)
+            notifyObservers(this);
+    }
+
+    public void awayCloseDoors(ArrayList<Door> allDoors) {
+        boolean needUpdate = false;
+        for (Door d : allDoors) {
+            if (d.isOpen()) {
+                d.setOpen(false);
+                System.out.println("[SHC Module] [Away Mode] Closed and Locked " + d.getName());
+                needUpdate = true;
+            }
+        }
+        if (needUpdate)
+            notifyObservers(this);
+    }
+
+    public void updateInIndividualLocation(String oldLocation, String location) {
+        if (Model.getSimulationParameters().isAutoModeOn()) {
+            SHCModule.getInstance().autoCloseLights(oldLocation);
+            SHCModule.getInstance().autoOpenLights(location);
+        }
+        notifyObservers(this);
     }
 }

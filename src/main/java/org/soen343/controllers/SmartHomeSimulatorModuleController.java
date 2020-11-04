@@ -75,7 +75,7 @@ public class SmartHomeSimulatorModuleController extends Controller {
      * @param s
      * @return false
      */
-    public static boolean isInteger(String s) {
+    private boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
         } catch (NumberFormatException e) {
@@ -207,11 +207,12 @@ public class SmartHomeSimulatorModuleController extends Controller {
             LocalDate date = datePicker.getValue();
             shsModule.updateDate(date);
         }
-
-        String t = time.getText();
-        Date date = parseTime(t);
-        if (date != null) {
-            shsModule.updateTime(date);
+        if (!time.getText().isBlank()) {
+            String t = time.getText();
+            Date date = parseTime(t);
+            if (date!=null){
+                shsModule.updateTime(date);
+            }
         }
     }
 

@@ -2,7 +2,10 @@ package org.soen343.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBoxTreeItem;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.layout.Pane;
 import org.soen343.models.Model;
@@ -42,10 +45,13 @@ public class SmartHomeCoreModuleController extends Controller {
         shcModule = SHCModule.getInstance();
         CheckBoxTreeItem<String> d = initializeTreeView("Doors");
         doorsTreeView.setRoot(d);
+        doorsTreeView.setShowRoot(false);
         CheckBoxTreeItem<String> w = initializeTreeView("Windows");
         windowsTreeView.setRoot(w);
+        windowsTreeView.setShowRoot(false);
         CheckBoxTreeItem<String> l = initializeTreeView("Lights");
         lightsTreeView.setRoot(l);
+        lightsTreeView.setShowRoot(false);
 
         doorsTreeView.setCellFactory(CheckBoxTreeCell.<String>forTreeView());
         windowsTreeView.setCellFactory(CheckBoxTreeCell.<String>forTreeView());
@@ -60,11 +66,14 @@ public class SmartHomeCoreModuleController extends Controller {
         update();
     }
 
-    public void update(){
+    public void update() {
         if (Model.getSimulationParameters().isSimulationRunning()) {
             enableButtons();
         } else {
             disableButtons();
+            if (Model.getSimulationParameters().isAutoModeOn()) {
+                toggleAutoMode(null);
+            }
         }
     }
 
@@ -112,8 +121,8 @@ public class SmartHomeCoreModuleController extends Controller {
                     CheckBoxTreeItem<String> item = new CheckBoxTreeItem<>(itemT.getName());
                     superItem.getChildren().add(item);
                 }
+                root.getChildren().add(superItem);
             }
-            root.getChildren().add(superItem);
         }
         return root;
     }
@@ -129,7 +138,9 @@ public class SmartHomeCoreModuleController extends Controller {
                 doorsToUpdate.add(Integer.parseInt(value.split(" ")[1].replace("#", "")));
             }
         }
-        shcModule.updateDoorState(doorsToUpdate);
+        if (doorsToUpdate.size() > 0) {
+            shcModule.updateDoorState(doorsToUpdate);
+        }
     }
 
     @FXML
@@ -144,7 +155,9 @@ public class SmartHomeCoreModuleController extends Controller {
                 windowsToUpdate.add(Integer.parseInt(value.split(" ")[1].replace("#", "")));
             }
         }
-        shcModule.updateWindowState(windowsToUpdate);
+        if (windowsToUpdate.size() > 0) {
+            shcModule.updateWindowState(windowsToUpdate);
+        }
     }
 
     @FXML
@@ -158,21 +171,23 @@ public class SmartHomeCoreModuleController extends Controller {
                 lightsToUpdate.add(Integer.parseInt(value.split(" ")[1].replace("#", "")));
             }
         }
-        shcModule.updateLightState(lightsToUpdate);
+        if (lightsToUpdate.size() > 0) {
+            shcModule.updateLightState(lightsToUpdate);
+        }
     }
 
-    public void ToggleAutoMode(ActionEvent actionEvent) {
+    public void toggleAutoMode(ActionEvent actionEvent) {
         boolean success = shcModule.setAutoMode();
         boolean status = Model.getSimulationParameters().isAutoModeOn();
         autoModeButton.setText(status ? "Auto Mode ON" : "Auto Mode OFF");
         autoModeButton.setSelected(status);
     }
 
-    public void disableButtons(){
+    public void disableButtons() {
         smartHomeCoreModule.setDisable(true);
     }
 
-    public void enableButtons(){
+    public void enableButtons() {
         smartHomeCoreModule.setDisable(false);
     }
 

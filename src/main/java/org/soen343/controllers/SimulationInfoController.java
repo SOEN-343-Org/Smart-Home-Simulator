@@ -10,6 +10,7 @@ import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.Individual;
 import org.soen343.services.DashboardService;
+import org.soen343.services.modules.SHPModule;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,11 +41,11 @@ public class SimulationInfoController extends Controller {
     private Label chosenTime;
 
     private DashboardService dashboardService;
-    private Timer timer;
+
+    private Timer timer = new Timer();
 
     public void initializeController() {
         dashboardService = DashboardService.getInstance();
-        timer = new Timer();
         update();
         //initializing the listener
         addListenerToMultiplierSlider();
@@ -100,18 +101,23 @@ public class SimulationInfoController extends Controller {
     public void updateTime() {
         Date date = Model.getSimulationParameters().getDateTime().getDate().getTime();
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
+        DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
         chosenTime.setText(timeFormat.format(date));
         chosenDate.setText(dateFormat.format(date));
     }
 
     private void startAnimatedTime() {
         timer = new Timer();
+        SHPModule shpModule = SHPModule.getInstance();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                Platform.runLater(() -> updateTime());
+                Platform.runLater(() -> {
+                    shpModule.notifiesTimeUpdate();
+                    updateTime();
+                });
             }
+
         }, 0, (long) (Duration.ofSeconds(1).toMillis() / Model.getSimulationParameters().getDateTime().getClockSpeedMultiplier()));
     }
 

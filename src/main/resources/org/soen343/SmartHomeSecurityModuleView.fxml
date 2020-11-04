@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="smartHomeSecurityModule" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.soen343.controllers.SmartHomeSecurityModuleController">
+   <children>
+      <Label layoutX="14.0" layoutY="6.0" text="SMART HOME SECURITY MODULE" />
+      <ToggleButton fx:id="awayMode" layoutX="308.0" layoutY="63.0" mnemonicParsing="false" onAction="#toggleAwayMode" text="Away Mode OFF" />
+      <Label layoutX="23.0" layoutY="51.0" prefHeight="49.0" prefWidth="237.0" text="Away Mode will lock all doors and windows and alert authorities when a break-in occurs" wrapText="true" />
+      <Label layoutX="14.0" layoutY="134.0" text="Away Mode parameters" />
+      <Separator layoutX="3.0" layoutY="121.0" prefHeight="0.0" prefWidth="475.0" />
+      <AnchorPane fx:id="awayModeParamPane" layoutX="-3.0" layoutY="162.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="480.0">
+         <children>
+            <Label layoutX="21.0" text="Select lights that should remain on during Away Mode:" />
+            <Button layoutX="400.0" layoutY="192.0" mnemonicParsing="false" onAction="#setLightsTime" text="Set" />
+            <Label layoutX="21.0" layoutY="255.0" text="Time before alerting the authorities:" />
+            <Button layoutX="400.0" layoutY="251.0" mnemonicParsing="false" onAction="#setTimeBeforeAlertingAuthorities" text="Set" />
+            <Label layoutX="336.0" layoutY="255.0" text="seconds" />
+            <Spinner fx:id="timeBeforeAlertingAuthoritiesSpinner" layoutX="224.0" layoutY="251.0" prefHeight="25.0" prefWidth="103.0" />
+            <Label layoutX="270.0" layoutY="196.0" text="to" />
+            <TextField fx:id="timeFrom" alignment="CENTER" layoutX="171.0" layoutY="192.0" prefHeight="25.0" prefWidth="88.0" text="00:00" />
+            <TextField fx:id="timeTo" alignment="CENTER" layoutX="301.0" layoutY="192.0" prefHeight="25.0" prefWidth="88.0" text="00:00" />
+            <Label layoutX="21.0" layoutY="196.0" text="Lights should be on from " />
+            <Button layoutX="400.0" layoutY="86.0" mnemonicParsing="false" onAction="#setAwayModeLights" text="Set" />
+            <TreeView fx:id="lightsTree" layoutX="21.0" layoutY="30.0" prefHeight="137.0" prefWidth="336.0" />
+            <Label fx:id="errorTime" layoutX="232.0" layoutY="217.0" text="Error in time format" textFill="RED" visible="false" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
