@@ -15,9 +15,20 @@ import org.soen343.services.modules.SHSModule;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class SmartHomeSimulatorModuleController extends Controller {
 
+    @FXML
+    private Button addProfileButton;
+    @FXML
+    private Button removeProfileButton;
+    @FXML
+    private Button updateIndividualButton;
+    @FXML
+    private Button updateTimeButton;
+    @FXML
+    private Button updateTempButton;
     @FXML
     private TextField time;
     @FXML
@@ -81,6 +92,8 @@ public class SmartHomeSimulatorModuleController extends Controller {
 
         shsModule = SHSModule.getInstance();
 
+        Logger.getLogger("Testing");
+
         column1.setCellValueFactory(new PropertyValueFactory<>("id"));
         column2.setCellValueFactory(new PropertyValueFactory<>("name"));
         column3.setCellValueFactory(new PropertyValueFactory<>("role"));
@@ -100,6 +113,12 @@ public class SmartHomeSimulatorModuleController extends Controller {
      * Update location, role, location, name, individuals table
      */
     public void update() {
+
+        if (Model.getSimulationParameters().isSimulationRunning()) {
+            disableButtons();
+        } else {
+            enableButtons();
+        }
         ArrayList<String> roomsName = Model.getHouse().roomsName;
 
         locationChoicesAdd.setItems(FXCollections.observableArrayList(roomsName));
@@ -209,6 +228,40 @@ public class SmartHomeSimulatorModuleController extends Controller {
             int temp = Integer.parseInt(t);
             shsModule.updateOutsideTemp(temp);
         }
+    }
+
+    public void disableButtons(){
+        time.setDisable(true);
+        datePicker.setDisable(true);
+        outsideTemp.setDisable(true);
+        locationChoices.setDisable(true);
+        nameChoices.setDisable(true);
+        idToRemove.setDisable(true);
+        addedName.setDisable(true);
+        roleChoicesAdd.setDisable(true);
+        locationChoicesAdd.setDisable(true);
+        addProfileButton.setDisable(true);
+        updateIndividualButton.setDisable(true);
+        updateTempButton.setDisable(true);
+        updateTimeButton.setDisable(true);
+        removeProfileButton.setDisable(true);
+    }
+
+    public void enableButtons(){
+        time.setDisable(false);
+        datePicker.setDisable(false);
+        outsideTemp.setDisable(false);
+        locationChoices.setDisable(false);
+        nameChoices.setDisable(false);
+        idToRemove.setDisable(false);
+        addedName.setDisable(false);
+        roleChoicesAdd.setDisable(false);
+        locationChoicesAdd.setDisable(false);
+        addProfileButton.setDisable(false);
+        updateIndividualButton.setDisable(false);
+        updateTempButton.setDisable(false);
+        updateTimeButton.setDisable(false);
+        removeProfileButton.setDisable(false);
     }
 
 }
