@@ -14,7 +14,7 @@
     <children>
         <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="700.0">
             <children>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="693.0" spacing="200.0">
+                <HBox alignment="CENTER" prefHeight="89.0" prefWidth="685.0" spacing="200.0">
                     <children>
                         <Label text="Module Commands">
                             <font>
@@ -29,30 +29,30 @@
                   <Insets top="20.0" />
                </padding>
                 </HBox>
-            <HBox alignment="CENTER" prefHeight="61.0" prefWidth="685.0">
+            <HBox alignment="CENTER" prefHeight="39.0" prefWidth="685.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" text="Smart Home Core ( SHC ) Module">
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="42.0" prefWidth="268.0" text="Smart Home Core ( SHC ) Module">
                      <font>
                         <Font size="18.0" />
                      </font>
                      <HBox.margin>
-                        <Insets top="15.0" />
+                        <Insets />
                      </HBox.margin>
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="38.0" prefWidth="685.0">
+            <HBox alignment="CENTER" prefHeight="13.0" prefWidth="685.0">
                <children>
-                  <Label text="Strangers have no permissions no matter their location.">
+                  <Label prefHeight="16.0" prefWidth="416.0" text="Strangers have no permissions no matter their location.">
                      <font>
                         <Font name="System Bold Italic" size="16.0" />
                      </font>
                   </Label>
                </children>
             </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                <HBox alignment="CENTER" prefHeight="362.0" prefWidth="685.0">
                     <children>
-                        <TableView fx:id="SHCtable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="596.0">
+                        <TableView fx:id="SHCtable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="357.0" prefWidth="596.0">
                             <columns>
                                 <TableColumn fx:id="shcCommandColumn" prefWidth="165.0" text="Commands" />
                                 <TableColumn fx:id="SHCpermissionsColumn" prefWidth="429.0" text="Permissions" />
@@ -77,7 +77,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="147.0" prefWidth="685.0">
                <children>
-                  <TableView fx:id="SHPtable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="127.0" prefWidth="601.0">
+                  <TableView fx:id="SHPtable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="119.0" prefWidth="601.0">
                      <columns>
                         <TableColumn fx:id="shpCommandColumn" prefWidth="163.0" text="Commands" />
                         <TableColumn fx:id="SHPpermissionsColumn" prefWidth="436.0" text="Permissions" />

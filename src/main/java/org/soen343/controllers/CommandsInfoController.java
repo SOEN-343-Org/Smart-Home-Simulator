@@ -44,7 +44,7 @@ public class CommandsInfoController{
         CommandsContract p1 = new SHCcommands();
         ArrayList SHCCommands = p1.getContract();
 
-        SHCtable.setFixedCellSize(100.0);
+        SHCtable.setFixedCellSize(80.0);
         SHCtable.setItems(FXCollections.observableArrayList(SHCCommands));
     }
 
@@ -55,7 +55,7 @@ public class CommandsInfoController{
         CommandsContract p2 = new SHPcommands();
         ArrayList SHPCommands = p2.getContract();
 
-        SHPtable.setFixedCellSize(100.0);
+        SHPtable.setFixedCellSize(80.0);
         SHPtable.setItems(FXCollections.observableArrayList(SHPCommands));
     }
 }
