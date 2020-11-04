@@ -1,6 +1,14 @@
 package org.soen343.models.house;
 
+<<<<<<< HEAD
 public class Light implements Components {
+=======
+import org.soen343.models.permissions.Rule;
+import org.soen343.models.permissions.SHCRule;
+import org.soen343.models.permissions.Validator;
+
+public class Light implements Components, Validator {
+>>>>>>> validation done for SHC commands according to user role and location
 
     private final int id;
     private boolean open;
@@ -30,7 +38,9 @@ public class Light implements Components {
      * @param open new state of the light
      */
     public void setOpen(boolean open) {
-        this.open = open;
+        if (validate() == true) {
+            this.open = open;
+        }
     }
 
     /**
@@ -56,4 +66,12 @@ public class Light implements Components {
         return this.getName() + ", state: " + (open ? "opened" : "closed");
     }
 
+    @Override
+    public boolean validate() {
+        Rule r = new SHCRule();
+        Rule lightRule = r.createRule("Light", id);
+        boolean isValid = lightRule.validate();
+        if (isValid) return true;
+        return false;
+    }
 }

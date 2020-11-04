@@ -1,6 +1,14 @@
 package org.soen343.models.house;
 
+<<<<<<< HEAD
 public class Door implements Components {
+=======
+import org.soen343.models.permissions.Rule;
+import org.soen343.models.permissions.SHCRule;
+import org.soen343.models.permissions.Validator;
+
+public class Door implements Components, Validator {
+>>>>>>> validation done for SHC commands according to user role and location
 
     private final int id;
     private boolean open;
@@ -28,7 +36,9 @@ public class Door implements Components {
      * @param open state of the door
      */
     public void setOpen(boolean open) {
-        this.open = open;
+        if (validate() == true) {
+            this.open = open;
+        }
     }
 
     /**
@@ -52,5 +62,14 @@ public class Door implements Components {
     @Override
     public String toString() {
         return this.getName() + ", state: " + (open ? "opened" : "closed");
+    }
+
+    @Override
+    public boolean validate() {
+        Rule r = new SHCRule();
+        Rule doorRule = r.createRule("Door", id);
+        boolean isValid = doorRule.validate();
+        if (isValid) return true;
+        return false;
     }
 }
