@@ -124,7 +124,6 @@ public class LoginController {
                         if (queryResult.getInt(1) == 0) {
                             invalidLogInLabel.setText("Invalid password. Please try again");
                         } else {
-                            invalidLogInLabel.setText("IT WORKED. REMOVE LATER");
                             User.setUsername(tfUsernameLogIn.getText());
                             changeScene(actionEvent);
                         }
