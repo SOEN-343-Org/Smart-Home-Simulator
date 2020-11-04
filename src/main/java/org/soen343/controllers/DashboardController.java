@@ -1,24 +1,13 @@
 package org.soen343.controllers;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import org.soen343.models.Model;
-import org.soen343.models.parameters.SimulationParameters;
 import org.soen343.services.DashboardService;
 import org.soen343.services.SimulationContextService;
 import org.soen343.services.modules.SHCModule;
 import org.soen343.services.modules.SHSModule;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class DashboardController extends Controller {
 
@@ -71,9 +60,9 @@ public class DashboardController extends Controller {
         houseLayoutController.update();
     }
 
-                /**
-                 * Update
-                 */
+    /**
+     * Update
+     */
     @Override
     public void update() {
     }
