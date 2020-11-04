@@ -3,6 +3,7 @@ package org.soen343.services;
 import org.soen343.models.Model;
 import org.soen343.models.house.Individual;
 import org.soen343.models.house.Window;
+import org.soen343.services.modules.SHCModule;
 
 import java.util.HashSet;
 
@@ -41,7 +42,15 @@ public class SimulationContextService extends Service {
     public void updateIndividualLocation(Individual individual, String location) {
         //TODO: Log that we update location of that individual
         if (individual != null) {
+
+            String oldLocation = individual.getLocation();
             individual.setLocation(location);
+
+            if (Model.getSimulationParameters().isAutoModeOn()) {
+                SHCModule.getInstance().autoCloseLights(oldLocation);
+                SHCModule.getInstance().autoOpenLights(location);
+            }
+
             this.notifyObservers(this);
         }
     }

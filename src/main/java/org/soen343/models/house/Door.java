@@ -1,6 +1,6 @@
 package org.soen343.models.house;
 
-public class Door {
+public class Door implements Components{
 
     private final int id;
     private boolean open;

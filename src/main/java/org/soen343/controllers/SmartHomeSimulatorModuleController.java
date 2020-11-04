@@ -4,24 +4,33 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.Individual;
 import org.soen343.services.modules.SHSModule;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SmartHomeSimulatorModuleController extends Controller {
 
+    @FXML
+    private Pane smartHomeSimulationModule;
     @FXML
     private TextField time;
     @FXML
@@ -85,6 +94,8 @@ public class SmartHomeSimulatorModuleController extends Controller {
 
         shsModule = SHSModule.getInstance();
 
+        Logger.getLogger("Testing");
+
         column1.setCellValueFactory(new PropertyValueFactory<>("id"));
         column2.setCellValueFactory(new PropertyValueFactory<>("name"));
         column3.setCellValueFactory(new PropertyValueFactory<>("role"));
@@ -104,6 +115,12 @@ public class SmartHomeSimulatorModuleController extends Controller {
      * Update location, role, location, name, individuals table
      */
     public void update() {
+
+        if (Model.getSimulationParameters().isSimulationRunning()) {
+            disableButtons();
+        } else {
+            enableButtons();
+        }
         ArrayList<String> roomsName = Model.getHouse().roomsName;
 
         locationChoicesAdd.setItems(FXCollections.observableArrayList(roomsName));
@@ -216,4 +233,31 @@ public class SmartHomeSimulatorModuleController extends Controller {
             shsModule.updateOutsideTemp(temp);
         }
     }
+
+    public void disableButtons() {
+        smartHomeSimulationModule.setDisable(true);
+    }
+
+    public void enableButtons() {
+        smartHomeSimulationModule.setDisable(false);
+    }
+
+    @FXML
+    private void openCommandsInfoView() {
+        // opens a new window
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/org/soen343/CommandsInfoView.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 700, 900);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            Logger logger = Logger.getLogger(getClass().getName());
+            logger.log(Level.SEVERE, "Failed to create new Window.", e);
+        }
+    }
+
+
 }
