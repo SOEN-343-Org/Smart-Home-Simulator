@@ -9,6 +9,9 @@ import org.soen343.models.permissions.*;
 
 import java.util.ArrayList;
 
+/**
+ * The type Commands info controller.
+ */
 public class CommandsInfoController{
 
     @FXML
@@ -25,6 +28,9 @@ public class CommandsInfoController{
     private TableView SHPtable;
 
 
+    /**
+     * Initialize.
+     */
     @FXML
     public void initialize() {
         setSHCTable();

@@ -2,8 +2,14 @@ package org.soen343.models.permissions;
 
 import java.util.ArrayList;
 
+/**
+ * The type Sh ccommands.
+ */
 public class SHCcommands extends CommandsContract {
 
+    /**
+     * Instantiates a new SHCcommands.
+     */
     public SHCcommands() {
         contract = new ArrayList<Command>();
         setContract();

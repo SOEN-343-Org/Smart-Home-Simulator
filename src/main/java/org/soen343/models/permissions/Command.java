@@ -17,9 +17,9 @@ public class Command {
     }
 
     /**
-     * Gets role.
+     * Gets name of the command.
      *
-     * @return the role
+     * @return the name
      */
     public String getName() {
         return name;

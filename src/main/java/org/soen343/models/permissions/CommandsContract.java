@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public abstract class CommandsContract {
     /**
-     * The Contract is a list of Permission objects.
+     * The Contract is a list of Command objects.
      */
     public ArrayList<Command> contract;
 
