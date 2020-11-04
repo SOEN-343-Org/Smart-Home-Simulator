@@ -9,6 +9,7 @@ module org.soen343 {
     opens org.soen343.models to javafx.base;
     opens org.soen343.models.house to javafx.base;
     opens org.soen343.models.parameters to javafx.base;
+    opens org.soen343.models.permissions to javafx.base;
     exports org.soen343;
 
 }
