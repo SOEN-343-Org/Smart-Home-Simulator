@@ -73,6 +73,6 @@ public class Window implements Components {
 
     @Override
     public String toString() {
-        return this.getName();
+        return this.getName() + ", state: " + (open ? "opened" : "closed") + (blocked ? "blocked" : "not blocked");
     }
 }

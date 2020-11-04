@@ -53,7 +53,7 @@ public class Light implements Components {
 
     @Override
     public String toString() {
-        return this.getName();
+        return this.getName() + ", state: " + (open ? "opened" : "closed");
     }
 
 }
