@@ -41,6 +41,8 @@ public class SimulationInfoController extends Controller {
     public Text currentDate;
     public Text currentTime;
     public Text currentMultiplier;
+
+    @FXML
     public Slider slider;
 
     private DashboardService dashboardService;
