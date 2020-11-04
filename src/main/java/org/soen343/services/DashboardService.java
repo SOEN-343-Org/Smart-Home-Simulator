@@ -1,5 +1,7 @@
 package org.soen343.services;
 
+import javafx.fxml.FXML;
+import org.soen343.controllers.SmartHomeSimulatorModuleController;
 import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.Individual;

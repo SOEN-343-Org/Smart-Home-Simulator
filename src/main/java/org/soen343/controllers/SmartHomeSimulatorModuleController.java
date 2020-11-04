@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.Individual;
@@ -15,9 +16,12 @@ import org.soen343.services.modules.SHSModule;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class SmartHomeSimulatorModuleController extends Controller {
 
+    @FXML
+    private Pane smartHomeSimulationModule;
     @FXML
     private TextField time;
     @FXML
@@ -81,6 +85,8 @@ public class SmartHomeSimulatorModuleController extends Controller {
 
         shsModule = SHSModule.getInstance();
 
+        Logger.getLogger("Testing");
+
         column1.setCellValueFactory(new PropertyValueFactory<>("id"));
         column2.setCellValueFactory(new PropertyValueFactory<>("name"));
         column3.setCellValueFactory(new PropertyValueFactory<>("role"));
@@ -100,6 +106,12 @@ public class SmartHomeSimulatorModuleController extends Controller {
      * Update location, role, location, name, individuals table
      */
     public void update() {
+
+        if (Model.getSimulationParameters().isSimulationRunning()) {
+            disableButtons();
+        } else {
+            enableButtons();
+        }
         ArrayList<String> roomsName = Model.getHouse().roomsName;
 
         locationChoicesAdd.setItems(FXCollections.observableArrayList(roomsName));
@@ -209,6 +221,14 @@ public class SmartHomeSimulatorModuleController extends Controller {
             int temp = Integer.parseInt(t);
             shsModule.updateOutsideTemp(temp);
         }
+    }
+
+    public void disableButtons(){
+        smartHomeSimulationModule.setDisable(true);
+    }
+
+    public void enableButtons(){
+        smartHomeSimulationModule.setDisable(false);
     }
 
 }
