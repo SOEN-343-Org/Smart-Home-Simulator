@@ -5,8 +5,10 @@ import org.soen343.models.User;
 import org.soen343.models.house.Individual;
 import org.soen343.services.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Calendar;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class SHSModule extends Service {
 
@@ -26,9 +28,9 @@ public class SHSModule extends Service {
      * @param location
      */
     public void updateIndividualLocation(Individual individual, String location) {
-        //TODO: Log that we update location of that individual
         if (individual != null) {
             individual.setLocation(location);
+            System.out.println("[SHS Module] Updated " + individual.getName() + " location to " + location);
             notifyObservers(this);
         }
     }
@@ -42,7 +44,7 @@ public class SHSModule extends Service {
      */
     public boolean updateIndividualName(String newName, int idSelected) {
         boolean success = Model.updateIndividualName(newName, idSelected);
-        //TODO: Log that we changed individual's name
+        System.out.println("[SHS Module] Updated individual " + idSelected + "'s name to " + newName);
         notifyObservers(this);
         return success;
     }
@@ -58,7 +60,7 @@ public class SHSModule extends Service {
     public boolean addNewIndividual(String name, String role, String location) {
         String username = User.getUsername();
         boolean success = Model.addIndividual(name, role, username, location);
-        //TODO: Log that we added a new individual
+        System.out.println("[SHS Module] Added new individual " + name + " at location " + location + " with role " + role);
         notifyObservers(this);
         return success;
     }
@@ -71,24 +73,9 @@ public class SHSModule extends Service {
      */
     public boolean removeIndividual(int individualId) {
         boolean success = Model.removeIndividual(individualId);
-        //TODO: Log that we removed an individual
+        System.out.println("[SHS Module] Removed individual " + individualId);
         notifyObservers(this);
         return success;
-    }
-
-    /**
-     * Update date and time
-     *
-     * @param date
-     */
-    public void updateDateTimeDate(LocalDate date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, date.getYear());
-        calendar.set(Calendar.MONTH, date.getMonthValue());
-        calendar.set(Calendar.DAY_OF_MONTH, date.getDayOfMonth());
-
-        Model.getSimulationParameters().getDateTime().setCalendar(calendar);
-        notifyObservers(this);
     }
 
     /**
@@ -99,23 +86,28 @@ public class SHSModule extends Service {
     public void updateUserIndividual(Individual individual) {
         if (individual != null) {
             User.setCurrentIndividual(individual);
-            //TODO: Log that we set the user's individual
+            System.out.println("[SHS Module] Logged into individual #" + individual.getId() + " " + individual.getName());
             notifyObservers(this);
         }
     }
 
     /**
-     * Update time
+     * Update date and time
      *
-     * @param h
-     * @param m
-     * @param s
+     * @param date
      */
-    public void updateTime(int h, int m, int s) {
-        Calendar calendar = Model.getSimulationParameters().getDateTime().getCalendar();
-        calendar.set(Calendar.HOUR, h);
-        calendar.set(Calendar.MINUTE, m);
-        calendar.set(Calendar.SECOND, s);
+    public void updateDateTimeDate(LocalDate date) {
+        Model.getSimulationParameters().getDateTime().setCalendarDate(date);
+        System.out.println("[SHS Module] Updated Simulation's Date to " + DateTimeFormatter.ofPattern("MM/dd/yy").format(date));
+        notifyObservers(this);
+    }
+
+    /**
+     * Update time
+     */
+    public void updateTime(Date date) {
+        Model.getSimulationParameters().getDateTime().setCalendarTime(date);
+        System.out.println("[SHS Module] Updated Simulation's Time to " + new SimpleDateFormat("HH:mm:ss").format(date));
         notifyObservers(this);
     }
 
@@ -126,6 +118,7 @@ public class SHSModule extends Service {
      */
     public void updateOutsideTemp(Integer temp) {
         Model.getSimulationParameters().setOutsideTemp(temp);
+        System.out.println("[SHS Module] Updated outside temperature to " + temp + "°C");
         notifyObservers(this);
     }
 }

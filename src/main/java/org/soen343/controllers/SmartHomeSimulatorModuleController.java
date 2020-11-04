@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -19,8 +18,12 @@ import org.soen343.models.house.Individual;
 import org.soen343.services.modules.SHSModule;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -207,18 +210,22 @@ public class SmartHomeSimulatorModuleController extends Controller {
         }
         if (!time.getText().isBlank()) {
             String t = time.getText();
-            String[] timeArray = t.split(":");
-            if (timeArray.length == 3 && timeArray[0].length() == 2 && isInteger(timeArray[0]) && timeArray[1].length() == 2 && isInteger(timeArray[1]) && timeArray[2].length() == 2 && isInteger(timeArray[2])) {
-                int h = Integer.parseInt(timeArray[0]);
-                int m = Integer.parseInt(timeArray[1]);
-                int s = Integer.parseInt(timeArray[2]);
-
-                if (h >= 0 && h < 24 && m >= 0 && m < 60 && s >= 0 && s < 60) {
-                    shsModule.updateTime(h, m, s);
-                }
+            Date date = parseTime(t);
+            if (date!=null){
+                shsModule.updateTime(date);
             }
         }
     }
+
+    private Date parseTime(String t) {
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        try {
+            return timeFormat.parse(t);
+        } catch (ParseException ignored) {
+        }
+        return null;
+    }
+
 
     @FXML
     private void updateOutsideTemp(ActionEvent ae) {
@@ -229,11 +236,11 @@ public class SmartHomeSimulatorModuleController extends Controller {
         }
     }
 
-    public void disableButtons(){
+    public void disableButtons() {
         smartHomeSimulationModule.setDisable(true);
     }
 
-    public void enableButtons(){
+    public void enableButtons() {
         smartHomeSimulationModule.setDisable(false);
     }
 

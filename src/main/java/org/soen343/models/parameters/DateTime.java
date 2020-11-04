@@ -5,7 +5,9 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
+import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Date;
 
 public class DateTime {
 
@@ -21,8 +23,12 @@ public class DateTime {
         return calendar;
     }
 
-    public void setCalendar(Calendar calendar) {
-        this.calendar = calendar;
+    public void setCalendarTime(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        calendar.set(Calendar.HOUR, c.get(Calendar.HOUR));
+        calendar.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
+        calendar.set(Calendar.SECOND, c.get(Calendar.SECOND));
     }
 
     public Timeline getTime() {
@@ -50,4 +56,9 @@ public class DateTime {
     }
 
 
+    public void setCalendarDate(LocalDate date) {
+        calendar.set(Calendar.YEAR, date.getYear());
+        calendar.set(Calendar.MONTH, date.getMonthValue());
+        calendar.set(Calendar.DAY_OF_MONTH, date.getDayOfMonth());
+    }
 }

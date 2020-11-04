@@ -35,16 +35,9 @@ public class SHPModule extends Service {
         }
         // Here old lights are lights we need to turn off
         // And new lights are lights that will be added to away mode parameters and be lit once their time comes
-        // TODO: Make sure that we open the lights when their time comes
 
-        if (Model.getSimulationParameters().isAwayModeOn()) {
-            for (Light l : oldLights) {
-                l.setOpen(false);
-                System.out.println(l);
-            }
-        }
+        SHCModule.getInstance().awayCloseLights(oldLights);
         Model.getSimulationParameters().getAwayModeParameters().setOpenLights(newLights);
-        notifyObservers(this);
     }
 
     public void setLightsOpenTime(Date from, Date to) {
@@ -62,24 +55,23 @@ public class SHPModule extends Service {
         String role = currentIndividual.getRole();
         if (role.equals("Guest") || role.equals("Stranger")) {
             //TODO: Log that role cannot set away mode on/off
-            System.out.println("Individual does not have the permission to set Away Mode");
+            System.out.println("[SHP Module] [Away Mode] " + currentIndividual.getName() + " does not have the permission to set Away Mode");
             return false;
         }
         for (Individual ind : Model.getHouse().getIndividuals()) {
             if (!ind.getLocation().equals("outside")) {
                 //TODO: Log that location cannot set away mode on/off
-                System.out.println(ind.getName() + " is still in the house");
+                System.out.println("[SHP Module] [Away Mode] Cannot set Away Mode, " + ind.getName() + " is still in the house");
                 return false;
             }
         }
         Model.getSimulationParameters().setAwayMode();
-        System.out.println("Away Mode is set to " + Model.getSimulationParameters().isAwayModeOn());
+        System.out.println("[SHP Module] [Away Mode] " + currentIndividual.getName() + " has set Away mode to " + (Model.getSimulationParameters().isAwayModeOn() ? "ON" : "OFF"));
         if (Model.getSimulationParameters().isAwayModeOn()) {
-            SHCModule.getInstance().closeAllLights();
-            SHCModule.getInstance().closeAllWindows();
-            SHCModule.getInstance().closeAllDoors();
+            SHCModule.getInstance().awayCloseLights(Model.getHouse().getAllLights());
+            SHCModule.getInstance().awayCloseWindows(Model.getHouse().getAllWindows());
+            SHCModule.getInstance().awayCloseDoors(Model.getHouse().getAllDoors());
         }
-        notifyObservers(this);
         return true;
     }
 
@@ -95,6 +87,29 @@ public class SHPModule extends Service {
 
         //TODO: log it
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        System.out.println("Alerting the authorities at" + timeFormat.format(calendar.getTime()));
+        System.out.println("[SHP Module] [Away Mode] Alerting the authorities at" + timeFormat.format(calendar.getTime()));
+    }
+
+    public void notifiesTimeUpdate() {
+        if (!Model.getSimulationParameters().isAwayModeOn()) {
+            return;
+        }
+        // Away mode is on
+        Date currentDate = Model.getSimulationParameters().getDateTime().getCalendar().getTime();
+        Date from = Model.getSimulationParameters().getAwayModeParameters().getLightsOpenFrom();
+        Date to = Model.getSimulationParameters().getAwayModeParameters().getLightsOpenTo();
+        if (currentDate.after(from) && currentDate.before(to)) {
+            // lights should be on during that time
+            SHCModule.getInstance().awayOpenLights(Model.getSimulationParameters().getAwayModeParameters().getOpenLights());
+        } else {
+            // lights should be closed
+            SHCModule.getInstance().awayCloseLights(Model.getSimulationParameters().getAwayModeParameters().getOpenLights());
+        }
+        Date authoritiesDate = Model.getSimulationParameters().getAwayModeParameters().getDateForCallingPoliceAfterBreakIn();
+
+        if (currentDate.equals(authoritiesDate)) {
+            // Time to alert the authorities
+            SHCModule.getInstance().alertAuthorities();
+        }
     }
 }

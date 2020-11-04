@@ -18,6 +18,6 @@
       <Label layoutX="25.0" layoutY="182.0" text="Windows" />
       <Label layoutX="25.0" layoutY="326.0" text="Lights" />
       <Button fx:id="lightsButton" layoutX="335.0" layoutY="367.0" mnemonicParsing="false" onAction="#openCloseLights" text="Open / Close" />
-      <ToggleButton fx:id="autoModeButton" layoutX="335.0" layoutY="412.0" mnemonicParsing="false" onAction="#ToggleAutoMode" text="Auto Mode OFF" />
+      <ToggleButton fx:id="autoModeButton" layoutX="335.0" layoutY="412.0" mnemonicParsing="false" onAction="#toggleAutoMode" text="Auto Mode OFF" />
     </children>
 </AnchorPane>

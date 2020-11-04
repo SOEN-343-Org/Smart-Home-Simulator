@@ -2,7 +2,10 @@ package org.soen343.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBoxTreeItem;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.layout.Pane;
 import org.soen343.models.Model;
@@ -63,11 +66,14 @@ public class SmartHomeCoreModuleController extends Controller {
         update();
     }
 
-    public void update(){
+    public void update() {
         if (Model.getSimulationParameters().isSimulationRunning()) {
             enableButtons();
         } else {
             disableButtons();
+            if (Model.getSimulationParameters().isAutoModeOn()) {
+                toggleAutoMode(null);
+            }
         }
     }
 
@@ -170,18 +176,18 @@ public class SmartHomeCoreModuleController extends Controller {
         }
     }
 
-    public void ToggleAutoMode(ActionEvent actionEvent) {
+    public void toggleAutoMode(ActionEvent actionEvent) {
         boolean success = shcModule.setAutoMode();
         boolean status = Model.getSimulationParameters().isAutoModeOn();
         autoModeButton.setText(status ? "Auto Mode ON" : "Auto Mode OFF");
         autoModeButton.setSelected(status);
     }
 
-    public void disableButtons(){
+    public void disableButtons() {
         smartHomeCoreModule.setDisable(true);
     }
 
-    public void enableButtons(){
+    public void enableButtons() {
         smartHomeCoreModule.setDisable(false);
     }
 

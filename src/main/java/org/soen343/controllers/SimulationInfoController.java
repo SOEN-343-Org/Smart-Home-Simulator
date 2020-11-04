@@ -9,6 +9,7 @@ import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.Individual;
 import org.soen343.services.DashboardService;
+import org.soen343.services.modules.SHPModule;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -105,11 +106,12 @@ public class SimulationInfoController extends Controller {
 
     private void startAnimatedTime() {
         clockTimer = new Timer();
+        SHPModule shpModule = SHPModule.getInstance();
         clockTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                    dashboardService.updateTime();
+                    shpModule.notifiesTimeUpdate();
                     updateTime();
                 });
             }
