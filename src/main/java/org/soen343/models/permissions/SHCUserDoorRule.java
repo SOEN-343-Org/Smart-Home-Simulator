@@ -31,6 +31,7 @@ public class SHCUserDoorRule extends SHCRule {
         for (Room room : roomsWithDoor) {
             if (individualLocation.equals(room.getName())) {
                 userInRoom = true;
+                break;
             }
         }
         if (role.equals("Family Adult")) return true;
