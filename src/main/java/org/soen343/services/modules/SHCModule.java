@@ -34,7 +34,6 @@ public class SHCModule extends Service implements Validator {
         Window w = new Window(0);
 
         for (int i : windows) {
-            System.out.println(i);
             if (w.validate(i)) {
                 validWindowIds.add(i);
             }
@@ -65,7 +64,6 @@ public class SHCModule extends Service implements Validator {
         Door d = new Door(0);
 
         for (int i : doors) {
-            System.out.println(i);
             if (d.validate(i)) {
                 validDoorIds.add(i);
             }
@@ -92,7 +90,6 @@ public class SHCModule extends Service implements Validator {
         Light l = new Light(0);
 
         for (int i : lights) {
-            System.out.println(i);
             if (l.validate(i)) {
                 validLightIds.add(i);
             }
