@@ -45,7 +45,9 @@ public class ConsoleOutputService extends Service {
     }
 
     private void log(String message) {
+        openFile();
         log  = "[" + getTime() + "] " + getLevel() + " " + message;
+        closeFile();
         notifyObservers(this);
     }
 
@@ -58,7 +60,7 @@ public class ConsoleOutputService extends Service {
     }
 
     private void writeToFile() {
-        file.format("\n", "output file");
+        file.format("\n", log);
     }
 
     private void closeFile() {
