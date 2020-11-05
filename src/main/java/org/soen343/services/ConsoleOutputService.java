@@ -16,6 +16,11 @@ public class ConsoleOutputService extends Service {
     private String level;
     private FileWriter fileWriter;
 
+    /**
+     * Get instance
+     *
+     * @return consoleOuputService
+     */
     public static ConsoleOutputService getInstance() {
         if (consoleOutputService == null) {
             consoleOutputService = new ConsoleOutputService();
@@ -23,30 +28,60 @@ public class ConsoleOutputService extends Service {
         return consoleOutputService;
     }
 
+    /**
+     * Get log
+     *
+     * @return log
+     */
     public String getLog() {
         return log;
     }
 
+    /**
+     * Setting infor log level
+     *
+     * @param message
+     */
     public void infoLog(String message) {
         level = "INFO";
         log(message);
     }
 
+    /**
+     * Setting critical log level
+     *
+     * @param message
+     */
     public void criticalLog(String message) {
         level = "CRITICAL";
         log(message);
     }
 
-    public void warningLog(String message) {
-        level = "WARNING";
+    /**
+     * Setting error log level
+     *
+     * @param message
+     */
+    public void errorLog(String message) {
+        level = "ERROR";
         log(message);
     }
 
+    /**
+     * Get time
+     *
+     * @return time
+     */
     private String getTime() {
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         return timeFormat.format(Model.getSimulationParameters().getDateTime().getDate().getTime());
     }
 
+    /**
+     * Log message
+     *
+     * @param message
+     */
     private void log(String message) {
         openFile();
         log = "[" + getTime() + "] " + getLevel() + " " + message;
@@ -63,7 +98,7 @@ public class ConsoleOutputService extends Service {
                 fileWriter = new FileWriter("consoleOutput.txt", true);
             file = new Formatter(fileWriter);
         } catch (Exception exception) {
-            System.out.println("The is an error");
+            System.out.println("Error");
         }
     }
 
@@ -80,6 +115,11 @@ public class ConsoleOutputService extends Service {
         }
     }
 
+    /**
+     * Get level
+     *
+     * @return level
+     */
     public String getLevel() {
         return level;
     }
