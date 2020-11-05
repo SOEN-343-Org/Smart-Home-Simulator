@@ -27,9 +27,7 @@ public class Door implements Components {
      *
      * @param open state of the door
      */
-    public void setOpen(boolean open) {
-        this.open = open;
-    }
+    public void setOpen(boolean open) { this.open = open; }
 
     /**
      * Gets the id of the door

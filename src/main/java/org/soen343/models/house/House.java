@@ -3,6 +3,9 @@ package org.soen343.models.house;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * The type House.
+ */
 public class House {
 
     // Used for drawing the house layout
@@ -11,8 +14,14 @@ public class House {
     // Doors and windows have the same reference to the objects inside layout
     private final HashMap<Integer, Room> rooms;
 
+    /**
+     * The Rooms name.
+     */
     public ArrayList<String> roomsName = new ArrayList<>();
 
+    /**
+     * The Individuals.
+     */
     public HashMap<Integer, Individual> individuals = new HashMap<>();
 
     /**
@@ -72,6 +81,12 @@ public class House {
     }
 
 
+    /**
+     * Gets door by id.
+     *
+     * @param id the id
+     * @return the door by id
+     */
     public Door getDoorById(int id) {
         ArrayList<Room> rooms = getRooms();
         for (Room room : rooms) {
@@ -83,6 +98,12 @@ public class House {
         return null;
     }
 
+    /**
+     * Gets window by id.
+     *
+     * @param id the id
+     * @return the window by id
+     */
     public Window getWindowById(int id) {
         ArrayList<Room> rooms = getRooms();
         for (Room room : rooms) {
@@ -94,6 +115,12 @@ public class House {
         return null;
     }
 
+    /**
+     * Gets light by id.
+     *
+     * @param id the id
+     * @return the light by id
+     */
     public Light getLightById(int id) {
         ArrayList<Room> rooms = getRooms();
         for (Room room : rooms) {
@@ -119,6 +146,12 @@ public class House {
         return "House of dimension (" + layout.length + " by " + layout[0].length + ")\nRooms=\n" + rooms;
     }
 
+    /**
+     * Gets room by name.
+     *
+     * @param location the location
+     * @return the room by name
+     */
     public Room getRoomByName(String location) {
         ArrayList<Room> rooms = getRooms();
         for (Room room : rooms) {
@@ -145,5 +178,68 @@ public class House {
             doors.addAll(room.getDoors());
         }
         return doors;
+    }
+
+    /**
+     * Gets room by door id.
+     *
+     * @param id the id
+     * @return the room by door id
+     */
+    public ArrayList<Room> getRoomByDoorId(int id) {
+        ArrayList<Room> roomsWithDoor = new ArrayList<>();
+        ArrayList<Room> rooms = getRooms();
+
+        for (Room room : rooms) {
+            if (room.getDoor(id) != null) {
+                roomsWithDoor.add(room);
+            }
+        }
+        if (roomsWithDoor.size() != 0) {
+            return roomsWithDoor;
+        }
+        return null;
+    }
+
+    /**
+     * Gets room by light id.
+     *
+     * @param id the id
+     * @return the room by light id
+     */
+    public Room getRoomByLightId(int id) {
+        Room roomWithLight = null;
+        ArrayList<Room> rooms = getRooms();
+
+        for (Room room : rooms) {
+            if (room.getLight(id) != null) {
+                roomWithLight = room;
+            }
+        }
+        if (roomWithLight != null) {
+            return roomWithLight;
+        }
+        return null;
+    }
+
+    /**
+     * Gets room by window id.
+     *
+     * @param id the id
+     * @return the room by window id
+     */
+    public Room getRoomByWindowId(int id) {
+        Room roomWithWindow = null;
+        ArrayList<Room> rooms = getRooms();
+
+        for (Room room : rooms) {
+            if (room.getWindow(id) != null) {
+                roomWithWindow = room;
+            }
+        }
+        if (roomWithWindow != null) {
+            return roomWithWindow;
+        }
+        return null;
     }
 }
