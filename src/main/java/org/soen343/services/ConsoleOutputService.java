@@ -24,7 +24,6 @@ public class ConsoleOutputService extends Service {
         return log;
     }
 
-
     public void infoLog(String message) {
         level = "INFO";
         log(message);
