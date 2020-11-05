@@ -3,6 +3,7 @@ package org.soen343.services.modules;
 import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.*;
+import org.soen343.models.permissions.*;
 import org.soen343.services.ConsoleOutputService;
 import org.soen343.services.Service;
 
@@ -23,16 +24,26 @@ public class SHCModule extends Service {
     /**
      * Update window state
      *
-     * @param windows
+     * @param windows Set of selected Window Id's
      */
     public void updateWindowState(HashSet<Integer> windows) {
+        HashSet<Integer> validWindowIds = new HashSet<>();
 
         //Check permissions:
+        SHCUserWindowRule r = new SHCUserWindowRule();
 
-        for (int id : windows) {
+        for (int i : windows) {
+            if (r.validate(i)) {
+                validWindowIds.add(i);
+            } else {
+                ConsoleOutputService.getInstance().warningLog("[SHC Module] User does not have the permission to update " + Model.getHouse().getWindowById(i).getName());
+            }
+        }
+
+        for (int id : validWindowIds) {
             Window window = Model.getHouse().getWindowById(id);
             if (window.isBlocked()) {
-                ConsoleOutputService.getInstance().errorLog("[SHC Module] " + window.getName() + " is blocked");
+                ConsoleOutputService.getInstance().warningLog("[SHC Module] Cannot update " + window.getName() + " because it is blocked");
             } else {
                 boolean state = window.isOpen();
                 window.setOpen(!state);
@@ -48,10 +59,20 @@ public class SHCModule extends Service {
      * @param doors
      */
     public void updateDoorState(HashSet<Integer> doors) {
+        HashSet<Integer> validDoorIds = new HashSet<>();
 
         //Check permissions:
+        SHCUserDoorRule r = new SHCUserDoorRule();
 
-        for (int id : doors) {
+        for (int i : doors) {
+            if (r.validate(i)) {
+                validDoorIds.add(i);
+            } else {
+                ConsoleOutputService.getInstance().warningLog("[SHC Module] User does not have the permission to update " + Model.getHouse().getDoorById(i).getName());
+            }
+        }
+
+        for (int id : validDoorIds) {
             Door door = Model.getHouse().getDoorById(id);
             boolean state = door.isOpen();
             door.setOpen(!state);
@@ -66,10 +87,20 @@ public class SHCModule extends Service {
      * @param lights
      */
     public void updateLightState(HashSet<Integer> lights) {
+        HashSet<Integer> validLightIds = new HashSet<>();
 
         //Check permissions:
+        SHCUserLightRule r = new SHCUserLightRule();
 
-        for (int id : lights) {
+        for (int i : lights) {
+            if (r.validate(i)) {
+                validLightIds.add(i);
+            } else {
+                ConsoleOutputService.getInstance().warningLog("[SHC Module] User does not have the permission to update " + Model.getHouse().getLightById(i).getName());
+            }
+        }
+
+        for (int id : validLightIds) {
             Light light = Model.getHouse().getLightById(id);
             boolean state = light.isOpen();
             light.setOpen(!state);
@@ -79,16 +110,32 @@ public class SHCModule extends Service {
     }
 
     public boolean setAutoMode() {
-        //Check permissions:
         Individual ind = User.getCurrentIndividual();
-        if (ind.getRole().equals("Family Adult") || ind.getRole().equals("Family Child")) {
+
+        //Check permissions:
+        if (validate()) {
             Model.getSimulationParameters().setAutoMode();
             ConsoleOutputService.getInstance().infoLog("[SHC Module] [Auto Mode] " + ind.getName() + " has set Auto mode to " + (Model.getSimulationParameters().isAutoModeOn() ? "ON" : "OFF"));
             return true;
         }
         // User does not have the permission
-        ConsoleOutputService.getInstance().errorLog("[SHC Module] [Auto Mode] " + ind.getName() + " does not have the permission to set auto mode");
+        ConsoleOutputService.getInstance().warningLog("[SHC Module] [Auto Mode] " + ind.getName() + " does not have the permission to set auto mode");
         return false;
+    }
+
+    private boolean validate() {
+        Rule r = new SHCRule();
+        Rule autoModeRule = r.createRule("AutoMode", 0);
+        boolean isValid = autoModeRule.validate(0);
+        if (isValid) return true;
+        return false;
+    }
+
+    public void resetAutoMode() {
+        Model.getSimulationParameters().setAutoMode();
+        // Simulation is off while auto mode was on, so we turn auto mode off
+        ConsoleOutputService.getInstance().warningLog("[SHC Module] [Auto Mode] Auto Mode shut down because Simulation stopped");
+        notifyObservers(this);
     }
 
     public void autoOpenLights(String location) {
@@ -167,7 +214,7 @@ public class SHCModule extends Service {
                     ConsoleOutputService.getInstance().infoLog("[SHC Module] [Away Mode] Closed and Locked " + w.getName());
                     needUpdate = true;
                 } else {
-                    ConsoleOutputService.getInstance().criticalLog("[SHC Module] [Away Mode] Could not close " + w.getName() + " because it is blocked");
+                    ConsoleOutputService.getInstance().warningLog("[SHC Module] [Away Mode] Could not close " + w.getName() + " because it is blocked");
                 }
             }
         }

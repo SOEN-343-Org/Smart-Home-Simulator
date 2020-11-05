@@ -52,20 +52,29 @@ public class SHPModule extends Service {
 
     public boolean setAwayMode() {
         //Look at permissions
+
         Individual currentIndividual = User.getCurrentIndividual();
+        // if away mode is on we want to turn it off even if there is still people inside
+        if (Model.getSimulationParameters().isAwayModeOn()) {
+            Model.getSimulationParameters().setAwayMode();
+            ConsoleOutputService.getInstance().infoLog("[SHP Module] [Away Mode] " + currentIndividual.getName() + " has set Away Mode to OFF");
+            notifyObservers(this);
+            return true;
+        }
+
         String role = currentIndividual.getRole();
         if (role.equals("Guest") || role.equals("Stranger")) {
-            ConsoleOutputService.getInstance().errorLog("[SHP Module] [Away Mode] " + currentIndividual.getName() + " does not have the permission to set Away Mode");
+            ConsoleOutputService.getInstance().warningLog("[SHP Module] [Away Mode] " + currentIndividual.getName() + " does not have the permission to set Away Mode");
             return false;
         }
         for (Individual ind : Model.getHouse().getIndividuals()) {
             if (!ind.getLocation().equals("outside")) {
-                ConsoleOutputService.getInstance().errorLog("[SHP Module] [Away Mode] Cannot set Away Mode, " + ind.getName() + " is still in the house");
+                ConsoleOutputService.getInstance().warningLog("[SHP Module] [Away Mode] Cannot set Away Mode, " + ind.getName() + " is still in the house");
                 return false;
             }
         }
         Model.getSimulationParameters().setAwayMode();
-        ConsoleOutputService.getInstance().infoLog("[SHP Module] [Away Mode] " + currentIndividual.getName() + " has set Away mode to " + (Model.getSimulationParameters().isAwayModeOn() ? "ON" : "OFF"));
+        ConsoleOutputService.getInstance().infoLog("[SHP Module] [Away Mode] " + currentIndividual.getName() + " has set Away Mode to " + (Model.getSimulationParameters().isAwayModeOn() ? "ON" : "OFF"));
         if (Model.getSimulationParameters().isAwayModeOn()) {
             SHCModule.getInstance().awayCloseLights(Model.getHouse().getAllLights());
             SHCModule.getInstance().awayCloseWindows(Model.getHouse().getAllWindows());
@@ -85,7 +94,7 @@ public class SHPModule extends Service {
         calendar.add(Calendar.SECOND, Model.getSimulationParameters().getAwayModeParameters().getTimeBeforeCallingPoliceAfterBreakIn());
         Model.getSimulationParameters().getAwayModeParameters().setDateBeforeCallingPolice(calendar);
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        ConsoleOutputService.getInstance().infoLog("[SHP Module] [Away Mode] Alerting the authorities at " + timeFormat.format(calendar.getTime()));
+        ConsoleOutputService.getInstance().criticalLog("[SHP Module] [Away Mode] Alerting the authorities at " + timeFormat.format(calendar.getTime()));
     }
 
     public void notifiesTimeUpdate() {
@@ -122,7 +131,7 @@ public class SHPModule extends Service {
         Model.getSimulationParameters().setAwayMode();
         // Simulation is off while away mode was on, so we turn away mode off and reset the alerting authorities clock.
         Model.getSimulationParameters().getAwayModeParameters().setDateBeforeCallingPolice(null);
-        ConsoleOutputService.getInstance().criticalLog("[SHP Module] [Away Mode] Away Mode shut down because Simulation stopped");
+        ConsoleOutputService.getInstance().warningLog("[SHP Module] [Away Mode] Away Mode shut down because Simulation stopped");
         notifyObservers(this);
     }
 }
