@@ -20,7 +20,7 @@ public class SHCUserLightRule extends SHCRule{
     }
 
     @Override
-    public boolean validate() {
+    public boolean validate(int id) {
         Room roomWithLight = Model.getHouse().getRoomByLightId(id);
         String individualLocation = User.getCurrentIndividual().getLocation();
         String role = User.getCurrentIndividual().getRole();
@@ -36,8 +36,6 @@ public class SHCUserLightRule extends SHCRule{
         if (role.equals("Guest") && userInRoom) return true;
         if (role.equals("Family Child") && userInHouse && autoModeIsOn) return true;
         if (role.equals("Guest") && userInHouse && autoModeIsOn) return true;
-
-        // TODO : Log that the user is not allowed to issue this command
 
         return false;
     }

@@ -22,7 +22,7 @@ public class SHCUserDoorRule extends SHCRule {
     }
 
     @Override
-    public boolean validate() {
+    public boolean validate(int id) {
         ArrayList<Room> roomsWithDoor = Model.getHouse().getRoomByDoorId(id);
         String individualLocation = User.getCurrentIndividual().getLocation();
         String role = User.getCurrentIndividual().getRole();
@@ -37,8 +37,6 @@ public class SHCUserDoorRule extends SHCRule {
         if (role.equals("Family Adult")) return true;
         if (role.equals("Family Child") && userInRoom) return true;
         if (role.equals("Guest") && userInRoom) return true;
-
-        // TODO : Log that the user is not allowed to issue this command
 
         return false;
     }

@@ -44,11 +44,7 @@ public class Window implements Components, Validator {
      *
      * @param open new opened state of the window
      */
-    public void setOpen(boolean open) {
-        if (validate() == true) {
-            this.open = open;
-        }
-    }
+    public void setOpen(boolean open) { this.open = open; }
 
     /**
      * Gets the blocked state of the window
@@ -83,10 +79,10 @@ public class Window implements Components, Validator {
     }
 
     @Override
-    public boolean validate() {
+    public boolean validate(int windowId) {
         Rule r = new SHCRule();
-        Rule windowRule = r.createRule("Window", id);
-        boolean isValid = windowRule.validate();
+        Rule windowRule = r.createRule("Window", windowId);
+        boolean isValid = windowRule.validate(windowId);
         if (isValid) return true;
         return false;
     }

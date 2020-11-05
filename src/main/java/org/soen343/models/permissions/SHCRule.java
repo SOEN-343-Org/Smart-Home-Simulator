@@ -20,7 +20,7 @@ public class SHCRule extends Rule {
 
     // not to be used
     @Override
-    public boolean validate() {
+    public boolean validate(int id) {
         return false;
     }
 }

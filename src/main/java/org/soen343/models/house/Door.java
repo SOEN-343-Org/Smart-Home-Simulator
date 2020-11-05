@@ -31,11 +31,7 @@ public class Door implements Components, Validator {
      *
      * @param open state of the door
      */
-    public void setOpen(boolean open) {
-        if (validate() == true) {
-            this.open = open;
-        }
-    }
+    public void setOpen(boolean open) { this.open = open; }
 
     /**
      * Gets the id of the door
@@ -61,10 +57,10 @@ public class Door implements Components, Validator {
     }
 
     @Override
-    public boolean validate() {
+    public boolean validate(int id) {
         Rule r = new SHCRule();
         Rule doorRule = r.createRule("Door", id);
-        boolean isValid = doorRule.validate();
+        boolean isValid = doorRule.validate(id);
         if (isValid) return true;
         return false;
     }

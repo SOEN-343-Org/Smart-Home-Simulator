@@ -19,7 +19,7 @@ public class SHCUserAutoModeRule extends SHCRule{
     }
 
     @Override
-    public boolean validate() {
+    public boolean validate(int id) {
         String individualLocation = User.getCurrentIndividual().getLocation();
         String role = User.getCurrentIndividual().getRole();
         boolean userInHouse = !individualLocation.equals("outside");
@@ -27,9 +27,6 @@ public class SHCUserAutoModeRule extends SHCRule{
         if (role.equals("Family Adult")) return true;
         if (role.equals("Family Child") && userInHouse) return true;
         if (role.equals("Guest") && userInHouse) return true;
-
-        // TODO : Log that the user is not allowed to issue this command
-        System.out.println( role + " NOT ALLOWED to issue this command");
 
         return false;
     }

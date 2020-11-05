@@ -3,12 +3,15 @@ package org.soen343.services.modules;
 import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.*;
+import org.soen343.models.permissions.Rule;
+import org.soen343.models.permissions.SHCRule;
+import org.soen343.models.permissions.Validator;
 import org.soen343.services.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class SHCModule extends Service {
+public class SHCModule extends Service implements Validator {
 
     private static SHCModule shcModule = null;
 
@@ -22,13 +25,22 @@ public class SHCModule extends Service {
     /**
      * Update window state
      *
-     * @param windows
+     * @param windows Set of selected Window Id's
      */
     public void updateWindowState(HashSet<Integer> windows) {
+        HashSet<Integer> validWindowIds = new HashSet<>();
 
         //Check permissions:
+        Window w = new Window(0);
 
-        for (int id : windows) {
+        for (int i : windows) {
+            System.out.println(i);
+            if (w.validate(i)) {
+                validWindowIds.add(i);
+            }
+        }
+
+        for (int id : validWindowIds) {
             Window window = Model.getHouse().getWindowById(id);
             if (window.isBlocked()) {
                 System.out.println("[SHC Module] " + window.getName() + " is blocked");
@@ -47,10 +59,19 @@ public class SHCModule extends Service {
      * @param doors
      */
     public void updateDoorState(HashSet<Integer> doors) {
+        HashSet<Integer> validDoorIds = new HashSet<>();
 
         //Check permissions:
+        Door d = new Door(0);
 
-        for (int id : doors) {
+        for (int i : doors) {
+            System.out.println(i);
+            if (d.validate(i)) {
+                validDoorIds.add(i);
+            }
+        }
+
+        for (int id : validDoorIds) {
             Door door = Model.getHouse().getDoorById(id);
             boolean state = door.isOpen();
             door.setOpen(!state);
@@ -65,10 +86,19 @@ public class SHCModule extends Service {
      * @param lights
      */
     public void updateLightState(HashSet<Integer> lights) {
+        HashSet<Integer> validLightIds = new HashSet<>();
 
         //Check permissions:
+        Light l = new Light(0);
 
-        for (int id : lights) {
+        for (int i : lights) {
+            System.out.println(i);
+            if (l.validate(i)) {
+                validLightIds.add(i);
+            }
+        }
+
+        for (int id : validLightIds) {
             Light light = Model.getHouse().getLightById(id);
             boolean state = light.isOpen();
             light.setOpen(!state);
@@ -78,15 +108,27 @@ public class SHCModule extends Service {
     }
 
     public boolean setAutoMode() {
-        //Check permissions:
         Individual ind = User.getCurrentIndividual();
-        if (ind.getRole().equals("Family Adult") || ind.getRole().equals("Family Child")) {
-            Model.getSimulationParameters().setAutoMode();
-            System.out.println("[SHC Module] [Auto Mode] " + ind.getName() + " has set Auto mode to " + (Model.getSimulationParameters().isAutoModeOn() ? "ON" : "OFF"));
-            return true;
+
+        //Check permissions:
+        if (validate(0)) {
+            if (ind.getRole().equals("Family Adult") || ind.getRole().equals("Family Child")) {
+                Model.getSimulationParameters().setAutoMode();
+                System.out.println("[SHC Module] [Auto Mode] " + ind.getName() + " has set Auto mode to " + (Model.getSimulationParameters().isAutoModeOn() ? "ON" : "OFF"));
+                return true;
+            }
         }
         // User does not have the permission
         System.out.println("[SHC Module] [Auto Mode] " + ind.getName() + " does not have the permission to set auto mode");
+        return false;
+    }
+
+    @Override
+    public boolean validate(int id) {
+        Rule r = new SHCRule();
+        Rule autoModeRule = r.createRule("AutoMode", id);
+        boolean isValid = autoModeRule.validate(id);
+        if (isValid) return true;
         return false;
     }
 

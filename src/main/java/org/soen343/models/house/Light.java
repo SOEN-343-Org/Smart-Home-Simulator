@@ -33,11 +33,7 @@ public class Light implements Components, Validator {
      *
      * @param open new state of the light
      */
-    public void setOpen(boolean open) {
-        if (validate() == true) {
-            this.open = open;
-        }
-    }
+    public void setOpen(boolean open) { this.open = open; }
 
     /**
      * Gets the id of the light
@@ -63,10 +59,10 @@ public class Light implements Components, Validator {
     }
 
     @Override
-    public boolean validate() {
+    public boolean validate(int id) {
         Rule r = new SHCRule();
         Rule lightRule = r.createRule("Light", id);
-        boolean isValid = lightRule.validate();
+        boolean isValid = lightRule.validate(id);
         if (isValid) return true;
         return false;
     }

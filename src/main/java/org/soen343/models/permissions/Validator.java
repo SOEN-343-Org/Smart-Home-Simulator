@@ -9,5 +9,5 @@ public interface Validator {
      *
      * @return the boolean
      */
-    public boolean validate();
+    public boolean validate(int id);
 }
