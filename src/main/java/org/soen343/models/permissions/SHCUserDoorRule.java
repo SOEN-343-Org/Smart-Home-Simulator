@@ -17,6 +17,7 @@ public class SHCUserDoorRule extends SHCRule {
     public boolean validate(int id) {
         String role = User.getCurrentIndividual().getRole();
         if (role.equals("Family Adult")) return true;
+        if (role.equals("Stranger")) return false;
 
         ArrayList<Room> roomsWithDoor = Model.getHouse().getRoomByDoorId(id);
         String individualLocation = User.getCurrentIndividual().getLocation();

@@ -13,6 +13,8 @@ public class SHCUserAutoModeRule extends SHCRule{
     public boolean validate(int id) {
         String role = User.getCurrentIndividual().getRole();
         if (role.equals("Family Adult")) return true;
+        if (role.equals("Stranger")) return false;
+
         String individualLocation = User.getCurrentIndividual().getLocation();
         boolean userInHouse = !individualLocation.equals("outside");
 

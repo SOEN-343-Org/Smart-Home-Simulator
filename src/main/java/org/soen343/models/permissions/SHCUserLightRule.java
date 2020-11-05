@@ -15,6 +15,7 @@ public class SHCUserLightRule extends SHCRule{
     public boolean validate(int id) {
         String role = User.getCurrentIndividual().getRole();
         if (role.equals("Family Adult")) return true;
+        if (role.equals("Stranger")) return false;
 
         Room roomWithLight = Model.getHouse().getRoomByLightId(id);
         String individualLocation = User.getCurrentIndividual().getLocation();
