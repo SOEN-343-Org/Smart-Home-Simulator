@@ -28,7 +28,7 @@ public class SimulationContextService extends Service {
         for (int id : windows) {
             Window window = Model.getHouse().getWindowById(id);
             window.setBlocked(!window.isBlocked());
-            System.out.println("[Simulation Context] " + (window.isBlocked() ? "Blocked " : "Unblocked ") + " " + window.getName());
+            ConsoleOutputService.getInstance().infoLog("[Simulation Context] " + (window.isBlocked() ? "Blocked " : "Unblocked ") + " " + window.getName());
         }
         this.notifyObservers(this);
     }
@@ -43,7 +43,7 @@ public class SimulationContextService extends Service {
         if (individual != null) {
             String oldLocation = individual.getLocation();
             individual.setLocation(location);
-            System.out.println("[Simulation Context] Updated location of " + individual.getName() + " to " + location);
+            ConsoleOutputService.getInstance().infoLog("[Simulation Context] Updated location of " + individual.getName() + " to " + location);
 
             SHCModule.getInstance().updateInIndividualLocation(oldLocation, location);
 

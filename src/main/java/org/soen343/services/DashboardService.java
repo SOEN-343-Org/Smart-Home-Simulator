@@ -34,10 +34,11 @@ public class DashboardService extends Service {
     public boolean setSimulationRunning() {
         Individual ind = User.getCurrentIndividual();
         if (ind == null) {
-            System.out.println("Cannot start simulation, profile not selected");
+            ConsoleOutputService.getInstance().infoLog("Cannot start simulation, profile not selected.");
             return false;
         }
         Model.getSimulationParameters().setSimulationIsRunning();
+        ConsoleOutputService.getInstance().infoLog("Simulation has started.");
         this.notifyObservers(this);
         return true;
         //TODO: Log that we started the simulation
