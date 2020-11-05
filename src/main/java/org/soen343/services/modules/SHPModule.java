@@ -52,7 +52,16 @@ public class SHPModule extends Service {
 
     public boolean setAwayMode() {
         //Look at permissions
+
         Individual currentIndividual = User.getCurrentIndividual();
+        // if away mode is on we want to turn it off even if there is still people inside
+        if (Model.getSimulationParameters().isAwayModeOn()) {
+            Model.getSimulationParameters().setAwayMode();
+            ConsoleOutputService.getInstance().infoLog("[SHP Module] [Away Mode] " + currentIndividual.getName() + " has set Away Mode to OFF");
+            notifyObservers(this);
+            return true;
+        }
+
         String role = currentIndividual.getRole();
         if (role.equals("Guest") || role.equals("Stranger")) {
             ConsoleOutputService.getInstance().warningLog("[SHP Module] [Away Mode] " + currentIndividual.getName() + " does not have the permission to set Away Mode");
@@ -65,7 +74,7 @@ public class SHPModule extends Service {
             }
         }
         Model.getSimulationParameters().setAwayMode();
-        ConsoleOutputService.getInstance().infoLog("[SHP Module] [Away Mode] " + currentIndividual.getName() + " has set Away mode to " + (Model.getSimulationParameters().isAwayModeOn() ? "ON" : "OFF"));
+        ConsoleOutputService.getInstance().infoLog("[SHP Module] [Away Mode] " + currentIndividual.getName() + " has set Away Mode to " + (Model.getSimulationParameters().isAwayModeOn() ? "ON" : "OFF"));
         if (Model.getSimulationParameters().isAwayModeOn()) {
             SHCModule.getInstance().awayCloseLights(Model.getHouse().getAllLights());
             SHCModule.getInstance().awayCloseWindows(Model.getHouse().getAllWindows());

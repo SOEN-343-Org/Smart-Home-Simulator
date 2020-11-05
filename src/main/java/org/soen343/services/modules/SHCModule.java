@@ -35,6 +35,8 @@ public class SHCModule extends Service {
         for (int i : windows) {
             if (r.validate(i)) {
                 validWindowIds.add(i);
+            } else {
+                ConsoleOutputService.getInstance().warningLog("[SHC Module] User does not have the permission to update " + Model.getHouse().getWindowById(i).getName());
             }
         }
 
@@ -65,6 +67,8 @@ public class SHCModule extends Service {
         for (int i : doors) {
             if (r.validate(i)) {
                 validDoorIds.add(i);
+            } else {
+                ConsoleOutputService.getInstance().warningLog("[SHC Module] User does not have the permission to update " + Model.getHouse().getDoorById(i).getName());
             }
         }
 
@@ -91,6 +95,8 @@ public class SHCModule extends Service {
         for (int i : lights) {
             if (r.validate(i)) {
                 validLightIds.add(i);
+            } else {
+                ConsoleOutputService.getInstance().warningLog("[SHC Module] User does not have the permission to update " + Model.getHouse().getLightById(i).getName());
             }
         }
 
