@@ -32,9 +32,7 @@ public class SimulationParameters {
         return autoMode;
     }
 
-    public void setAutoMode() {
-        autoMode = !autoMode;
-    }
+    public void setAutoMode() { autoMode = !autoMode; }
 
     public boolean isSimulationRunning() {
         return simulationRunning;

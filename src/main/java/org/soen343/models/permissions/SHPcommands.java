@@ -27,7 +27,7 @@ public class SHPcommands extends CommandsContract {
                 "commands, but they must not be inside the house. Guests and Strangers \n" +
                 "do not have access to Away Mode commands.";
 
-        contract.add(new Command("Open / Close Windows", awayModePermissions));
+        contract.add(new Command("Turn On / Off Away Mode", awayModePermissions));
 
     }
 }

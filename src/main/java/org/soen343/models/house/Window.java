@@ -40,9 +40,7 @@ public class Window implements Components {
      *
      * @param open new opened state of the window
      */
-    public void setOpen(boolean open) {
-        this.open = open;
-    }
+    public void setOpen(boolean open) { this.open = open; }
 
     /**
      * Gets the blocked state of the window
@@ -75,4 +73,5 @@ public class Window implements Components {
     public String toString() {
         return this.getName() + ", state: " + (open ? "opened" : "closed") + (blocked ? "blocked" : "not blocked");
     }
+
 }

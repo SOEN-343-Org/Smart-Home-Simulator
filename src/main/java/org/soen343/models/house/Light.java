@@ -29,9 +29,7 @@ public class Light implements Components {
      *
      * @param open new state of the light
      */
-    public void setOpen(boolean open) {
-        this.open = open;
-    }
+    public void setOpen(boolean open) { this.open = open; }
 
     /**
      * Gets the id of the light
@@ -55,5 +53,4 @@ public class Light implements Components {
     public String toString() {
         return this.getName() + ", state: " + (open ? "opened" : "closed");
     }
-
 }
