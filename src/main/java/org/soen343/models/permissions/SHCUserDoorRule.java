@@ -10,22 +10,16 @@ import java.util.ArrayList;
  * The type Shc user door rule.
  */
 public class SHCUserDoorRule extends SHCRule {
-    private int id;
 
-    /**
-     * Instantiates a new Shc user door rule.
-     *
-     * @param id the id
-     */
-    SHCUserDoorRule(int id) {
-        this.id = id;
-    }
+    public SHCUserDoorRule() {}
 
     @Override
     public boolean validate(int id) {
+        String role = User.getCurrentIndividual().getRole();
+        if (role.equals("Family Adult")) return true;
+
         ArrayList<Room> roomsWithDoor = Model.getHouse().getRoomByDoorId(id);
         String individualLocation = User.getCurrentIndividual().getLocation();
-        String role = User.getCurrentIndividual().getRole();
         boolean userInRoom = false;
 
         for (Room room : roomsWithDoor) {
@@ -34,7 +28,6 @@ public class SHCUserDoorRule extends SHCRule {
                 break;
             }
         }
-        if (role.equals("Family Adult")) return true;
         if (role.equals("Family Child") && userInRoom) return true;
         if (role.equals("Guest") && userInRoom) return true;
 

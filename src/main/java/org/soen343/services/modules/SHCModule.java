@@ -3,9 +3,7 @@ package org.soen343.services.modules;
 import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.*;
-import org.soen343.models.permissions.Rule;
-import org.soen343.models.permissions.SHCRule;
-import org.soen343.models.permissions.Validator;
+import org.soen343.models.permissions.*;
 import org.soen343.services.Service;
 
 import java.util.ArrayList;
@@ -31,10 +29,10 @@ public class SHCModule extends Service implements Validator {
         HashSet<Integer> validWindowIds = new HashSet<>();
 
         //Check permissions:
-        Window w = new Window(0);
+        SHCUserWindowRule r = new SHCUserWindowRule();
 
         for (int i : windows) {
-            if (w.validate(i)) {
+            if (r.validate(i)) {
                 validWindowIds.add(i);
             }
         }
@@ -61,10 +59,10 @@ public class SHCModule extends Service implements Validator {
         HashSet<Integer> validDoorIds = new HashSet<>();
 
         //Check permissions:
-        Door d = new Door(0);
+        SHCUserDoorRule r = new SHCUserDoorRule();
 
         for (int i : doors) {
-            if (d.validate(i)) {
+            if (r.validate(i)) {
                 validDoorIds.add(i);
             }
         }
@@ -87,10 +85,10 @@ public class SHCModule extends Service implements Validator {
         HashSet<Integer> validLightIds = new HashSet<>();
 
         //Check permissions:
-        Light l = new Light(0);
+        SHCUserLightRule r = new SHCUserLightRule();
 
         for (int i : lights) {
-            if (l.validate(i)) {
+            if (r.validate(i)) {
                 validLightIds.add(i);
             }
         }
@@ -108,6 +106,7 @@ public class SHCModule extends Service implements Validator {
         Individual ind = User.getCurrentIndividual();
 
         //Check permissions:
+        // validate(int id) requires an int, so a random one is provided, the int is not used in this case
         if (validate(0)) {
             if (ind.getRole().equals("Family Adult") || ind.getRole().equals("Family Child")) {
                 Model.getSimulationParameters().setAutoMode();

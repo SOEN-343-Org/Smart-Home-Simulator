@@ -8,34 +8,23 @@ import org.soen343.models.house.Room;
  * The type Shc user light rule.
  */
 public class SHCUserLightRule extends SHCRule{
-    private int id;
 
-    /**
-     * Instantiates a new Shc user light rule.
-     *
-     * @param id the id
-     */
-    SHCUserLightRule(int id) {
-        this.id = id;
-    }
+    public SHCUserLightRule() { }
 
     @Override
     public boolean validate(int id) {
+        String role = User.getCurrentIndividual().getRole();
+        if (role.equals("Family Adult")) return true;
+
         Room roomWithLight = Model.getHouse().getRoomByLightId(id);
         String individualLocation = User.getCurrentIndividual().getLocation();
-        String role = User.getCurrentIndividual().getRole();
-        boolean autoModeIsOn = Model.getSimulationParameters().isAutoModeOn();
         boolean userInRoom = false;
-        boolean userInHouse = !individualLocation.equals("outside");
 
         if (individualLocation.equals(roomWithLight.getName())) {
             userInRoom = true;
         }
-        if (role.equals("Family Adult")) return true;
         if (role.equals("Family Child") && userInRoom)  return true;
         if (role.equals("Guest") && userInRoom) return true;
-        if (role.equals("Family Child") && userInHouse && autoModeIsOn) return true;
-        if (role.equals("Guest") && userInHouse && autoModeIsOn) return true;
 
         return false;
     }
