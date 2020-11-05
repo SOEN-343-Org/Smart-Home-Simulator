@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="consoleOutput" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="975.0" style="-fx-border-color: black; -fx-border-width: 5; -fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.soen343.controllers.ConsoleOutputController">
+   <children>
+      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutX="10.0" layoutY="9.0" prefHeight="284.0" prefWidth="955.0" style="-fx-background-color: #FFFFFF;">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="280.0" prefWidth="950.0" style="-fx-background-color: #FFFFFF;" />
+        </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

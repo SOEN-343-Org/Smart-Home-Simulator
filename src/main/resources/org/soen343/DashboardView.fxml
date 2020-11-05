@@ -26,8 +26,8 @@
                             GridPane.rowIndex="1" GridPane.rowSpan="3"/>
                 <fx:include fx:id="houseLayout" source="HouseLayoutView.fxml" GridPane.columnIndex="2"
                             GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
-                <fx:include fx:id="outputConsole" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                            minWidth="-Infinity" source="OutputConsoleView.fxml" GridPane.columnIndex="1"
+                <fx:include fx:id="consoleOutput" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                            minWidth="-Infinity" source="ConsoleOuputView.fxml" GridPane.columnIndex="1"
                             GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2"
                             GridPane.valignment="CENTER"/>
                 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
