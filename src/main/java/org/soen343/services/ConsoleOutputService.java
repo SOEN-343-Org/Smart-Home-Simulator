@@ -62,8 +62,8 @@ public class ConsoleOutputService extends Service {
      *
      * @param message
      */
-    public void errorLog(String message) {
-        level = "ERROR";
+    public void warningLog(String message) {
+        level = "WARNING";
         log(message);
     }
 
@@ -92,10 +92,7 @@ public class ConsoleOutputService extends Service {
 
     private void openFile() {
         try {
-            if (fileWriter==null)
-                fileWriter = new FileWriter("consoleOutput.txt");
-            else
-                fileWriter = new FileWriter("consoleOutput.txt", true);
+            fileWriter = new FileWriter("consoleOutput.txt", fileWriter != null);
             file = new Formatter(fileWriter);
         } catch (Exception exception) {
             System.out.println("Error");
