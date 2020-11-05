@@ -49,7 +49,7 @@ public class App extends Application {
             Platform.exit();
             System.exit(0);
         });
-        scene = new Scene(loadFXML("LoginView"), 1200, 900);
+        scene = new Scene(loadFXML("LoginView"), 800, 500);
         stage.setScene(scene);
         stage.show();
     }

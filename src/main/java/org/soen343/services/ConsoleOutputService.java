@@ -50,25 +50,6 @@ public class ConsoleOutputService extends Service {
         notifyObservers(this);
     }
 
-    /*
-
-    public info() {
-        return log()
-    }
-    public critical {
-
-
-    public error
-
-    public void log (String message, level)
-            level + message
-    time date
-
-    Model.getSimulationParameters.getDateTime.getDate
-    look at simulation parameters
-     */
-
-
     private void openFile() {
         try {
             file = new Formatter("consoleOutput.txt");

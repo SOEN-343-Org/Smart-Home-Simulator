@@ -18,7 +18,6 @@ public class ConsoleOutputController extends Controller {
     void update() {
         String log = consoleOutputService.getLog();
         String level = consoleOutputService.getLevel();
-        String oldLog = console.getText();
         console.appendText("\n" + log);
     }
 
