@@ -18,6 +18,9 @@ public class ConsoleOutputController extends Controller {
 
     private ConsoleOutputService consoleOutputService;
 
+    /**
+     * Initialize controller
+     */
     void initializeController() {
         outputArea = new TextFlow();
         outputArea.setStyle("-fx-background-color: #FFFFFF;");
@@ -42,6 +45,12 @@ public class ConsoleOutputController extends Controller {
         outputArea.getChildren().add(t);
     }
 
+    /**
+     * Select text color
+     *
+     * @param level
+     * @param t
+     */
     private void selectTextColor(String level, Text t) {
         switch (level) {
             case "INFO":
