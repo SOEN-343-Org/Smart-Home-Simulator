@@ -2,6 +2,8 @@ package org.soen343.services;
 
 import org.soen343.models.Model;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Formatter;
@@ -12,6 +14,7 @@ public class ConsoleOutputService extends Service {
     private Formatter file;
     private String log;
     private String level;
+    private FileWriter fileWriter;
 
     public static ConsoleOutputService getInstance() {
         if (consoleOutputService == null) {
@@ -46,25 +49,35 @@ public class ConsoleOutputService extends Service {
 
     private void log(String message) {
         openFile();
-        log  = "[" + getTime() + "] " + getLevel() + " " + message;
+        log = "[" + getTime() + "] " + getLevel() + " " + message;
+        writeToFile();
         closeFile();
         notifyObservers(this);
     }
 
     private void openFile() {
         try {
-            file = new Formatter("consoleOutput.txt");
+            if (fileWriter==null)
+                fileWriter = new FileWriter("consoleOutput.txt");
+            else
+                fileWriter = new FileWriter("consoleOutput.txt", true);
+            file = new Formatter(fileWriter);
         } catch (Exception exception) {
             System.out.println("The is an error");
         }
     }
 
     private void writeToFile() {
-        file.format("\n", log);
+        file.format(log + "\n");
     }
 
     private void closeFile() {
-        file.close();
+        try {
+            file.close();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getLevel() {
