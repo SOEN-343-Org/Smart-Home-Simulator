@@ -9,7 +9,7 @@ import org.soen343.services.Service;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class SHCModule extends Service implements Validator {
+public class SHCModule extends Service {
 
     private static SHCModule shcModule = null;
 
@@ -106,8 +106,7 @@ public class SHCModule extends Service implements Validator {
         Individual ind = User.getCurrentIndividual();
 
         //Check permissions:
-        // validate(int id) requires an int, so a random one is provided, the int is not used in this case
-        if (validate(0)) {
+        if (validate()) {
             if (ind.getRole().equals("Family Adult") || ind.getRole().equals("Family Child")) {
                 Model.getSimulationParameters().setAutoMode();
                 System.out.println("[SHC Module] [Auto Mode] " + ind.getName() + " has set Auto mode to " + (Model.getSimulationParameters().isAutoModeOn() ? "ON" : "OFF"));
@@ -119,11 +118,10 @@ public class SHCModule extends Service implements Validator {
         return false;
     }
 
-    @Override
-    public boolean validate(int id) {
+    public boolean validate() {
         Rule r = new SHCRule();
-        Rule autoModeRule = r.createRule("AutoMode", id);
-        boolean isValid = autoModeRule.validate(id);
+        Rule autoModeRule = r.createRule("AutoMode", 0);
+        boolean isValid = autoModeRule.validate(0);
         if (isValid) return true;
         return false;
     }
