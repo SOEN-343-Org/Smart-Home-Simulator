@@ -1,9 +1,5 @@
 package org.soen343.models.house;
 
-import org.soen343.models.permissions.Rule;
-import org.soen343.models.permissions.SHCRule;
-import org.soen343.models.permissions.Validator;
-
 public class Window implements Components {
 
     private final int id;
