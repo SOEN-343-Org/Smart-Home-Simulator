@@ -4,7 +4,7 @@ import org.soen343.models.permissions.Rule;
 import org.soen343.models.permissions.SHCRule;
 import org.soen343.models.permissions.Validator;
 
-public class Window implements Components, Validator {
+public class Window implements Components {
 
     private final int id;
     private boolean open;
@@ -78,12 +78,4 @@ public class Window implements Components, Validator {
         return this.getName() + ", state: " + (open ? "opened" : "closed") + (blocked ? "blocked" : "not blocked");
     }
 
-    @Override
-    public boolean validate(int windowId) {
-        Rule r = new SHCRule();
-        Rule windowRule = r.createRule("Window", windowId);
-        boolean isValid = windowRule.validate(windowId);
-        if (isValid) return true;
-        return false;
-    }
 }

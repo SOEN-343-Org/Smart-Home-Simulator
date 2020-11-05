@@ -4,7 +4,7 @@ import org.soen343.models.permissions.Rule;
 import org.soen343.models.permissions.SHCRule;
 import org.soen343.models.permissions.Validator;
 
-public class Light implements Components, Validator {
+public class Light implements Components {
 
     private final int id;
     private boolean open;
@@ -56,14 +56,5 @@ public class Light implements Components, Validator {
     @Override
     public String toString() {
         return this.getName() + ", state: " + (open ? "opened" : "closed");
-    }
-
-    @Override
-    public boolean validate(int id) {
-        Rule r = new SHCRule();
-        Rule lightRule = r.createRule("Light", id);
-        boolean isValid = lightRule.validate(id);
-        if (isValid) return true;
-        return false;
     }
 }

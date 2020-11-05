@@ -107,18 +107,16 @@ public class SHCModule extends Service {
 
         //Check permissions:
         if (validate()) {
-            if (ind.getRole().equals("Family Adult") || ind.getRole().equals("Family Child")) {
-                Model.getSimulationParameters().setAutoMode();
-                System.out.println("[SHC Module] [Auto Mode] " + ind.getName() + " has set Auto mode to " + (Model.getSimulationParameters().isAutoModeOn() ? "ON" : "OFF"));
-                return true;
-            }
+            Model.getSimulationParameters().setAutoMode();
+            System.out.println("[SHC Module] [Auto Mode] " + ind.getName() + " has set Auto mode to " + (Model.getSimulationParameters().isAutoModeOn() ? "ON" : "OFF"));
+            return true;
         }
         // User does not have the permission
         System.out.println("[SHC Module] [Auto Mode] " + ind.getName() + " does not have the permission to set auto mode");
         return false;
     }
 
-    public boolean validate() {
+    private boolean validate() {
         Rule r = new SHCRule();
         Rule autoModeRule = r.createRule("AutoMode", 0);
         boolean isValid = autoModeRule.validate(0);
