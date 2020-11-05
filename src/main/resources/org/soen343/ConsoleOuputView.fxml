@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.AnchorPane?>
-
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <AnchorPane fx:id="consoleOutput" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="975.0" style="-fx-border-color: black; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.soen343.controllers.ConsoleOutputController">
    <children>
-      <TextArea fx:id="console" layoutX="23.0" layoutY="30.0" prefHeight="256.0" prefWidth="916.0" />
+      <TextArea fx:id="console" layoutX="7.0" layoutY="7.0" prefHeight="286.0" prefWidth="960.0" />
    </children>
 </AnchorPane>

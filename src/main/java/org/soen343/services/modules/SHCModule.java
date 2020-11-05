@@ -32,12 +32,11 @@ public class SHCModule extends Service {
         for (int id : windows) {
             Window window = Model.getHouse().getWindowById(id);
             if (window.isBlocked()) {
-                ConsoleOutputService.getInstance().infoLog("[SHC Module] " + window.getName() + " is blocked");
-                //System.out.println("[SHC Module] " + window.getName() + " is blocked");
+                ConsoleOutputService.getInstance().errorLog("[SHC Module] " + window.getName() + " is blocked");
             } else {
                 boolean state = window.isOpen();
                 window.setOpen(!state);
-                System.out.println("[SHC Module] " + (!state ? "Opened " : "Closed ") + window.getName());
+                ConsoleOutputService.getInstance().infoLog("[SHC Module] " + (!state ? "Opened " : "Closed ") + window.getName());
             }
         }
         this.notifyObservers(this);
@@ -56,7 +55,7 @@ public class SHCModule extends Service {
             Door door = Model.getHouse().getDoorById(id);
             boolean state = door.isOpen();
             door.setOpen(!state);
-            System.out.println("[SHC Module] " + (!state ? "Opened " : "Closed ") + door.getName());
+            ConsoleOutputService.getInstance().infoLog("[SHC Module] " + (!state ? "Opened " : "Closed ") + door.getName());
         }
         this.notifyObservers(this);
     }
@@ -74,7 +73,7 @@ public class SHCModule extends Service {
             Light light = Model.getHouse().getLightById(id);
             boolean state = light.isOpen();
             light.setOpen(!state);
-            System.out.println("[SHC Module] " + (!state ? "Opened " : "Closed ") + light.getName());
+            ConsoleOutputService.getInstance().infoLog("[SHC Module] " + (!state ? "Opened " : "Closed ") + light.getName());
         }
         this.notifyObservers(this);
     }
@@ -84,11 +83,11 @@ public class SHCModule extends Service {
         Individual ind = User.getCurrentIndividual();
         if (ind.getRole().equals("Family Adult") || ind.getRole().equals("Family Child")) {
             Model.getSimulationParameters().setAutoMode();
-            System.out.println("[SHC Module] [Auto Mode] " + ind.getName() + " has set Auto mode to " + (Model.getSimulationParameters().isAutoModeOn() ? "ON" : "OFF"));
+            ConsoleOutputService.getInstance().infoLog("[SHC Module] [Auto Mode] " + ind.getName() + " has set Auto mode to " + (Model.getSimulationParameters().isAutoModeOn() ? "ON" : "OFF"));
             return true;
         }
         // User does not have the permission
-        System.out.println("[SHC Module] [Auto Mode] " + ind.getName() + " does not have the permission to set auto mode");
+        ConsoleOutputService.getInstance().errorLog("[SHC Module] [Auto Mode] " + ind.getName() + " does not have the permission to set auto mode");
         return false;
     }
 
@@ -98,7 +97,7 @@ public class SHCModule extends Service {
         for (Light light : room.getLights()) {
             if (!light.isOpen()) {
                 light.setOpen(true);
-                System.out.println("[SHC Module] [Auto Mode] Opened " + light.getName());
+                ConsoleOutputService.getInstance().infoLog("[SHC Module] [Auto Mode] Opened " + light.getName());
             }
         }
     }
@@ -119,7 +118,7 @@ public class SHCModule extends Service {
         for (Light light : room.getLights()) {
             if (light.isOpen()) {
                 light.setOpen(false);
-                System.out.println("[SHC Module] [Auto Mode] Closed " + light.getName());
+                ConsoleOutputService.getInstance().infoLog("[SHC Module] [Auto Mode] Closed " + light.getName());
             }
         }
     }
@@ -130,7 +129,7 @@ public class SHCModule extends Service {
         for (Light l : lights) {
             if (!l.isOpen()) {
                 l.setOpen(true);
-                System.out.println("[SHC Module] [Away Mode] Opened " + l.getName());
+                ConsoleOutputService.getInstance().infoLog("[SHC Module] [Away Mode] Opened " + l.getName());
                 needUpdate = true;
             }
         }
@@ -139,11 +138,11 @@ public class SHCModule extends Service {
     }
 
     public void alertAuthorities() {
-        System.out.println("[SHC Module] [Away Mode] Authorities have been alerted");
+        ConsoleOutputService.getInstance().criticalLog("[SHC Module] [Away Mode] Authorities have been alerted");
     }
 
     public void intrusionDetectedDuringAwayMode(Individual individual) {
-        System.out.println("[SHC Module] [Away Mode] Intruder " + individual.getName() + " detected");
+        ConsoleOutputService.getInstance().criticalLog("[SHC Module] [Away Mode] Intruder " + individual.getName() + " detected");
     }
 
     public void awayCloseLights(ArrayList<Light> lights) {
@@ -151,7 +150,7 @@ public class SHCModule extends Service {
         for (Light l : lights) {
             if (l.isOpen()) {
                 l.setOpen(false);
-                System.out.println("[SHC Module] [Away Mode] Closed " + l.getName());
+                ConsoleOutputService.getInstance().infoLog("[SHC Module] [Away Mode] Closed " + l.getName());
                 needUpdate = true;
             }
         }
@@ -165,10 +164,10 @@ public class SHCModule extends Service {
             if (w.isOpen()) {
                 if (!w.isBlocked()) {
                     w.setOpen(false);
-                    System.out.println("[SHC Module] [Away Mode] Closed and Locked " + w.getName());
+                    ConsoleOutputService.getInstance().infoLog("[SHC Module] [Away Mode] Closed and Locked " + w.getName());
                     needUpdate = true;
                 } else {
-                    System.out.println("[SHC Module] [Away Mode] Could not close " + w.getName() + " because it is blocked");
+                    ConsoleOutputService.getInstance().criticalLog("[SHC Module] [Away Mode] Could not close " + w.getName() + " because it is blocked");
                 }
             }
         }
@@ -181,7 +180,7 @@ public class SHCModule extends Service {
         for (Door d : allDoors) {
             if (d.isOpen()) {
                 d.setOpen(false);
-                System.out.println("[SHC Module] [Away Mode] Closed and Locked " + d.getName());
+                ConsoleOutputService.getInstance().infoLog("[SHC Module] [Away Mode] Closed and Locked " + d.getName());
                 needUpdate = true;
             }
         }
