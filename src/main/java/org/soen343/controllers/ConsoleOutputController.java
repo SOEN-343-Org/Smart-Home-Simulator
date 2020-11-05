@@ -50,7 +50,7 @@ public class ConsoleOutputController extends Controller {
             case "CRITICAL":
                 t.setFill(Color.RED);
                 break;
-            case "ERROR":
+            case "WARNING":
                 t.setFill(Color.ORANGE);
                 break;
         }

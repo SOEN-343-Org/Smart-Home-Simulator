@@ -34,8 +34,8 @@ public class ConsoleOutputService extends Service {
         log(message);
     }
 
-    public void errorLog(String message) {
-        level = "ERROR";
+    public void warningLog(String message) {
+        level = "WARNING";
         log(message);
     }
 

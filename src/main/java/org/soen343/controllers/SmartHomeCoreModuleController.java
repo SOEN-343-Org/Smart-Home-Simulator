@@ -72,7 +72,7 @@ public class SmartHomeCoreModuleController extends Controller {
         } else {
             disableButtons();
             if (Model.getSimulationParameters().isAutoModeOn()) {
-                toggleAutoMode(null);
+                resetAutoMode();
             }
         }
     }
@@ -174,6 +174,13 @@ public class SmartHomeCoreModuleController extends Controller {
         if (lightsToUpdate.size() > 0) {
             shcModule.updateLightState(lightsToUpdate);
         }
+    }
+
+    private void resetAutoMode() {
+        shcModule.resetAutoMode();
+        boolean status = Model.getSimulationParameters().isAutoModeOn();
+        autoModeButton.setText(status ? "Auto Mode ON" : "Auto Mode OFF");
+        autoModeButton.setSelected(status);
     }
 
     public void toggleAutoMode(ActionEvent actionEvent) {

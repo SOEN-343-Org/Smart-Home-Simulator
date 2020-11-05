@@ -32,7 +32,7 @@ public class SHCModule extends Service {
         for (int id : windows) {
             Window window = Model.getHouse().getWindowById(id);
             if (window.isBlocked()) {
-                ConsoleOutputService.getInstance().errorLog("[SHC Module] " + window.getName() + " is blocked");
+                ConsoleOutputService.getInstance().warningLog("[SHC Module] Cannot update " + window.getName() + " because it is blocked");
             } else {
                 boolean state = window.isOpen();
                 window.setOpen(!state);
@@ -87,8 +87,15 @@ public class SHCModule extends Service {
             return true;
         }
         // User does not have the permission
-        ConsoleOutputService.getInstance().errorLog("[SHC Module] [Auto Mode] " + ind.getName() + " does not have the permission to set auto mode");
+        ConsoleOutputService.getInstance().warningLog("[SHC Module] [Auto Mode] " + ind.getName() + " does not have the permission to set auto mode");
         return false;
+    }
+
+    public void resetAutoMode() {
+        Model.getSimulationParameters().setAutoMode();
+        // Simulation is off while auto mode was on, so we turn auto mode off
+        ConsoleOutputService.getInstance().warningLog("[SHC Module] [Auto Mode] Auto Mode shut down because Simulation stopped");
+        notifyObservers(this);
     }
 
     public void autoOpenLights(String location) {
@@ -167,7 +174,7 @@ public class SHCModule extends Service {
                     ConsoleOutputService.getInstance().infoLog("[SHC Module] [Away Mode] Closed and Locked " + w.getName());
                     needUpdate = true;
                 } else {
-                    ConsoleOutputService.getInstance().criticalLog("[SHC Module] [Away Mode] Could not close " + w.getName() + " because it is blocked");
+                    ConsoleOutputService.getInstance().warningLog("[SHC Module] [Away Mode] Could not close " + w.getName() + " because it is blocked");
                 }
             }
         }
