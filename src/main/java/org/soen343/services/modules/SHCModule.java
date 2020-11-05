@@ -109,6 +109,10 @@ public class SHCModule extends Service {
         this.notifyObservers(this);
     }
 
+    /**
+     * Sets the auto mode
+     * @return true is the auto mode has been set
+     */
     public boolean setAutoMode() {
         Individual ind = User.getCurrentIndividual();
 
@@ -123,6 +127,10 @@ public class SHCModule extends Service {
         return false;
     }
 
+    /**
+     * Check auto mode permission
+     * @return true if individual can set auto mode
+     */
     private boolean validate() {
         Rule r = new SHCRule();
         Rule autoModeRule = r.createRule("AutoMode", 0);
@@ -131,6 +139,9 @@ public class SHCModule extends Service {
         return false;
     }
 
+    /**
+     * Turns the auto mode off if simulation is turned off while auto mode is on
+     */
     public void resetAutoMode() {
         Model.getSimulationParameters().setAutoMode();
         // Simulation is off while auto mode was on, so we turn auto mode off
@@ -138,6 +149,10 @@ public class SHCModule extends Service {
         notifyObservers(this);
     }
 
+    /**
+     * Opens the light at location during auto
+     * @param location Individual`s location
+     */
     public void autoOpenLights(String location) {
         if (location.equals("outside")) return;
         Room room = Model.getHouse().getRoomByName(location);
@@ -149,6 +164,10 @@ public class SHCModule extends Service {
         }
     }
 
+    /**
+     * Closes the light at location during auto
+     * @param location Individual's location
+     */
     public void autoCloseLights(String location) {
         if (location.equals("outside")) return;
 
@@ -171,6 +190,10 @@ public class SHCModule extends Service {
     }
 
 
+    /**
+     * Opens the light during away mode
+     * @param lights list of lights to open
+     */
     public void awayOpenLights(ArrayList<Light> lights) {
         boolean needUpdate = false;
         for (Light l : lights) {
@@ -184,14 +207,25 @@ public class SHCModule extends Service {
             notifyObservers(this);
     }
 
+    /**
+     * Log that we alert the authorities
+     */
     public void alertAuthorities() {
         ConsoleOutputService.getInstance().criticalLog("[SHC Module] [Away Mode] Authorities have been alerted");
     }
 
+    /**
+     * Log that an intruder has been detected
+     * @param individual Individual that broke into the house
+     */
     public void intrusionDetectedDuringAwayMode(Individual individual) {
         ConsoleOutputService.getInstance().criticalLog("[SHC Module] [Away Mode] Intruder " + individual.getName() + " detected");
     }
 
+    /**
+     * CLose lights during away mode
+     * @param lights List of Lights
+     */
     public void awayCloseLights(ArrayList<Light> lights) {
         boolean needUpdate = false;
         for (Light l : lights) {
@@ -205,6 +239,10 @@ public class SHCModule extends Service {
             notifyObservers(this);
     }
 
+    /**
+     * Closes windows during away mode
+     * @param allWindows List of windows
+     */
     public void awayCloseWindows(ArrayList<Window> allWindows) {
         boolean needUpdate = false;
         for (Window w : allWindows) {
@@ -222,6 +260,10 @@ public class SHCModule extends Service {
             notifyObservers(this);
     }
 
+    /**
+     * Closes doors during away mode
+     * @param allDoors List of Doors
+     */
     public void awayCloseDoors(ArrayList<Door> allDoors) {
         boolean needUpdate = false;
         for (Door d : allDoors) {
@@ -235,6 +277,11 @@ public class SHCModule extends Service {
             notifyObservers(this);
     }
 
+    /**
+     * Called when an individual's location has been updated, to open/close lights during auto mode
+     * @param oldLocation old location
+     * @param location new location
+     */
     public void updateInIndividualLocation(String oldLocation, String location) {
         if (Model.getSimulationParameters().isAutoModeOn()) {
             SHCModule.getInstance().autoCloseLights(oldLocation);

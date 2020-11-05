@@ -18,6 +18,10 @@ public class SHPModule extends Service {
 
     private static SHPModule shpModule = null;
 
+    /**
+     * Singleton instance
+     * @return SHPModule instance
+     */
     public static SHPModule getInstance() {
         if (shpModule == null) {
             shpModule = new SHPModule();
@@ -25,6 +29,10 @@ public class SHPModule extends Service {
         return shpModule;
     }
 
+    /**
+     * Set the lights during away mode
+     * @param lightsToUpdate list of ind id
+     */
     public void setAwayModeLights(HashSet<Integer> lightsToUpdate) {
 
         ArrayList<Light> oldLights = Model.getSimulationParameters().getAwayModeParameters().getOpenLights();
@@ -41,6 +49,11 @@ public class SHPModule extends Service {
         Model.getSimulationParameters().getAwayModeParameters().setOpenLights(newLights);
     }
 
+    /**
+     * Set the time for the light to be open during away mode
+     * @param from Date for starting date
+     * @param to Date for ending date
+     */
     public void setLightsOpenTime(Date from, Date to) {
         if (from.before(to)) {
             // to is after from so we can update the time
@@ -50,6 +63,10 @@ public class SHPModule extends Service {
     }
 
 
+    /**
+     * Set the away mode
+     * @return True if away mode is set else false
+     */
     public boolean setAwayMode() {
         //Look at permissions
 
@@ -84,10 +101,18 @@ public class SHPModule extends Service {
         return true;
     }
 
+    /**
+     * Set the time before alerting the police
+     * @param time seconds int
+     */
     public void setTimeBeforeAlertingPolice(int time) {
         Model.getSimulationParameters().getAwayModeParameters().setTimeBeforeCallingPoliceAfterBreakIn(time);
     }
 
+    /**
+     * Intruder has been detected sets the timer to alert the authorities
+     * @param individual Individual that broke into the hosue
+     */
     public void intrusionDetectedDuringAwayMode(Individual individual) {
         SHCModule.getInstance().intrusionDetectedDuringAwayMode(individual);
         Calendar calendar = (Calendar) Model.getSimulationParameters().getDateTime().getDate().clone();
@@ -97,6 +122,9 @@ public class SHPModule extends Service {
         ConsoleOutputService.getInstance().criticalLog("[SHP Module] [Away Mode] Alerting the authorities at " + timeFormat.format(calendar.getTime()));
     }
 
+    /**
+     * Called at each second to see if lights need to be updated and if it is time to call the authorities
+     */
     public void notifiesTimeUpdate() {
         if (!Model.getSimulationParameters().isAwayModeOn()) {
             return;
@@ -120,6 +148,11 @@ public class SHPModule extends Service {
         }
     }
 
+    /**
+     * Detect an intrusion
+     * @param individual Individual that broke into the house
+     * @param location Location where the individual is in
+     */
     public void updateInIndividualLocation(Individual individual, String location) {
         if (Model.getSimulationParameters().isAwayModeOn()) {
             if (!location.equals("outside"))
@@ -127,6 +160,9 @@ public class SHPModule extends Service {
         }
     }
 
+    /**
+     * Turns off away mode when simulation is turned off
+     */
     public void resetAwayMode() {
         Model.getSimulationParameters().setAwayMode();
         // Simulation is off while away mode was on, so we turn away mode off and reset the alerting authorities clock.
