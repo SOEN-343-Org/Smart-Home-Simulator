@@ -6,23 +6,20 @@ import org.soen343.models.house.Individual;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SHCUserAutoModeRuleTest {
+class SHCUserLightRuleTest {
 
-    SHCUserAutoModeRule SHCAutoTest = new SHCUserAutoModeRule();
+    SHCUserDoorRule SHCLightTest = new SHCUserDoorRule();
+
 
     @Test
     void validateTest() {
         Individual testIdividual = new Individual(5, "TestName", "Family Adult", "outside", "TestUserName");
         User.setCurrentIndividual(testIdividual);
-        assertTrue(SHCAutoTest.validate(5));
+        assertTrue(SHCLightTest.validate(5));
         testIdividual.setRole("Stranger");
-        assertFalse(SHCAutoTest.validate(5));
+        assertFalse(SHCLightTest.validate(5));
+        testIdividual.setLocation("kitchen");
         testIdividual.setRole("Family Child");
-        testIdividual.setLocation("not outside");
-        assertTrue(SHCAutoTest.validate(5));
-        testIdividual.setRole("Guest");
-        assertTrue(SHCAutoTest.validate(5));
-        testIdividual.setLocation("outside");
-        assertFalse(SHCAutoTest.validate(5));
+        //cant test other cases
     }
 }
