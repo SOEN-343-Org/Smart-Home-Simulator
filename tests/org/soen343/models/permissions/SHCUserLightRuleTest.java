@@ -14,17 +14,17 @@ class SHCUserLightRuleTest {
     @Test
     void validateTest() {
         Model.setModelParameters();
-        Individual testIdividual = new Individual(5, "TestName", "Family Adult", "outside", "TestUserName");
-        User.setCurrentIndividual(testIdividual);
-        assertTrue(SHCLightTest.validate(testIdividual.getId()));
-        testIdividual.setRole("Stranger");
-        assertFalse(SHCLightTest.validate(testIdividual.getId()));
-        testIdividual.setRole("Family Child");
-        assertFalse(SHCLightTest.validate(testIdividual.getId()));
-        testIdividual.setLocation("kitchen");
-        assertFalse(SHCLightTest.validate(testIdividual.getId()));
-        testIdividual.setLocation("dining room");
-        assertTrue(SHCLightTest.validate(testIdividual.getId()));
+        Individual testIndividual = new Individual(5, "TestName", "Family Adult", "outside", "TestUserName");
+        User.setCurrentIndividual(testIndividual);
+        assertTrue(SHCLightTest.validate(testIndividual.getId()));
+        testIndividual.setRole("Stranger");
+        assertFalse(SHCLightTest.validate(testIndividual.getId()));
+        testIndividual.setRole("Family Child");
+        assertFalse(SHCLightTest.validate(testIndividual.getId()));
+        testIndividual.setLocation("kitchen");
+        assertFalse(SHCLightTest.validate(testIndividual.getId()));
+        testIndividual.setLocation("dining room");
+        assertTrue(SHCLightTest.validate(testIndividual.getId()));
 
     }
 }

@@ -14,15 +14,15 @@ class SHCUserDoorRuleTest {
     @Test
     void validateTest() {
         Model.setModelParameters();
-        Individual testIdividual = new Individual(5, "TestName", "Family Adult", "outside", "TestUserName");
-        User.setCurrentIndividual(testIdividual);
-        assertTrue(SHCDoorTest.validate(5));
-        testIdividual.setRole("Stranger");
-        assertFalse(SHCDoorTest.validate(5));
-        testIdividual.setLocation("kitchen");
-        testIdividual.setRole("Family Child");
-        assertFalse(SHCDoorTest.validate(testIdividual.getId()));
-        testIdividual.setLocation("dining room");
-        assertTrue(SHCDoorTest.validate(testIdividual.getId()));
+        Individual testIndividual = new Individual(5, "TestName", "Family Adult", "outside", "TestUserName");
+        User.setCurrentIndividual(testIndividual);
+        assertTrue(SHCDoorTest.validate(testIndividual.getId()));
+        testIndividual.setRole("Stranger");
+        assertFalse(SHCDoorTest.validate(testIndividual.getId()));
+        testIndividual.setLocation("kitchen");
+        testIndividual.setRole("Family Child");
+        assertFalse(SHCDoorTest.validate(testIndividual.getId()));
+        testIndividual.setLocation("dining room");
+        assertTrue(SHCDoorTest.validate(testIndividual.getId()));
     }
 }

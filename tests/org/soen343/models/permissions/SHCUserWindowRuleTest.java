@@ -15,14 +15,14 @@ class SHCUserWindowRuleTest {
     @Test
     void validateTest() {
         Model.setModelParameters();
-        Individual testIdividual = new Individual(5, "TestName", "Family Adult", "outside", "TestUserName");
-        User.setCurrentIndividual(testIdividual);
-        assertTrue(SHCWindowTest.validate(testIdividual.getId()));
-        testIdividual.setRole("Stranger");
-        assertFalse(SHCWindowTest.validate(testIdividual.getId()));
-        testIdividual.setRole("Family Child");
-        assertFalse(SHCWindowTest.validate(testIdividual.getId()));
-        testIdividual.setLocation("kitchen");
-        assertTrue(SHCWindowTest.validate(testIdividual.getId()));
+        Individual testIndividual = new Individual(5, "TestName", "Family Adult", "outside", "TestUserName");
+        User.setCurrentIndividual(testIndividual);
+        assertTrue(SHCWindowTest.validate(testIndividual.getId()));
+        testIndividual.setRole("Stranger");
+        assertFalse(SHCWindowTest.validate(testIndividual.getId()));
+        testIndividual.setRole("Family Child");
+        assertFalse(SHCWindowTest.validate(testIndividual.getId()));
+        testIndividual.setLocation("kitchen");
+        assertTrue(SHCWindowTest.validate(testIndividual.getId()));
     }
 }
