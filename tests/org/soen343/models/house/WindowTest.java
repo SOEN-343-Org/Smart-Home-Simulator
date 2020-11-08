@@ -1,9 +1,11 @@
-package test;
+package org.soen343.models.house;
 
-import org.junit.jupiter.api.*;
-import org.soen343.models.Window;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class U7Test {
+class WindowTest {
 
     public static Window window;
 
@@ -45,6 +47,4 @@ public class U7Test {
         boolean isOpen= window.isOpen();
         Assertions.assertFalse(isOpen);
     }
-
-
 }

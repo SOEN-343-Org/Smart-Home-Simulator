@@ -1,12 +1,11 @@
-package test;
+package org.soen343.models.house;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.soen343.models.Individual;
 
-public class U3Test {
+class IndividualTest {
 
     public Individual individual;
     public Individual individual2;
@@ -46,5 +45,6 @@ public class U3Test {
         Assertions.assertNotNull(individual.getLocation());
         Assertions.assertNotNull(individual2.getLocation());
     }
+
 
 }

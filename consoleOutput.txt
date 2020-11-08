@@ -1,0 +1,16 @@
+[16:03:53] INFO [SHS Module] Logged into individual #74 Anthony
+[16:03:53] INFO [SHS Module] Updated Anthony location to outside
+[16:03:53] INFO Simulation has started
+[16:03:59] INFO [SHC Module] Opened Door #2
+[16:03:59] INFO [SHC Module] Opened Door #3
+[16:04:03] INFO [SHC Module] Opened Window #3
+[16:04:06] INFO [SHC Module] Opened Light #3
+[16:04:11] INFO Simulation has stopped
+[16:04:11] INFO Simulation has started
+[16:04:13] INFO [SHP Module] [Away Mode] Anthony has set Away Mode to ON
+[16:04:13] INFO [SHC Module] [Away Mode] Closed Light #3
+[16:04:13] INFO [SHC Module] [Away Mode] Closed and Locked Window #3
+[16:04:13] INFO [SHC Module] [Away Mode] Closed and Locked Door #2
+[16:04:13] INFO [SHC Module] [Away Mode] Closed and Locked Door #3
+[16:04:31] INFO Simulation has stopped
+[16:04:31] WARNING [SHP Module] [Away Mode] Away Mode shut down because Simulation stopped
