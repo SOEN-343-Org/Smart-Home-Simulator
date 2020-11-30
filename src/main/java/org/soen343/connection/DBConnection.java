@@ -21,10 +21,10 @@ public class DBConnection {
 
         final String HOSTNAME = "sql9.freemysqlhosting.net";
         final String PORT = "3306";
-        final String DB_NAME = "sql9370834";
+        final String DB_NAME = "sql9379175";
         final String URL = "jdbc:mysql://" + HOSTNAME + ":" + PORT + "/" + DB_NAME;
-        final String USERNAME = "sql9370834";
-        final String PASSWORD = "48zb95EinY";
+        final String USERNAME = "sql9379175";
+        final String PASSWORD = "iM49ZMVNbc";
 
         System.out.println("Connecting database...");
 
