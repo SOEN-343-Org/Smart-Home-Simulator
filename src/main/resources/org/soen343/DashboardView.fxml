@@ -70,7 +70,7 @@
                             <content>
                                 <fx:include fx:id="smartHomeHeaterModule" maxHeight="-Infinity" maxWidth="-Infinity"
                                             minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0"
-                                            prefWidth="450.0" source="SmartHomeSecurityModuleView.fxml" GridPane.columnIndex="1"
+                                            prefWidth="450.0" source="SmartHomeHeaterModuleView.fxml" GridPane.columnIndex="1"
                                             GridPane.halignment="CENTER" GridPane.rowIndex="1"
                                             GridPane.valignment="CENTER"/>
                             </content>

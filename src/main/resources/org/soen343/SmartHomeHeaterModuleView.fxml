@@ -3,29 +3,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="smartHomeHeaterModule" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.soen343.controllers.SmartHomeSecurityModuleController">
+<AnchorPane fx:id="smartHomeHeaterModule" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.soen343.controllers.SmartHomeCoreModuleController">
     <children>
+        <Button fx:id="doorsButton" layoutX="335.0" layoutY="42.0" mnemonicParsing="false" onAction="#openCloseDoors" text="Set Zone 1" />
+        <TreeView fx:id="doorsTreeView" layoutX="27.0" layoutY="42.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="68.0" prefWidth="296.0" />
         <Label layoutX="14.0" layoutY="6.0" text="SMART HOME HEATER MODULE" />
-        <ToggleButton fx:id="awayMode" layoutX="308.0" layoutY="63.0" mnemonicParsing="false" onAction="#toggleAwayMode" text="Away Mode OFF" />
-        <Label layoutX="23.0" layoutY="51.0" prefHeight="49.0" prefWidth="237.0" text="Away Mode will lock all doors and windows and alert authorities when a break-in occurs" wrapText="true" />
-        <Label layoutX="14.0" layoutY="134.0" text="Away Mode parameters" />
-        <Separator layoutX="3.0" layoutY="121.0" prefHeight="0.0" prefWidth="475.0" />
-        <AnchorPane fx:id="awayModeParamPane" layoutX="-3.0" layoutY="162.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="480.0">
-            <children>
-                <Label layoutX="21.0" text="Select lights that should remain on during Away Mode:" />
-                <Button layoutX="400.0" layoutY="192.0" mnemonicParsing="false" onAction="#setLightsTime" text="Set" />
-                <Label layoutX="21.0" layoutY="255.0" text="Time before alerting the authorities:" />
-                <Button layoutX="400.0" layoutY="251.0" mnemonicParsing="false" onAction="#setTimeBeforeAlertingAuthorities" text="Set" />
-                <Label layoutX="336.0" layoutY="255.0" text="seconds" />
-                <Spinner fx:id="timeBeforeAlertingAuthoritiesSpinner" layoutX="224.0" layoutY="251.0" prefHeight="25.0" prefWidth="103.0" />
-                <Label layoutX="270.0" layoutY="196.0" text="to" />
-                <TextField fx:id="timeFrom" alignment="CENTER" layoutX="171.0" layoutY="192.0" prefHeight="25.0" prefWidth="88.0" text="00:00" />
-                <TextField fx:id="timeTo" alignment="CENTER" layoutX="301.0" layoutY="192.0" prefHeight="25.0" prefWidth="88.0" text="00:00" />
-                <Label layoutX="21.0" layoutY="196.0" text="Lights should be on from " />
-                <Button layoutX="400.0" layoutY="86.0" mnemonicParsing="false" onAction="#setAwayModeLights" text="Set" />
-                <TreeView fx:id="lightsTree" layoutX="21.0" layoutY="30.0" prefHeight="137.0" prefWidth="336.0" />
-                <Label fx:id="errorTime" layoutX="232.0" layoutY="217.0" text="Error in time format" textFill="RED" visible="false" />
-            </children>
-        </AnchorPane>
+        <Label layoutX="25.0" layoutY="24.0" text="Zone 1" />
+        <Button fx:id="windowsButton" layoutX="335.0" layoutY="128.0" mnemonicParsing="false" onAction="#openCloseWindows" text="Set Zone 2" />
+        <TreeView fx:id="windowsTreeView" layoutX="27.0" layoutY="128.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="68.0" prefWidth="296.0" />
+        <TreeView fx:id="lightsTreeView" layoutX="27.0" layoutY="212.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="68.0" prefWidth="296.0" />
+        <Label layoutX="25.0" layoutY="110.0" text="Zone 2" />
+        <Label layoutX="27.0" layoutY="280.0" text="Zone 4" />
+        <Button fx:id="lightsButton" layoutX="335.0" layoutY="299.0" mnemonicParsing="false" onAction="#openCloseLights" text="Set Zone 4" />
+        <ToggleButton fx:id="autoModeButton" layoutX="335.0" layoutY="453.0" mnemonicParsing="false" onAction="#toggleAutoMode" text="Zone Mode OFF" />
+      <Label layoutX="27.0" layoutY="196.0" text="Zone 3" />
+      <TreeView fx:id="lightsTreeView1" layoutX="27.0" layoutY="299.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="68.0" prefWidth="296.0" />
+      <Button fx:id="lightsButton1" layoutX="335.0" layoutY="214.0" mnemonicParsing="false" onAction="#openCloseLights" text="Set Zone 3" />
+      <Label layoutX="27.0" layoutY="367.0" text="Zone 5" />
+      <TreeView fx:id="lightsTreeView11" layoutX="27.0" layoutY="385.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="68.0" prefWidth="296.0" />
+      <Button fx:id="lightsButton2" layoutX="335.0" layoutY="385.0" mnemonicParsing="false" onAction="#openCloseLights" text="Set Zone 5" />
     </children>
 </AnchorPane>
