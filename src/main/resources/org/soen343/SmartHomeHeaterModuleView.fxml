@@ -27,13 +27,13 @@
       <Label layoutX="380.0" layoutY="296.0" text="°C" />
       <Label layoutX="380.0" layoutY="402.0" text="°C" />
       <TextField fx:id="zone4Temp" layoutX="323.0" layoutY="398.0" prefHeight="26.0" prefWidth="47.0" />
-      <ToggleButton fx:id="setZoneTimeButton1" layoutX="196.0" layoutY="40.0" mnemonicParsing="false" text="Set Time Zone 1" />
+      <ToggleButton fx:id="setZoneTimeButton1" layoutX="196.0" layoutY="40.0" mnemonicParsing="false" text="Set Zone 1 Time" />
       <ChoiceBox layoutX="75.0" layoutY="40.0" prefHeight="26.0" prefWidth="106.0" />
       <ChoiceBox layoutX="75.0" layoutY="149.0" prefHeight="26.0" prefWidth="106.0" />
       <ChoiceBox layoutX="75.0" layoutY="256.0" prefHeight="26.0" prefWidth="106.0" />
       <ChoiceBox layoutX="75.0" layoutY="365.0" prefHeight="26.0" prefWidth="106.0" />
-      <ToggleButton fx:id="setZoneTimeButton2" layoutX="196.0" layoutY="150.0" mnemonicParsing="false" text="Set Time Zone 2" />
-      <ToggleButton fx:id="setZoneTimeButton3" layoutX="196.0" layoutY="257.0" mnemonicParsing="false" text="Set Time Zone 3" />
-      <ToggleButton fx:id="setZoneTimeButton4" layoutX="196.0" layoutY="366.0" mnemonicParsing="false" text="Set Time Zone 4" />
+      <ToggleButton fx:id="setZoneTimeButton2" layoutX="196.0" layoutY="150.0" mnemonicParsing="false" text="Set Zone 2 Time" />
+      <ToggleButton fx:id="setZoneTimeButton3" layoutX="196.0" layoutY="257.0" mnemonicParsing="false" text="Set Zone 3 Time" />
+      <ToggleButton fx:id="setZoneTimeButton4" layoutX="196.0" layoutY="366.0" mnemonicParsing="false" text="Set Zone 4 Time" />
     </children>
 </AnchorPane>
