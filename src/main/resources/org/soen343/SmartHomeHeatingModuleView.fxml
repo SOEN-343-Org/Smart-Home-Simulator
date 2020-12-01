@@ -34,24 +34,24 @@
             <Label prefHeight="17.0" prefWidth="243.0" text="Morning temperature (4 am - 12 pm)" />
             <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1">
                <children>
-                  <TextField fx:id="zone2Temp" prefHeight="26.0" prefWidth="78.0" />
+                  <TextField prefHeight="26.0" prefWidth="78.0" />
                   <Label text="°C" />
                </children>
             </HBox>
-            <Button fx:id="setZone3Button" mnemonicParsing="false" text="Set" GridPane.columnIndex="2" />
+            <Button  mnemonicParsing="false" text="Set" GridPane.columnIndex="2" />
             <Label text="Afternoon temperature (12 pm - 8 pm)" GridPane.rowIndex="1" />
-            <Button fx:id="setZone3Button2" mnemonicParsing="false" text="Set" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button  mnemonicParsing="false" text="Set" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Label text="Night temperature (8 pm - 4 am)" GridPane.rowIndex="2" />
-            <Button fx:id="setZone3Button21" mnemonicParsing="false" text="Set" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Button  mnemonicParsing="false" text="Set" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <TextField fx:id="zone2Temp2" prefHeight="26.0" prefWidth="78.0" />
+                  <TextField prefHeight="26.0" prefWidth="78.0" />
                   <Label text="°C" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <TextField fx:id="zone2Temp3" prefHeight="26.0" prefWidth="78.0" />
+                  <TextField prefHeight="26.0" prefWidth="78.0" />
                   <Label text="°C" />
                </children>
             </HBox>
@@ -138,7 +138,7 @@
             <Label prefHeight="17.0" prefWidth="244.0" text="Overwrite desired temperature of the zone:" />
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="1">
                <children>
-                  <TextField fx:id="zone2Temp31" prefHeight="26.0" prefWidth="78.0" />
+                  <TextField prefHeight="26.0" prefWidth="78.0" />
                   <Label text="°C" />
                   <Button mnemonicParsing="false" text="Overwrite" />
                </children>
