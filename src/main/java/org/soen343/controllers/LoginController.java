@@ -143,7 +143,7 @@ public class LoginController {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, "Error connection to the database", e);
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, "Problem changing scene", e);
             System.exit(0);
         }
     }
