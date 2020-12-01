@@ -25,6 +25,11 @@ public class House {
     public HashMap<Integer, Individual> individuals = new HashMap<>();
 
     /**
+     * The zones
+     */
+    private ArrayList<Zone> zones = new ArrayList<>();
+
+    /**
      * Constructor for a House, should only be called once
      *
      * @param layout 2d array of Rooms
@@ -216,10 +221,7 @@ public class House {
                 roomWithLight = room;
             }
         }
-        if (roomWithLight != null) {
-            return roomWithLight;
-        }
-        return null;
+        return roomWithLight;
     }
 
     /**
@@ -237,9 +239,36 @@ public class House {
                 roomWithWindow = room;
             }
         }
-        if (roomWithWindow != null) {
-            return roomWithWindow;
+        return roomWithWindow;
+    }
+
+    /**
+     * Add a room to a zone, removes the room from the other zone and add the room to the new zone
+     * @param room room
+     * @param zone zone
+     */
+    public void addRoomToZone(Room room, Zone zone) {
+        for (Zone z : this.zones) {
+            if (z.getRooms().contains(room)) {
+                z.removeRoom(room);
+            }
         }
-        return null;
+        zone.addRoom(room);
+    }
+
+    public void removeRoomFromZone(Room room, Zone zone) {
+        zone.removeRoom(room);
+    }
+
+    public ArrayList<Zone> getZones() {
+        return zones;
+    }
+
+    public void addZone(Zone zone) {
+        this.zones.add(zone);
+    }
+
+    public void removeZone(Zone zone) {
+        this.zones.remove(zone);
     }
 }

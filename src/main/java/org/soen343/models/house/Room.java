@@ -10,11 +10,13 @@ public class Room {
     private final HashMap<Integer, Light> lights;
     private final int id;
     private final String name;
-
+    private final Heater heater;
+    private final AC ac;
     private final Object top;
     private final Object right;
     private final Object down;
     private final Object left;
+    private double temperature;
 
     /**
      * @param id     The room's id
@@ -36,6 +38,11 @@ public class Room {
         this.right = right;
         this.down = down;
         this.left = left;
+
+        temperature = 20;
+
+        this.heater = new Heater();
+        this.ac = new AC();
 
         for (Light light : lights) {
             insertInsideHashMap(light);
@@ -141,7 +148,7 @@ public class Room {
 
     @Override
     public String toString() {
-        return "name=" + name + ", windows=" + windows + ", doors=" + doors + ", lights=" + lights + "\n";
+        return getName();
     }
 
     //TODO: Could create a superclass for Window and Door
@@ -182,4 +189,29 @@ public class Room {
         return left;
     }
 
+    /**
+     * Returns the heater
+     *
+     * @return Heater
+     */
+    public Heater getHeater() {
+        return heater;
+    }
+
+    /**
+     * Returns the AC
+     *
+     * @return AC
+     */
+    public AC getAC() {
+        return ac;
+    }
+
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
 }
