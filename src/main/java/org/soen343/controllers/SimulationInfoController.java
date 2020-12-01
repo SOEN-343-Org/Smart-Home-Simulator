@@ -10,6 +10,7 @@ import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.Individual;
 import org.soen343.services.DashboardService;
+import org.soen343.services.modules.SHHModule;
 import org.soen343.services.modules.SHPModule;
 
 import java.text.DateFormat;
@@ -94,7 +95,7 @@ public class SimulationInfoController extends Controller {
             chosenLocation.setText(getLocation);
         }
         updateTime();
-        String temp = Integer.toString(Model.getSimulationParameters().getOutsideTemp());
+        String temp = Double.toString(Model.getSimulationParameters().getOutsideTemp());
         outsideTemp.setText(temp + " °C");
     }
 
@@ -109,11 +110,13 @@ public class SimulationInfoController extends Controller {
     private void startAnimatedTime() {
         timer = new Timer();
         SHPModule shpModule = SHPModule.getInstance();
+        SHHModule shhModule = SHHModule.getInstance();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(() -> {
                     shpModule.notifiesTimeUpdate();
+                    shhModule.notifiesTimeUpdate();
                     updateTime();
                 });
             }
