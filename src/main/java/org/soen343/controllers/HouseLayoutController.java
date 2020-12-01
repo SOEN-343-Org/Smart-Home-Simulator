@@ -35,6 +35,8 @@ public class HouseLayoutController extends Controller {
     private Image openedLight;
     private Image closedLight;
     private Image individual;
+    private Image heater;
+    private Image ac;
 
     @FXML
     public void initialize() {
@@ -50,6 +52,8 @@ public class HouseLayoutController extends Controller {
         openedLight = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/opened_light.png")));
         closedLight = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/closed_light.png")));
         individual = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/individual.png")));
+        heater = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/heater.png")));
+        ac = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/ac.png")));
 
         gc = canvas.getGraphicsContext2D();
     }
@@ -222,6 +226,28 @@ public class HouseLayoutController extends Controller {
                             currentIndividualPosition++;
                         }
                     }
+
+                    // Heater
+
+                    if (room.getHeater().isOn()) {
+                        gc.drawImage(heater, (safeZoneW + roomSize * j) + 20, (safeZoneH + roomSize * i) + iconSize / 2, iconSize, iconSize);
+                    }
+
+                    // AC
+
+                    if (room.getAC().isOn()) {
+                        gc.drawImage(ac, (safeZoneW + roomSize * j) + (roomSize / 3) * 2, (safeZoneH + roomSize * i) + roomSize / 4, iconSize, iconSize);
+                    }
+
+                    // Draw temperature on room
+                    double fontSize2 = 15;
+                    gc.setFont(new Font(fontSize2));
+                    Text temp = new Text(String.format("%.2f", room.getTemperature()) + "°C");
+                    temp.setFont(new Font(fontSize2));
+                    double tempSize = temp.getBoundsInLocal().getWidth();
+                    gc.fillText(String.format("%.2f", room.getTemperature())+ "°C", (safeZoneW + roomSize * j) + (roomSize - tempSize) / 2, (safeZoneH + roomSize * i) + roomSize / 4);
+
+
                 }
             }
         }
