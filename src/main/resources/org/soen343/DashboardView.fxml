@@ -66,6 +66,15 @@
                                             GridPane.valignment="CENTER"/>
                             </content>
                         </Tab>
+                        <Tab closable="false" text="SHH">
+                            <content>
+                                <fx:include fx:id="smartHomeHeatingModule" maxHeight="-Infinity" maxWidth="-Infinity"
+                                            minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0"
+                                            prefWidth="450.0" source="SmartHomeHeatingModuleView.fxml" GridPane.columnIndex="1"
+                                            GridPane.halignment="CENTER" GridPane.rowIndex="1"
+                                            GridPane.valignment="CENTER"/>
+                            </content>
+                        </Tab>
                     </tabs>
                 </TabPane>
                 <Label alignment="CENTER" prefHeight="35.0" prefWidth="324.0" text="SMART HOME SIMULATOR"

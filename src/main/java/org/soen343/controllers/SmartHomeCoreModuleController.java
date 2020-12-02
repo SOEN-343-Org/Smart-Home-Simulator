@@ -36,7 +36,6 @@ public class SmartHomeCoreModuleController extends Controller {
 
     private SHCModule shcModule;
 
-
     /**
      * Initialize smart home core controller module controller
      */

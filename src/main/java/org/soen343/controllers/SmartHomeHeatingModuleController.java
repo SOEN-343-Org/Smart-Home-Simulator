@@ -1,7 +1,6 @@
 package org.soen343.controllers;
 
-
-public class SmartHomeHeatingController extends Controller {
+public class SmartHomeHeatingModuleController extends Controller {
 
     @Override
     void initializeController() {
