@@ -29,6 +29,8 @@ public class House {
      */
     private ArrayList<Zone> zones = new ArrayList<>();
 
+    String havcStatus = "STOP";
+
     /**
      * Constructor for a House, should only be called once
      *
@@ -271,4 +273,7 @@ public class House {
     public void removeZone(Zone zone) {
         this.zones.remove(zone);
     }
+
+    public void setHavcStatus(String s) { this.havcStatus = s; }
+    public String getHavcStatus() { return havcStatus; }
 }

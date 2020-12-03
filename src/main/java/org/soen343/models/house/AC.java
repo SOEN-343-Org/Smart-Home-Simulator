@@ -4,7 +4,7 @@ public class AC implements Components{
     private boolean on;
 
     public AC() {
-        this.on = true;
+        this.on = false;
     }
 
     public boolean isOn() {

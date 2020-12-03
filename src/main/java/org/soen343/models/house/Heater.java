@@ -4,7 +4,7 @@ public class Heater implements Components {
     private boolean on;
 
     public Heater() {
-        this.on = true;
+        this.on = false;
     }
 
     public boolean isOn() {

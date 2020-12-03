@@ -82,6 +82,14 @@ public class SmartHomeHeatingModuleController extends Controller {
             }
             String roomsNames = roomsName.toString();
             String desiredTemp = shhModule.getDesiredTempFromZone(zone);
+//            System.out.println(desiredTemp); // TO REMOV
+//            String delimiter = "\\u00B0";
+//            String[] tokensVal = desiredTemp.split(delimiter);
+//            for(String token : tokensVal) {
+//                System.out.println(token);
+//            }
+//            float i = Float.parseFloat(tokensVal[0]);
+//            System.out.println(i + " is now an float number");
             Map<String, Object> item = new HashMap<>();
             item.put("zoneName", zoneName);
             item.put("roomsName", roomsNames);
@@ -156,6 +164,7 @@ public class SmartHomeHeatingModuleController extends Controller {
         }
     }
 
+    // TODO : Fix errors
     @FXML
     private void deleteZoneAction(ActionEvent actionEvent) {
         Zone zone = (Zone) deleteZoneChoiceBox.getValue();
