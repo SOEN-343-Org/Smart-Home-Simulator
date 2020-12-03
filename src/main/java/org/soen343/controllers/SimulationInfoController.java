@@ -58,14 +58,12 @@ public class SimulationInfoController extends Controller {
 
     @FXML
     private void startSimulation(ActionEvent actionEvent) {
-        System.out.println("starting simulationnn");
         boolean success = dashboardService.setSimulationRunning();
         boolean status = Model.getSimulationParameters().isSimulationRunning();
         startStopToggle.setText(status ? "ON" : "OFF");
         startStopToggle.setSelected(status);
         if (status) {
             Model.getSimulationParameters().getDateTime().startTime();
-            System.out.println("starting animated timmeee");
             startAnimatedTime();
         } else {
             Model.getSimulationParameters().getDateTime().stopTime();
@@ -118,7 +116,6 @@ public class SimulationInfoController extends Controller {
     }
 
     private void startAnimatedTime() {
-        System.out.println("animation time started !!!");
         timer = new Timer();
         SHPModule shpModule = SHPModule.getInstance();
         SHHModule shhModule = SHHModule.getInstance();
@@ -136,48 +133,8 @@ public class SimulationInfoController extends Controller {
         }, 0, (long) (Duration.ofSeconds(1).toMillis() / Model.getSimulationParameters().getDateTime().getClockSpeedMultiplier()));
     }
 
-    private void stopAnimatedTime() { // TODO : add shh.notifiesTimeUpdateEnd
+    private void stopAnimatedTime() {
         timer.cancel();
-
-//        timer = new Timer();
-//        SHHModule shhModule = SHHModule.getInstance();
-
-//        timer.scheduleAtFixedRate(new TimerTask() {
-//            @Override
-//            public void run() {
-//                    int n = 0;
-//                Platform.runLater(() -> {
-//                    System.out.println(n);
-//                    if (++n == 5) {
-//                        timer.cancel();
-//                    }
-//                    shhModule.notifiesTimeUpdateEnd();
-//                    updateTime();
-//                });
-//            }
-//
-//        }, 0, (long) (Duration.ofSeconds(1).toMillis()));
-
-//        timer.scheduleAtFixedRate(new TimerTask() {
-//
-//            Platform.runLater(new Runnable(){
-//                @Override
-//                public void run() {
-//// ...
-//
-//                int n = 0;
-//                System.out.println(n);
-//                if (++n == 5) {
-//                    timer.cancel();
-//                }
-//                shhModule.notifiesTimeUpdateEnd();
-//                updateTime();
-//
-//            }
-//            });
-//
-//        }, 0, (long) (Duration.ofSeconds(1).toMillis()));
-
     }
 
     private void changeAnimatedTime() {

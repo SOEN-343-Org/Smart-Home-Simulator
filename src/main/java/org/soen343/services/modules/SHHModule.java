@@ -343,8 +343,6 @@ public class SHHModule extends Service {
         outsideTemp = round(outsideTemp, 2);
         currentTemp = round(currentTemp, 2);
 
-        System.out.println("current : " + currentTemp + " outside : " + outsideTemp);
-
         if (currentTemp > outsideTemp) { // must decrease
             room.setTemperature(currentTemp - 0.05);
         } else if (currentTemp < outsideTemp){ // must increase
@@ -412,24 +410,7 @@ public class SHHModule extends Service {
 
     public void notifiesTimeUpdate() {
         // This is called every second and needs to update the temperature
-
         gigaUpdate();
-        /*
-        ArrayList<Zone> zones = Model.getHouse().getZones();
-
-        for (Zone z : zones) {
-            String desiredTempStr = shhModule.getDesiredTempFromZone(z);
-            float desiredTemp = stringToFloatTemp(desiredTempStr);
-
-            ArrayList<Room> zoneRooms = z.getRooms();
-            for (Room r : zoneRooms) {
-
-                System.out.println(r.getName());
-                adjustRoomTemp(r.getTemperature(), desiredTemp, r);
-            }
-        }
-        */
-
         notifyObservers(this);
     }
 
