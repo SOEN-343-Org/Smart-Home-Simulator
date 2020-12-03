@@ -8,7 +8,6 @@ import org.soen343.services.Service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Timer;
 
 public class SHHModule extends Service {
     private static SHHModule shhModule = null;
@@ -64,17 +63,22 @@ public class SHHModule extends Service {
 
     public void deleteZone(Zone zone) {
         Model.getHouse().removeZone(zone);
+        for (Room r : zone.getRooms()) {
+            r.getHeater().setOn(false);
+            r.getAC().setOn(false);
+            r.setHvacState(false);
+        }
         notifyObservers(this);
     }
 
     public void setSummerTemp(double parseDouble) {
         Model.getSimulationParameters().getSmartHeatingParameters().setSummerTemp(parseDouble);
-        notifyObservers(this);
+        resetHVAC();
     }
 
     public void setWinterTemp(double parseDouble) {
         Model.getSimulationParameters().getSmartHeatingParameters().setWinterTemp(parseDouble);
-        notifyObservers(this);
+        resetHVAC();
     }
 
     public void addRoomToZone(Room r, Zone currentZone) {
@@ -84,38 +88,280 @@ public class SHHModule extends Service {
 
     public void removeRoomFromZone(Room r, Zone currentZone) {
         Model.getHouse().removeRoomFromZone(r, currentZone);
-        notifyObservers(this);
+        resetHVAC();
     }
 
     public void setMorningTempToZone(double parseDouble, Zone currentZone) {
         currentZone.setMorningTemp(parseDouble);
-        notifyObservers(this);
+        resetHVAC();
     }
 
     public void setAfternoonTempToZone(double parseDouble, Zone currentZone) {
         currentZone.setAfternoonTemp(parseDouble);
-        notifyObservers(this);
+        resetHVAC();
     }
 
     public void setNightTempToZone(double parseDouble, Zone currentZone) {
         currentZone.setNightTemp(parseDouble);
-        notifyObservers(this);
+        resetHVAC();
     }
 
     public void setOverwriteTemp(double parseDouble, Zone currentZone) {
         currentZone.setOverwrittenTemp(parseDouble);
-        notifyObservers(this);
+        resetHVAC();
     }
 
     public void removeOverwriteTemp(Zone currentZone) {
         currentZone.setOverwritten(false);
-        notifyObservers(this);
+        resetHVAC();
+    }
 
+    private void gigaUpdate() {
+
+        // Find which temperature is desired
+        // Loop over each zone and find context of desired temperature
+
+        // 1. if awaymode is on
+        // 1.1 if overwritten
+        // 1.1.1 change temp to summer overwritten
+        // 1.1.2 change temp to winter overwritten
+
+        // 1.2 not overwritten
+        // 1.2.1 change temp to summer away (cannot open windows)
+        // 1.2.2 change temp to winter away (cannot open windows)
+
+        // 2. (away mode off)
+        // 2.1 if overwritten
+        // 2.1.1 change temp to summer overwritten
+        // 2.1.2 change temp to winter overwritten
+
+        // 2.2 not overwritten
+        // 2.2.1 morning temp
+        // 2.2.1.1 change temp to summer
+        // 2.2.1.2 change temp to winter (cannot open windows)
+
+        // 2.2.2 afternoon temp
+        // 2.2.2.1 change temp to summer
+        // 2.2.2.2 change temp to winter (cannot open windows)
+
+        // 2.2.3 night temp
+        // 2.2.3.1 change temp to summer
+        // 2.2.3.2 change temp to winter (cannot open windows)
+
+
+        ArrayList<Zone> zones = Model.getHouse().getZones();
+
+        // 1. if awaymode is on
+
+        if (Model.getSimulationParameters().isAwayModeOn()) {
+            for (Zone zone : zones) {
+
+                // Look if zone is overwritten
+                int currentMonth = Model.getSimulationParameters().getDateTime().getDate().get(Calendar.MONTH);
+                if (zone.getOverwritten()) {
+                    double desiredTemp = zone.getOverwrittenTemp();
+                    if (Model.getSimulationParameters().getSmartHeatingParameters().isSummer(currentMonth)) {
+                        updateZoneTemp("summer", desiredTemp, zone);
+                    } else {
+                        updateZoneTemp("winter", desiredTemp, zone);
+                    }
+                } else {
+                    // 1.1 Summer temp
+                    // ...
+                    // 1.2 Winter temp
+                    // ...
+
+                    if (Model.getSimulationParameters().getSmartHeatingParameters().isSummer(currentMonth)) {
+                        // Summer temp
+                        double desiredTemp = Model.getSimulationParameters().getSmartHeatingParameters().getSummerTemp();
+                        updateZoneTemp("away", desiredTemp, zone);
+                    } else {
+                        // Winter temp
+                        double desiredTemp = Model.getSimulationParameters().getSmartHeatingParameters().getWinterTemp();
+                        updateZoneTemp("winter", desiredTemp, zone); // Because we dont open windows in winter, we can just take that function
+                    }
+                }
+            }
+        } else {
+            // 2. (away mode off) Check moment of day
+            for (Zone zone : zones) {
+
+                // Look if zone is overwritten
+                int currentMonth = Model.getSimulationParameters().getDateTime().getDate().get(Calendar.MONTH);
+                if (zone.getOverwritten()) {
+                    double desiredTemp = zone.getOverwrittenTemp();
+                    if (Model.getSimulationParameters().getSmartHeatingParameters().isSummer(currentMonth)) {
+                        updateZoneTemp("summer", desiredTemp, zone);
+                    } else {
+                        updateZoneTemp("winter", desiredTemp, zone);
+                    }
+                } else {
+                    // 2.1 morning
+                    // ...
+                    // 2.2 afternoon
+                    // ...
+                    // 2.3 night
+                    // ...
+                    if (Model.getSimulationParameters().getSmartHeatingParameters().isSummer(currentMonth)) {
+                        // Summer temp
+                        // Check moment of day
+                        int currentHour = Model.getSimulationParameters().getDateTime().getDate().get(Calendar.HOUR_OF_DAY);
+                        String timePeriod = Model.getSimulationParameters().getSmartHeatingParameters().getTimePeriod(currentHour);
+                        double desiredTemp;
+                        switch (timePeriod) {
+                            case "morning":
+                                desiredTemp = zone.getMorningTemp();
+                                updateZoneTemp("summer", desiredTemp, zone);
+                                break;
+                            case "afternoon":
+                                desiredTemp = zone.getAfternoonTemp();
+                                updateZoneTemp("summer", desiredTemp, zone);
+                                break;
+                            case "night":
+                                desiredTemp = zone.getNightTemp();
+                                updateZoneTemp("summer", desiredTemp, zone);
+                                break;
+                        }
+                    } else {
+                        // Winter temp
+                        // Check moment of day
+                        int currentHour = Model.getSimulationParameters().getDateTime().getDate().get(Calendar.HOUR_OF_DAY);
+                        String timePeriod = Model.getSimulationParameters().getSmartHeatingParameters().getTimePeriod(currentHour);
+                        double desiredTemp;
+                        switch (timePeriod) {
+                            case "morning":
+                                desiredTemp = zone.getMorningTemp();
+                                updateZoneTemp("winter", desiredTemp, zone);
+                                break;
+                            case "afternoon":
+                                desiredTemp = zone.getAfternoonTemp();
+                                updateZoneTemp("winter", desiredTemp, zone);
+                                break;
+                            case "night":
+                                desiredTemp = zone.getNightTemp();
+                                updateZoneTemp("winter", desiredTemp, zone);
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Update all rooms that are in no zones, like HVAC stopped, temperature will go towards outside temp
+
+
+    }
+
+    private void updateZoneTemp(String state, double desiredTemp, Zone zone) {
+        for (Room room : zone.getRooms()) {
+            double currentTemp = room.getTemperature();
+            if (room.isHvacState()) { // Means the temperature is not the same as desired, hvac is on
+                if (currentTemp < desiredTemp) { // Need to increase the temperature
+                    switch (state) {
+                        case "summer":
+                            increaseTempSummer(room, currentTemp);
+                            break;
+                        case "winter":
+                            increaseTempWinter(room, currentTemp);
+                            break;
+                        case "away":
+                            increaseTempSummerAway(room, currentTemp);
+                            break;
+                    }
+                } else if (currentTemp > desiredTemp) { // Need to decrease temperature
+                    switch (state) {
+                        case "summer":
+                            decreaseTempSummer(room, currentTemp);
+                            break;
+                        case "winter":
+                            decreaseTempWinter(room, currentTemp);
+                            break;
+                        case "away":
+                            decreaseTempSummerAway(room, currentTemp);
+                            break;
+                    }
+                }
+                if (room.getTemperature() >= desiredTemp - 0.06 && room.getTemperature() <= desiredTemp + 0.06) {
+                    room.getHeater().setOn(false);
+                    room.getAC().setOn(false);
+                    room.setHvacState(false);
+                }
+            } else { // hvac is off, temperature goes toward outside
+                double outsideTemp = Model.getSimulationParameters().getOutsideTemp();
+                if (currentTemp > outsideTemp) {
+                    room.setTemperature(currentTemp - 0.05);
+                } else {
+                    room.setTemperature(currentTemp + 0.05);
+                }
+                if (room.getTemperature() <= desiredTemp - 0.24 || room.getTemperature() >= desiredTemp + 0.24)
+                    room.setHvacState(true);
+            }
+        }
+    }
+
+    private void decreaseTempSummer(Room room, double currentTemp) {
+        if (currentTemp >= Model.getSimulationParameters().getOutsideTemp()) {
+            if (canOpenWindow(room)) {
+                closeWindows(room);
+            } else {
+                room.getAC().setOn(true);
+            }
+        } else {
+            room.getAC().setOn(true);
+        }
+        room.setTemperature(currentTemp - 0.1);
+    }
+
+    private void increaseTempSummer(Room room, double currentTemp) {
+        if (currentTemp >= Model.getSimulationParameters().getOutsideTemp()) {
+            room.getHeater().setOn(true);
+        } else {
+            if (canOpenWindow(room)) {
+                openWindows(room);
+            } else {
+                room.getHeater().setOn(true);
+            }
+        }
+        room.setTemperature(currentTemp + 0.1);
+    }
+
+    private void decreaseTempSummerAway(Room room, double currentTemp) {
+        room.getAC().setOn(true);
+        room.setTemperature(currentTemp - 0.1);
+    }
+
+    private void increaseTempSummerAway(Room room, double currentTemp) {
+        room.getHeater().setOn(true);
+        room.setTemperature(currentTemp + 0.1);
+    }
+
+    private void decreaseTempWinter(Room room, double currentTemp) {
+        room.getAC().setOn(true);
+        room.setTemperature(currentTemp - 0.1);
+    }
+
+    private void increaseTempWinter(Room room, double currentTemp) {
+        room.getHeater().setOn(true);
+        room.setTemperature(currentTemp + 0.1);
+    }
+
+    private boolean canOpenWindow(Room room) {
+        ArrayList<Window> windows = room.getWindows();
+        if (windows.size() > 0) {
+            for (Window w : windows) {
+                if (!w.isBlocked()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void notifiesTimeUpdate() {
         // This is called every second and needs to update the temperature
 
+        gigaUpdate();
+        /*
         ArrayList<Zone> zones = Model.getHouse().getZones();
 
         for (Zone z : zones) {
@@ -129,6 +375,8 @@ public class SHHModule extends Service {
                 adjustRoomTemp(r.getTemperature(), desiredTemp, r);
             }
         }
+        */
+
         notifyObservers(this);
     }
 
@@ -148,8 +396,8 @@ public class SHHModule extends Service {
 
         // if currently paused, check to see if need to resume
         if (havcStatus.equals("PAUSE") &&
-                ( actualTemp >= desiredTemp+0.25 ||
-                actualTemp <= desiredTemp-0.25 )
+                (actualTemp >= desiredTemp + 0.25 ||
+                        actualTemp <= desiredTemp - 0.25)
         ) {
             System.out.println("1");
             Model.getHouse().setHavcStatus("RESUME");
@@ -159,8 +407,8 @@ public class SHHModule extends Service {
 
         // INITIALLY
         if (havcStatus.equals("START") &&
-                ( actualTemp >= desiredTemp+1 ||
-                actualTemp <= desiredTemp-1 )
+                (actualTemp >= desiredTemp + 1 ||
+                        actualTemp <= desiredTemp - 1)
         ) {
             System.out.println("2");
             if (actualTemp < desiredTemp) actualTemp += 0.1;
@@ -174,8 +422,8 @@ public class SHHModule extends Service {
             if (actualTemp == desiredTemp) Model.getHouse().setHavcStatus("PAUSE");
         }
         if (havcStatus.equals("RESUME") &&
-                ( actualTemp >= desiredTemp+0.25 ||
-                actualTemp <= desiredTemp-0.25 )
+                (actualTemp >= desiredTemp + 0.25 ||
+                        actualTemp <= desiredTemp - 0.25)
         ) {
             System.out.println("3");
             if (actualTemp < desiredTemp) actualTemp += 0.1;
@@ -183,8 +431,8 @@ public class SHHModule extends Service {
             if (actualTemp == desiredTemp) Model.getHouse().setHavcStatus("PAUSE");
         }
         if (!havcStatus.equals("STOP") &&
-                ( actualTemp <= desiredTemp+0.05 &&
-                actualTemp >= desiredTemp-0.05 ))
+                (actualTemp <= desiredTemp + 0.05 &&
+                        actualTemp >= desiredTemp - 0.05))
 //        if (!havcStatus.equals("STOP") &&
 //                ( actualTemp == desiredTemp ))
         {
@@ -210,7 +458,7 @@ public class SHHModule extends Service {
         }
     }
 
-    public void adjustHavcForSummer(Room r, float desiredTemp){
+    public void adjustHavcForSummer(Room r, float desiredTemp) {
         double actualTemp = r.getTemperature();
         String outsideTempStr = Double.toString(Model.getSimulationParameters().getOutsideTemp());
         float outsideTemp = stringToFloatTemp(outsideTempStr);
@@ -254,7 +502,7 @@ public class SHHModule extends Service {
         }
     }
 
-    public void adjustHavcForWinter(Room r, float desiredTemp){
+    public void adjustHavcForWinter(Room r, float desiredTemp) {
         double actualTemp = r.getTemperature();
         String outsideTempStr = Double.toString(Model.getSimulationParameters().getOutsideTemp());
         float outsideTemp = stringToFloatTemp(outsideTempStr);
@@ -292,8 +540,7 @@ public class SHHModule extends Service {
                 r.getAC().setOn(true);
                 r.getHeater().setOn(false);
             }
-        }
-        else {
+        } else {
             r.getAC().setOn(false);
             r.getHeater().setOn(false);
         }
@@ -305,8 +552,6 @@ public class SHHModule extends Service {
         for (Window w : windows) {
             if (!w.isBlocked()) {
                 w.setOpen(true);
-            } else {
-                // TODO : notify user
             }
         }
     }
@@ -317,8 +562,6 @@ public class SHHModule extends Service {
         for (Window w : windows) {
             if (!w.isBlocked()) {
                 w.setOpen(false);
-            } else {
-                // TODO : notify user
             }
         }
     }
@@ -340,9 +583,8 @@ public class SHHModule extends Service {
     public void adjustRoomTempToOutside(double actualTemp, float outsideTemp, Room r) {
         System.out.println("Actual Temp : " + actualTemp + " Desired Temp : " + outsideTemp);
 
-        if ( ( actualTemp <= outsideTemp+0.1 ||
-                actualTemp >= outsideTemp-0.1 ) )
-        {
+        if ((actualTemp <= outsideTemp + 0.1 ||
+                actualTemp >= outsideTemp - 0.1)) {
             if (actualTemp < outsideTemp) actualTemp += 0.05;
             else if (actualTemp > outsideTemp) actualTemp -= 0.05;
         }
@@ -351,4 +593,13 @@ public class SHHModule extends Service {
         adjustRoomHavcSettings(r, outsideTemp);
     }
 
+    public void resetHVAC() {
+        for (Room r : Model.getHouse().getRooms()) {
+            r.getHeater().setOn(false);
+            r.getAC().setOn(false);
+            r.setHvacState(false);
+            closeWindows(r);
+        }
+        notifyObservers(this);
+    }
 }

@@ -17,6 +17,7 @@ public class Room {
     private final Object down;
     private final Object left;
     private double temperature;
+    private boolean hvacState;
 
     /**
      * @param id     The room's id
@@ -40,6 +41,8 @@ public class Room {
         this.left = left;
 
         temperature = 20;
+
+        hvacState = false;
 
         this.heater = new Heater();
         this.ac = new AC();
@@ -213,5 +216,13 @@ public class Room {
 
     public void setTemperature(double temperature) {
         this.temperature = temperature;
+    }
+
+    public boolean isHvacState() {
+        return hvacState;
+    }
+
+    public void setHvacState(boolean hvacState) {
+        this.hvacState = hvacState;
     }
 }
