@@ -6,6 +6,8 @@ import org.soen343.models.house.Window;
 import org.soen343.models.house.Zone;
 import org.soen343.services.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -116,6 +118,10 @@ public class SHHModule extends Service {
         resetHVAC();
     }
 
+    /**
+     * This is a giga method for giga updates
+     * and is of giga proportions
+     */
     private void gigaUpdate() {
 
         // Find which temperature is desired
@@ -248,9 +254,38 @@ public class SHHModule extends Service {
         }
 
         // Update all rooms that are in no zones, like HVAC stopped, temperature will go towards outside temp
-
-
+        updateNoZoneTemp();
     }
+
+    private ArrayList<String> getAllZoneRoomNames() {
+        ArrayList<String> allZoneRoomNames = new ArrayList<>();
+        for (Zone zone : Model.getHouse().getZones()) {
+            for (Room room : zone.getRooms()) {
+                allZoneRoomNames.add(room.getName());
+            }
+        }
+        return allZoneRoomNames;
+    }
+
+    private void updateNoZoneTemp() {
+        ArrayList<String> allZoneRooms = getAllZoneRoomNames();
+
+        ArrayList<String> allRoomNames = new ArrayList<>();
+
+        for (Room room : Model.getHouse().getRooms()) {
+            allRoomNames.add(room.getName());
+        }
+
+        for (String roomName : allRoomNames) {
+            if (!allZoneRooms.contains(roomName)) {
+                adjustToOutsideTemp(Model.getHouse().getRoomByName(roomName),
+                        Model.getSimulationParameters().getOutsideTemp(),
+                        Model.getHouse().getRoomByName(roomName).getTemperature()
+                );
+            }
+        }
+    }
+
 
     private void updateZoneTemp(String state, double desiredTemp, Zone zone) {
         for (Room room : zone.getRooms()) {
@@ -288,14 +323,32 @@ public class SHHModule extends Service {
                 }
             } else { // hvac is off, temperature goes toward outside
                 double outsideTemp = Model.getSimulationParameters().getOutsideTemp();
-                if (currentTemp > outsideTemp) {
-                    room.setTemperature(currentTemp - 0.05);
-                } else {
-                    room.setTemperature(currentTemp + 0.05);
-                }
+                adjustToOutsideTemp(room, outsideTemp, currentTemp);
+
                 if (room.getTemperature() <= desiredTemp - 0.24 || room.getTemperature() >= desiredTemp + 0.24)
                     room.setHvacState(true);
             }
+        }
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
+    private void adjustToOutsideTemp(Room room, double outsideTemp, double currentTemp) {
+        outsideTemp = round(outsideTemp, 2);
+        currentTemp = round(currentTemp, 2);
+
+        System.out.println("current : " + currentTemp + " outside : " + outsideTemp);
+
+        if (currentTemp > outsideTemp) { // must decrease
+            room.setTemperature(currentTemp - 0.05);
+        } else if (currentTemp < outsideTemp){ // must increase
+            room.setTemperature(currentTemp + 0.05);
         }
     }
 
