@@ -51,11 +51,7 @@ public class SimulationContextController extends Controller {
 
         simulationContextService = SimulationContextService.getInstance();
 
-        column1.setCellValueFactory(new PropertyValueFactory<>("id"));
-        column2.setCellValueFactory(new PropertyValueFactory<>("name"));
-        column3.setCellValueFactory(new PropertyValueFactory<>("role"));
-        column4.setCellValueFactory(new PropertyValueFactory<>("location"));
-        column2.setCellFactory(TextFieldTableCell.<Individual>forTableColumn());
+        setColumnValues();
 
         // BLOCK AND UNBLOCK of WINDOWS
 
@@ -99,6 +95,18 @@ public class SimulationContextController extends Controller {
             }
         });
         update();
+    }
+
+    /**
+     * Refactored intializeController Function
+     * Extracted method to set the values for the column
+     */
+    public void setColumnValues(){
+        column1.setCellValueFactory(new PropertyValueFactory<>("id"));
+        column2.setCellValueFactory(new PropertyValueFactory<>("name"));
+        column3.setCellValueFactory(new PropertyValueFactory<>("role"));
+        column4.setCellValueFactory(new PropertyValueFactory<>("location"));
+        column2.setCellFactory(TextFieldTableCell.<Individual>forTableColumn());
     }
 
     @Override
