@@ -63,9 +63,6 @@ public class SmartHomeHeatingModuleController extends Controller {
         roomColumn.setCellValueFactory(new MapValueFactory<>("roomsName"));
         tempColumn.setCellValueFactory(new MapValueFactory<>("desiredTemp"));
 
-
-
-        setInformation();
     }
 
     @Override
@@ -98,19 +95,8 @@ public class SmartHomeHeatingModuleController extends Controller {
         }
         zonesTableView.getItems().setAll(items);
 
-        setInformation();
     }
 
-    private void setInformation() {
-        createZoneTextField.setText("");
-        deleteZoneChoiceBox.setItems(FXCollections.observableArrayList(Model.getHouse().getZones()));
-
-        summerTempTextField.setText(String.format("%.2f", Model.getSimulationParameters().getSmartHeatingParameters().getSummerTemp()));
-        winterTempTextField.setText(String.format("%.2f", Model.getSimulationParameters().getSmartHeatingParameters().getWinterTemp()));
-
-        modifyZoneChoiceBox.setItems(FXCollections.observableArrayList(Model.getHouse().getZones()));
-        modifyZoneChoiceBox.setValue(currentZone);
-    }
 
     private void updateZoneFields() {
         if (currentZone != null) {
@@ -134,6 +120,12 @@ public class SmartHomeHeatingModuleController extends Controller {
             nightTempTextField.setText("");
             overwriteTempTextField.setText("");
         }
+    }
+
+    private void updateChoiceBox() {
+        deleteZoneChoiceBox.setItems(FXCollections.observableArrayList(Model.getHouse().getZones()));
+        modifyZoneChoiceBox.setItems(FXCollections.observableArrayList(Model.getHouse().getZones()));
+        modifyZoneChoiceBox.setValue(currentZone);
     }
 
     @FXML
@@ -161,6 +153,7 @@ public class SmartHomeHeatingModuleController extends Controller {
     private void createZoneAction(ActionEvent actionEvent) {
         if (!createZoneTextField.getText().isBlank()) {
             shhModule.createZone(createZoneTextField.getText());
+            updateChoiceBox();
         }
     }
 
