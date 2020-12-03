@@ -23,7 +23,11 @@ import java.util.TimerTask;
 public class SimulationInfoController extends Controller {
 
     @FXML
-    public Slider slider;
+    private Slider slider;
+    @FXML
+    private Label summerTemp;
+    @FXML
+    private Label winterTemp;
     @FXML
     private Label currentMultiplier;
     @FXML
@@ -97,7 +101,11 @@ public class SimulationInfoController extends Controller {
             chosenLocation.setText(getLocation);
         }
         updateTime();
-        String temp = Double.toString(Model.getSimulationParameters().getOutsideTemp());
+        String summerTemp1 = String.format("%.2f", Model.getSimulationParameters().getSmartHeatingParameters().getSummerTemp());
+        summerTemp.setText(summerTemp1 + " °C");
+        String winterTemp1 = String.format("%.2f", Model.getSimulationParameters().getSmartHeatingParameters().getWinterTemp());
+        winterTemp.setText(winterTemp1 + " °C");
+        String temp = String.format("%.2f", Model.getSimulationParameters().getOutsideTemp());
         outsideTemp.setText(temp + " °C");
     }
 
@@ -120,7 +128,6 @@ public class SimulationInfoController extends Controller {
             public void run() {
                 Platform.runLater(() -> {
                     shpModule.notifiesTimeUpdate();
-                    System.out.println("time to notify time update in SHH");
                     shhModule.notifiesTimeUpdate();
                     updateTime();
                 });
