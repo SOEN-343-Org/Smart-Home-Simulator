@@ -59,20 +59,8 @@ public class SimulationContextController extends Controller {
         root2.setExpanded(true);
 
         ArrayList<Room> rooms = Model.getHouse().getRooms();
+        iterateThroughTheWindowsInAllRooms(rooms, root2);
 
-        for (Room room : rooms) {
-
-            if (room.getWindows().size() > 0) {
-                CheckBoxTreeItem<String> superItem = new CheckBoxTreeItem<>(room.getName());
-                CheckBoxTreeItem<String> windowsItem = new CheckBoxTreeItem<>("Windows");
-                for (Window window : room.getWindows()) {
-                    CheckBoxTreeItem<String> item = new CheckBoxTreeItem<>(window.getName());
-                    windowsItem.getChildren().add(item);
-                }
-                superItem.getChildren().add(windowsItem);
-                root2.getChildren().add(superItem);
-            }
-        }
         blockUnblockTreeView.setRoot(root2);
 
         blockUnblockTreeView.setCellFactory(CheckBoxTreeCell.forTreeView());
@@ -107,6 +95,28 @@ public class SimulationContextController extends Controller {
         column3.setCellValueFactory(new PropertyValueFactory<>("role"));
         column4.setCellValueFactory(new PropertyValueFactory<>("location"));
         column2.setCellFactory(TextFieldTableCell.<Individual>forTableColumn());
+    }
+
+    /**
+     * Refactored initializeController Function
+     * Extraccted method to iterate through all of the windows in all rooms
+     * @param rooms
+     * @param root2
+     */
+    public void iterateThroughTheWindowsInAllRooms(ArrayList<Room> rooms, CheckBoxTreeItem<String> root2){
+        for (Room room : rooms) {
+
+            if (room.getWindows().size() > 0) {
+                CheckBoxTreeItem<String> superItem = new CheckBoxTreeItem<>(room.getName());
+                CheckBoxTreeItem<String> windowsItem = new CheckBoxTreeItem<>("Windows");
+                for (Window window : room.getWindows()) {
+                    CheckBoxTreeItem<String> item = new CheckBoxTreeItem<>(window.getName());
+                    windowsItem.getChildren().add(item);
+                }
+                superItem.getChildren().add(windowsItem);
+                root2.getChildren().add(superItem);
+            }
+        }
     }
 
     @Override
