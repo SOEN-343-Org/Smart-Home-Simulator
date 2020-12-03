@@ -53,7 +53,6 @@ public class SimulationInfoController extends Controller {
 
     @FXML
     private void startSimulation(ActionEvent actionEvent) {
-        boolean success = dashboardService.setSimulationRunning();
         boolean status = Model.getSimulationParameters().isSimulationRunning();
         startStopToggle.setText(status ? "ON" : "OFF");
         startStopToggle.setSelected(status);
