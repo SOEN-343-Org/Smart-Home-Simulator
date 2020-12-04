@@ -24,6 +24,14 @@ public class SHHModule extends Service {
         return shhModule;
     }
 
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
     public String getDesiredTempFromZone(Zone zone) {
         String t = "";
 
@@ -63,26 +71,28 @@ public class SHHModule extends Service {
 
     private String getUserName() {
         Individual ind = User.getCurrentIndividual();
-        return ind.getName();
+        return ind == null ? "Admin" : ind.getName();
     }
 
     private boolean validateUserPermission() {
-        String role = User.getCurrentIndividual().getRole();
-        if (role.equals("Family Adult")) return true;
-        else return false;
+        Individual user = User.getCurrentIndividual();
+        if (user == null)
+            return true;
+        String role = user.getRole();
+        return role.equals("Family Adult");
     }
 
     public void createZone(String text) {
-        if(validateUserPermission()) {
+        if (validateUserPermission()) {
             Model.getHouse().addZone(new Zone(text));
             notifyObservers(this);
             ConsoleOutputService.getInstance().infoLog("[SHH Module] " + getUserName() + " has created Zone #" + text);
-        }
-        else ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to create a zone");
+        } else
+            ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to create a zone");
     }
 
     public void deleteZone(Zone zone) {
-        if(validateUserPermission()) {
+        if (validateUserPermission()) {
             Model.getHouse().removeZone(zone);
             for (Room r : zone.getRooms()) {
                 r.getHeater().setOn(false);
@@ -91,89 +101,92 @@ public class SHHModule extends Service {
             }
             notifyObservers(this);
             ConsoleOutputService.getInstance().infoLog("[SHH Module] " + getUserName() + " has removed Zone #" + zone);
-        }
-        else ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to delete a zone");
+        } else
+            ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to delete a zone");
     }
 
     public void setSummerTemp(double parseDouble) {
-        if(validateUserPermission()) {
+        if (validateUserPermission()) {
             Model.getSimulationParameters().getSmartHeatingParameters().setSummerTemp(parseDouble);
             resetHVAC();
             ConsoleOutputService.getInstance().infoLog("[SHH Module] " + getUserName() + " has set the summer temperature to " + parseDouble + " °C");
-        }
-        else ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to set the summer temperature");
+        } else
+            ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to set the summer temperature");
     }
 
     public void setWinterTemp(double parseDouble) {
-        if(validateUserPermission()) {
+        if (validateUserPermission()) {
             Model.getSimulationParameters().getSmartHeatingParameters().setWinterTemp(parseDouble);
             resetHVAC();
             ConsoleOutputService.getInstance().infoLog("[SHH Module] " + getUserName() + " has set the winter temperature to " + parseDouble + " °C");
-        }
-        else ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to set the winter temperature");
+        } else
+            ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to set the winter temperature");
     }
 
     public void addRoomToZone(Room r, Zone currentZone) {
-        if(validateUserPermission()) {
+        if (validateUserPermission()) {
             Model.getHouse().addRoomToZone(r, currentZone);
             notifyObservers(this);
             ConsoleOutputService.getInstance().infoLog("[SHH Module] " + getUserName() + " added the " + r + " to Zone #" + currentZone);
-        }
-        else ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to add a room to the zone");
+        } else
+            ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to add a room to the zone");
     }
 
     public void removeRoomFromZone(Room r, Zone currentZone) {
-        if(validateUserPermission()) {
+        if (validateUserPermission()) {
             Model.getHouse().removeRoomFromZone(r, currentZone);
-            resetHVAC();
+            r.setHvacState(false);
+            r.getAC().setOn(false);
+            r.getHeater().setOn(false);
+            closeWindows(r);
             ConsoleOutputService.getInstance().infoLog("[SHH Module] " + getUserName() + " removed the " + r + " from Zone #" + currentZone);
-        }
-        else ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to remove a room to the zone");
+        } else
+            ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to remove a room to the zone");
     }
 
     public void setMorningTempToZone(double parseDouble, Zone currentZone) {
-        if(validateUserPermission()) {
+        if (validateUserPermission()) {
             currentZone.setMorningTemp(parseDouble);
             resetHVAC();
             ConsoleOutputService.getInstance().infoLog("[SHH Module] " + getUserName() + " has set morning temperature of " + parseDouble + " °C to Zone #" + currentZone);
-        }
-        else ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to set morning temperature to zone");
+        } else
+            ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to set morning temperature to zone");
     }
 
     public void setAfternoonTempToZone(double parseDouble, Zone currentZone) {
-        if(validateUserPermission()) {
+        if (validateUserPermission()) {
             currentZone.setAfternoonTemp(parseDouble);
             resetHVAC();
             ConsoleOutputService.getInstance().infoLog("[SHH Module] " + getUserName() + " has set afternoon temperature of " + parseDouble + " °C to Zone #" + currentZone);
-        }
-        else ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to set afternoon temperature to zone");
+        } else
+            ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to set afternoon temperature to zone");
     }
 
     public void setNightTempToZone(double parseDouble, Zone currentZone) {
-        if(validateUserPermission()) {
+        if (validateUserPermission()) {
             currentZone.setNightTemp(parseDouble);
             resetHVAC();
             ConsoleOutputService.getInstance().infoLog("[SHH Module] " + getUserName() + " has set night temperature of " + parseDouble + " °C to Zone #" + currentZone);
-        }
-        else ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to set night temperature to zone");
+        } else
+            ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to set night temperature to zone");
     }
 
     public void setOverwriteTemp(double parseDouble, Zone currentZone) {
-        if(validateUserPermission()) {
+        if (validateUserPermission()) {
             currentZone.setOverwrittenTemp(parseDouble);
             resetHVAC();
             ConsoleOutputService.getInstance().infoLog("[SHH Module] " + getUserName() + " has overwritten the temperature of Zone #" + currentZone + " to " + parseDouble + " °C");
-        }
-        else ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to overwrite temperature");
+        } else
+            ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to overwrite temperature");
     }
 
     public void removeOverwriteTemp(Zone currentZone) {
-        if(validateUserPermission()) {
+        if (validateUserPermission()) {
             currentZone.setOverwritten(false);
             resetHVAC();
             ConsoleOutputService.getInstance().infoLog("[SHH Module] " + getUserName() + " has removed the overwritten temperature of Zone #" + currentZone);
-        }
-        else ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to remove overwrite temperature");
+        } else
+            ConsoleOutputService.getInstance().warningLog("[SHH Module] " + getUserName() + " does not have the permission to remove overwrite temperature");
     }
 
     /**
@@ -251,7 +264,7 @@ public class SHHModule extends Service {
             for (Zone zone : zones) {
 
                 // Look if zone is overwritten
-                int currentMonth = Model.getSimulationParameters().getDateTime().getDate().get(Calendar.MONTH);
+                int currentMonth = Model.getSimulationParameters().getDateTime().getDate().get(Calendar.MONTH) + 1;
                 if (zone.getOverwritten()) {
                     double desiredTemp = zone.getOverwrittenTemp();
                     if (Model.getSimulationParameters().getSmartHeatingParameters().isSummer(currentMonth)) {
@@ -313,6 +326,17 @@ public class SHHModule extends Service {
 
         // Update all rooms that are in no zones, like HVAC stopped, temperature will go towards outside temp
         updateNoZoneTemp();
+
+        // Look at 0 degree rooms and alert of possible pipe explosion
+        alertColdRooms();
+    }
+
+    private void alertColdRooms() {
+        for (Room r : Model.getHouse().getRooms()) {
+            if (r.getTemperature() <= 0.01 && r.getTemperature() >= -0.06) {
+                ConsoleOutputService.getInstance().warningLog("[SHS Module] ALERT - Temperature of 0°C has been reach in room: " + r.getName() + ". Potential danger of pipe burst.");
+            }
+        }
     }
 
     private ArrayList<String> getAllZoneRoomNames() {
@@ -343,7 +367,6 @@ public class SHHModule extends Service {
             }
         }
     }
-
 
     private void updateZoneTemp(String state, double desiredTemp, Zone zone) {
         for (Room room : zone.getRooms()) {
@@ -378,6 +401,7 @@ public class SHHModule extends Service {
                     room.getHeater().setOn(false);
                     room.getAC().setOn(false);
                     room.setHvacState(false);
+                    closeWindows(room);
                 }
             } else { // hvac is off, temperature goes toward outside
                 double outsideTemp = Model.getSimulationParameters().getOutsideTemp();
@@ -389,21 +413,13 @@ public class SHHModule extends Service {
         }
     }
 
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        BigDecimal bd = BigDecimal.valueOf(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
-    }
-
     private void adjustToOutsideTemp(Room room, double outsideTemp, double currentTemp) {
         outsideTemp = round(outsideTemp, 2);
         currentTemp = round(currentTemp, 2);
 
         if (currentTemp > outsideTemp) { // must decrease
             room.setTemperature(currentTemp - 0.05);
-        } else if (currentTemp < outsideTemp){ // must increase
+        } else if (currentTemp < outsideTemp) { // must increase
             room.setTemperature(currentTemp + 0.05);
         }
     }
@@ -490,7 +506,6 @@ public class SHHModule extends Service {
                 w.setOpen(true);
             }
         }
-        ConsoleOutputService.getInstance().infoLog("[SHH Module] Windows of " + r + " have been opened");
     }
 
     public void closeWindows(Room r) {
@@ -501,7 +516,6 @@ public class SHHModule extends Service {
                 w.setOpen(false);
             }
         }
-        ConsoleOutputService.getInstance().infoLog("[SHH Module] Windows of " + r + " have been closed");
     }
 
 

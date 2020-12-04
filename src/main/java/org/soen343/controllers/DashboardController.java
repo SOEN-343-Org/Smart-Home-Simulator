@@ -76,6 +76,7 @@ public class DashboardController extends Controller {
         SHPModule.getInstance().attachObserver(smartHomeSecurityModuleController) // To update the visibility of the away model
                 .attachObserver(smartHomeHeatingModuleController); // For when away mode is turned on
         SHHModule.getInstance().attachObserver(smartHomeHeatingModuleController)
+                .attachObserver(simulationInfoController)
                 .attachObserver(houseLayoutController);
         DashboardService.getInstance().attachObserver(simulationContextController) // To update individual location
                 .attachObserver(smartHomeSimulatorModuleController) // To update individual location
