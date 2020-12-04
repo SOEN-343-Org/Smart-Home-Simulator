@@ -1,9 +1,0 @@
-[15:40:47] INFO [SHS Module] Added new individual Tony at location outside with role Family Adult
-[15:40:47] INFO [SHS Module] Added new individual Sousou at location hallway with role Guest
-[15:40:47] INFO [SHS Module] Logged into individual #8 Sousou
-[15:40:47] INFO [SHS Module] Updated Sousou location to outside
-[15:40:47] INFO Simulation has started
-[15:40:59] WARNING [SHC Module] User does not have the permission to update Door #1
-[15:40:59] WARNING [SHC Module] User does not have the permission to update Door #2
-[15:40:59] WARNING [SHC Module] User does not have the permission to update Door #3
-[15:41:23] INFO Simulation has stopped

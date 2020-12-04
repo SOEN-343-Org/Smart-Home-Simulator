@@ -27,6 +27,8 @@ public class DashboardController extends Controller {
     @FXML
     private SmartHomeSecurityModuleController smartHomeSecurityModuleController;
     @FXML
+    private SmartHomeHeatingModuleController smartHomeHeatingModuleController;
+    @FXML
     private ConsoleOutputController consoleOutputController;
 
     // UI element to change view
@@ -47,6 +49,7 @@ public class DashboardController extends Controller {
         smartHomeSimulatorModuleController.setMainController(this);
         smartHomeCoreModuleController.setMainController(this);
         smartHomeSecurityModuleController.setMainController(this);
+        smartHomeHeatingModuleController.setMainController(this);
         simulationContextController.setMainController(this);
         simulationInfoController.setMainController(this);
         consoleOutputController.setMainController(this);
@@ -56,6 +59,7 @@ public class DashboardController extends Controller {
         smartHomeSimulatorModuleController.initializeController();
         smartHomeCoreModuleController.initializeController();
         smartHomeSecurityModuleController.initializeController();
+        smartHomeHeatingModuleController.initializeController();
         houseLayoutController.initializeController();
         simulationInfoController.initializeController();
         consoleOutputController.initializeController();
