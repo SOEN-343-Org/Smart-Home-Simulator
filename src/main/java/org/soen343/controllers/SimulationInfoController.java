@@ -62,6 +62,16 @@ public class SimulationInfoController extends Controller {
         boolean status = Model.getSimulationParameters().isSimulationRunning();
         startStopToggle.setText(status ? "ON" : "OFF");
         startStopToggle.setSelected(status);
+        checkSimulationStatus(status);
+    }
+
+    /**
+     * Refactored version of startSimulation
+     * Checks the status of the simulation
+     *
+     * @param status
+     */
+    private void checkSimulationStatus(boolean status) {
         if (status) {
             Model.getSimulationParameters().getDateTime().startTime();
             startAnimatedTime();
@@ -86,6 +96,19 @@ public class SimulationInfoController extends Controller {
     @Override
     public void update() {
         Individual user = User.getCurrentIndividual();
+        checkIfProfileIsSet(user);
+        updateTime();
+        String temp = String.format("%.2f", Model.getSimulationParameters().getOutsideTemp());
+        outsideTemp.setText(temp + " °C");
+    }
+
+    /**
+     * Refactored the update function
+     * Extracted the if else statement into the new checkIfProfileIsSet function
+     *
+     * @param user
+     */
+    public void checkIfProfileIsSet(Individual user) {
         if (user == null) {
             profileName.setText("Profile not set");
             role.setText("Profile not set");

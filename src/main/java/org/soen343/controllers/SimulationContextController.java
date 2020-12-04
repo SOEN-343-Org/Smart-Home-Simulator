@@ -51,11 +51,7 @@ public class SimulationContextController extends Controller {
 
         simulationContextService = SimulationContextService.getInstance();
 
-        column1.setCellValueFactory(new PropertyValueFactory<>("id"));
-        column2.setCellValueFactory(new PropertyValueFactory<>("name"));
-        column3.setCellValueFactory(new PropertyValueFactory<>("role"));
-        column4.setCellValueFactory(new PropertyValueFactory<>("location"));
-        column2.setCellFactory(TextFieldTableCell.<Individual>forTableColumn());
+        setColumnValues();
 
         // BLOCK AND UNBLOCK of WINDOWS
 
@@ -63,7 +59,36 @@ public class SimulationContextController extends Controller {
         root2.setExpanded(true);
 
         ArrayList<Room> rooms = Model.getHouse().getRooms();
+        iterateThroughTheWindowsInAllRooms(rooms, root2);
 
+        blockUnblockTreeView.setRoot(root2);
+
+        blockUnblockTreeView.setCellFactory(CheckBoxTreeCell.forTreeView());
+        blockUnblockSelected = new HashSet<>();
+
+        checkBlockUnblockWindow(blockUnblockSelected, root2);
+        update();
+    }
+
+    /**
+     * Refactored intializeController Function
+     * Extracted method to set the values for the column
+     */
+    public void setColumnValues(){
+        column1.setCellValueFactory(new PropertyValueFactory<>("id"));
+        column2.setCellValueFactory(new PropertyValueFactory<>("name"));
+        column3.setCellValueFactory(new PropertyValueFactory<>("role"));
+        column4.setCellValueFactory(new PropertyValueFactory<>("location"));
+        column2.setCellFactory(TextFieldTableCell.<Individual>forTableColumn());
+    }
+
+    /**
+     * Refactored initializeController Function
+     * Extraccted method to iterate through all of the windows in all rooms
+     * @param rooms
+     * @param root2
+     */
+    public void iterateThroughTheWindowsInAllRooms(ArrayList<Room> rooms, CheckBoxTreeItem<String> root2){
         for (Room room : rooms) {
 
             if (room.getWindows().size() > 0) {
@@ -77,10 +102,15 @@ public class SimulationContextController extends Controller {
                 root2.getChildren().add(superItem);
             }
         }
-        blockUnblockTreeView.setRoot(root2);
+    }
 
-        blockUnblockTreeView.setCellFactory(CheckBoxTreeCell.forTreeView());
-        blockUnblockSelected = new HashSet<>();
+    /**
+     * Refactired initializeController Function
+     * Extracted method to see if the windows are blocked or unblocked
+     * @param blockUnblockSelected
+     * @param root2
+     */
+    public void checkBlockUnblockWindow(Set <TreeItem<String>> blockUnblockSelected,CheckBoxTreeItem<String> root2){
         root2.addEventHandler(CheckBoxTreeItem.checkBoxSelectionChangedEvent(), (CheckBoxTreeItem.TreeModificationEvent<String> evt) -> {
             CheckBoxTreeItem<String> item = evt.getTreeItem();
 
@@ -98,7 +128,6 @@ public class SimulationContextController extends Controller {
                 }
             }
         });
-        update();
     }
 
     @Override

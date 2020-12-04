@@ -7,16 +7,16 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import org.soen343.drawing.*;
 import org.soen343.models.Model;
 import org.soen343.models.house.*;
 
 import java.util.ArrayList;
 
+
 public class HouseLayoutController extends Controller {
 
-    private final double safeZoneH = 35;
-    private final double width = 500;
-    private final double height = 500;
+    private final double SAFE_ZONE_H = 35;
     private double safeZoneW;
     private double roomSize;
     private boolean nullHouse = false;
@@ -26,35 +26,16 @@ public class HouseLayoutController extends Controller {
     private GraphicsContext gc;
     private Room[][] layout;
     private Image grass;
-    private Image floor;
-    private Image openedDoor;
-    private Image closedDoor;
-    private Image openedWindow;
-    private Image closedWindow;
-    private Image blocker;
-    private Image openedLight;
-    private Image closedLight;
-    private Image individual;
-    private Image heater;
-    private Image ac;
 
     @FXML
     public void initialize() {
         // Initialization code can go here.
-
+        Corner.intitializeImages();
+        DoorsAndBlockers.initalizeImages();
+        Images.intitializeImages();
+        Individuals.intitializeImages();
+        ACAndHeater.initalizeImages();
         grass = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/grass.jpg")));
-        floor = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/floor.jpg")));
-        openedDoor = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/opened_door.png")));
-        closedDoor = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/closed_door.png")));
-        openedWindow = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/opened_window.png")));
-        closedWindow = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/closed_window.png")));
-        blocker = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/blocker.png")));
-        openedLight = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/opened_light.png")));
-        closedLight = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/closed_light.png")));
-        individual = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/individual.png")));
-        heater = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/heater.png")));
-        ac = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/ac.png")));
-
         gc = canvas.getGraphicsContext2D();
     }
 
@@ -68,7 +49,7 @@ public class HouseLayoutController extends Controller {
             nullHouse = true;
             return;
         }
-        roomSize = (int) Math.round((canvas.getHeight() - (2 * safeZoneH)) / layout.length);
+        roomSize = (int) Math.round((canvas.getHeight() - (2 * SAFE_ZONE_H)) / layout.length);
         safeZoneW = (int) Math.round((canvas.getWidth() - (roomSize * layout[0].length)) / 2);
     }
 
@@ -77,29 +58,34 @@ public class HouseLayoutController extends Controller {
         drawLayout();
     }
 
-    /**
-     * Draw null layout
-     */
-    private void drawNullLayout() {
-        gc.setLineWidth(8.0);
-        gc.strokeRect(0, 0, width, height);
-        gc.setStroke(Color.BLACK);
-        gc.setFont(new Font(20));
-        Text text = new Text("HOUSE LAYOUT IS NULL, RESTART THE APPLICATION");
-        text.setFont(new Font(20));
-        double textSize = text.getBoundsInLocal().getWidth();
-        gc.strokeText(text.getText(), (width - textSize) / 2, height / 2.0);
-    }
 
-    /**
-     * Create door
-     *
-     * @param object
-     * @return object door
-     */
-    private boolean isDoor(Object object) {
-        // Not the best and prettiest way but there is no place to put this yet.
-        return object instanceof Door;
+    private void drawAllRooms(){
+
+        // Loop through all the rooms in the layout 2d array
+        for (int i = 0; i < layout.length; i++) {
+            for (int j = 0; j < layout[i].length; j++) {
+                Room room = layout[i][j];
+                if (room != null) {
+
+                    WallsAndFloors.drawWallsAndFloors(gc, safeZoneW, roomSize, room, i, j);
+
+                    gc.setFill(Color.ALICEBLUE);
+
+                    DoorsAndBlockers.drawAllDoorsAndBlockers(gc, room, safeZoneW, roomSize, i, j);
+
+                    // Lights - in corner
+                    // There is a maximum of 4 items (lights, heater, AC) that will be placed in the corners
+                    Corner.drawCornerItems(gc, safeZoneW, roomSize, room, i, j);
+
+                    // User - under text there is visual maximum of individual inside of the same room, or else they wont be drawn
+                    Individuals.drawIndividuals(gc, safeZoneW, roomSize, room, i, j);
+
+                    // Ac and Heater and temp text over room name
+                    ACAndHeater.drawElectrics(gc, safeZoneW, roomSize, room, i, j);
+
+                }
+            }
+        }
     }
 
     /**
@@ -107,149 +93,14 @@ public class HouseLayoutController extends Controller {
      */
     public void drawLayout() {
         if (nullHouse) {
-            drawNullLayout();
+            DrawingNull.drawNullLayout(gc);
             return;
         }
 
-        ArrayList<Individual> individuals = Model.getHouse().getIndividuals();
-
-        gc.drawImage(grass, 0, 0, width, height);
-
-        for (int i = 0; i < layout.length; i++) {
-            for (int j = 0; j < layout[i].length; j++) {
-                if (layout[i][j] != null) {
-                    gc.drawImage(floor, safeZoneW + roomSize * j, safeZoneH + roomSize * i, roomSize, roomSize);
-                    gc.setStroke(Color.BLACK);
-                    gc.setLineWidth(5.0);
-                    gc.strokeRect(safeZoneW + roomSize * j, safeZoneH + roomSize * i, roomSize, roomSize);
-                }
-            }
-        }
-
-        // Loop through all the rooms in the layout 2d array
-        for (int i = 0; i < layout.length; i++) {
-            for (int j = 0; j < layout[i].length; j++) {
-                Room room = layout[i][j];
-                if (room != null) {
-                    // Draw floor, walls and name of room
-                    double fontSize = 20;
-                    gc.setFont(new Font(fontSize));
-                    gc.setFill(Color.ALICEBLUE);
-                    Text text = new Text(room.getName());
-                    text.setFont(new Font(fontSize));
-                    double textSize = text.getBoundsInLocal().getWidth();
-                    gc.fillText(room.getName(), (safeZoneW + roomSize * j) + (roomSize - textSize) / 2, (safeZoneH + roomSize * i) + (roomSize / 2));
-
-                    // Time to draw the icons
-
-                    // Doors and windows and blockers
-                    gc.setFill(Color.ALICEBLUE);
-
-                    double iconSize = 35;
-                    if (room.getTop() != null && isDoor(room.getTop())) {
-                        gc.drawImage((((Door) room.getTop()).isOpen() ? openedDoor : closedDoor), (safeZoneW + roomSize * j) + (roomSize - iconSize) / 2.0, (safeZoneH + roomSize * i) - (iconSize / 2.0), iconSize, iconSize);
-                        gc.fillText(Integer.toString(((Door) room.getTop()).getId()), (safeZoneW + roomSize * j) + (roomSize - iconSize) / 2.0 + iconSize / 2.0, (safeZoneH + roomSize * i) + iconSize / 4.0);
-                    } else if (room.getTop() != null && !isDoor(room.getTop())) {
-                        gc.drawImage((((Window) room.getTop()).isOpen() ? openedWindow : closedWindow), (safeZoneW + roomSize * j) + (roomSize - iconSize) / 2.0, (safeZoneH + roomSize * i) - (iconSize / 2.0), iconSize, iconSize);
-                        gc.fillText(Integer.toString(((Window) room.getTop()).getId()), (safeZoneW + roomSize * j) + (roomSize - iconSize) / 2.0 + iconSize / 3.0, (safeZoneH + roomSize * i) + iconSize / 4.0);
-                        if (((Window) room.getTop()).isBlocked()) {
-                            gc.drawImage(blocker, (safeZoneW + roomSize * j) + (roomSize - iconSize) / 2.0, (safeZoneH + roomSize * i) + iconSize / 2.0, iconSize, iconSize);
-                        }
-                    }
-                    if (room.getRight() != null && isDoor(room.getRight())) {
-                        gc.drawImage((((Door) room.getRight()).isOpen() ? openedDoor : closedDoor), (safeZoneW + roomSize * j) + (roomSize - iconSize / 2.0), (safeZoneH + roomSize * i) + (roomSize - iconSize) / 2.0, iconSize, iconSize);
-                        gc.fillText(Integer.toString(((Door) room.getRight()).getId()), (safeZoneW + roomSize * j) + roomSize, (safeZoneH + roomSize * i) + (roomSize / 2.0 + iconSize / 4.0));
-                    } else if (room.getRight() != null && !isDoor(room.getRight())) {
-                        gc.drawImage((((Window) room.getRight()).isOpen() ? openedWindow : closedWindow), (safeZoneW + roomSize * j) + (roomSize - iconSize / 2.0), (safeZoneH + roomSize * i) + (roomSize - iconSize) / 2.0, iconSize, iconSize);
-                        gc.fillText(Integer.toString(((Window) room.getRight()).getId()), (safeZoneW + roomSize * j) + (roomSize - iconSize / 8.0), (safeZoneH + roomSize * i) + (roomSize / 2.0 + iconSize / 4.0));
-                        if (((Window) room.getRight()).isBlocked()) {
-                            gc.drawImage(blocker, (safeZoneW + roomSize * j) + (roomSize - iconSize / 2.0) - iconSize, (safeZoneH + roomSize * i) + (roomSize - iconSize) / 2.0, iconSize, iconSize);
-                        }
-                    }
-                    if (room.getDown() != null && isDoor(room.getDown())) {
-                        gc.drawImage((((Door) room.getDown()).isOpen() ? openedDoor : closedDoor), (safeZoneW + roomSize * j) + (roomSize - iconSize) / 2.0, (safeZoneH + roomSize * i) + (roomSize - iconSize / 2.0), iconSize, iconSize);
-                        gc.fillText(Integer.toString(((Door) room.getDown()).getId()), (safeZoneW + roomSize * j) + (roomSize / 2.0), (safeZoneH + roomSize * i) + roomSize + iconSize / 4.0);
-                    } else if (room.getDown() != null && !isDoor(room.getDown())) {
-                        gc.drawImage((((Window) room.getDown()).isOpen() ? openedWindow : closedWindow), (safeZoneW + roomSize * j) + (roomSize - iconSize) / 2.0, (safeZoneH + roomSize * i) + (roomSize - iconSize / 2.0), iconSize, iconSize);
-                        gc.fillText(Integer.toString(((Window) room.getDown()).getId()), (safeZoneW + roomSize * j) + (roomSize - iconSize / 3.0) / 2.0, (safeZoneH + roomSize * i) + roomSize + iconSize / 4.0);
-                        if (((Window) room.getDown()).isBlocked()) {
-                            gc.drawImage(blocker, (safeZoneW + roomSize * j) + (roomSize - iconSize) / 2.0, (safeZoneH + roomSize * i) + (roomSize - iconSize / 2.0) - iconSize, iconSize, iconSize);
-                        }
-                    }
-                    if (room.getLeft() != null && isDoor(room.getLeft())) {
-                        gc.drawImage((((Door) room.getLeft()).isOpen() ? openedDoor : closedDoor), (safeZoneW + roomSize * j) - (iconSize / 2.0), (safeZoneH + roomSize * i) + (roomSize - iconSize) / 2.0, iconSize, iconSize);
-                        gc.fillText(Integer.toString(((Door) room.getLeft()).getId()), (safeZoneW + roomSize * j), (safeZoneH + roomSize * i) + (roomSize / 2.0 + iconSize / 4.0));
-                    } else if (room.getLeft() != null && !isDoor(room.getLeft())) {
-                        gc.drawImage((((Window) room.getLeft()).isOpen() ? openedWindow : closedWindow), (safeZoneW + roomSize * j) - (iconSize / 2.0), (safeZoneH + roomSize * i) + (roomSize - iconSize) / 2.0, iconSize, iconSize);
-                        gc.fillText(Integer.toString(((Window) room.getLeft()).getId()), (safeZoneW + roomSize * j) - iconSize / 9.0, (safeZoneH + roomSize * i) + (roomSize / 2.0 + iconSize / 4.0));
-                        if (((Window) room.getLeft()).isBlocked()) {
-                            gc.drawImage(blocker, (safeZoneW + roomSize * j) - (iconSize / 2.0) + iconSize, (safeZoneH + roomSize * i) + (roomSize - iconSize) / 2.0, iconSize, iconSize);
-                        }
-                    }
-
-                    // Lights - in corner
-                    // There is a maximum of 4 items (lights, heater, AC) that will be placed in the corners
-                    int currentObjectPosition = 0;
-                    ArrayList<Light> lights = room.getLights();
-                    for (Light light : lights) {
-                        if (currentObjectPosition == 0) {
-                            currentObjectPosition++;
-                            gc.drawImage((light.isOpen() ? openedLight : closedLight), (safeZoneW + roomSize * j), (safeZoneH + roomSize * i), iconSize, iconSize);
-                            gc.setFill(light.isOpen() ? Color.BLACK : Color.ALICEBLUE);
-                            gc.fillText(Integer.toString(light.getId()), (safeZoneW + roomSize * j) + iconSize / 3.0, (safeZoneH + roomSize * i) + iconSize * 0.7);
-                        } else if (currentObjectPosition == 1) {
-                            currentObjectPosition++;
-                            gc.drawImage((light.isOpen() ? openedLight : closedLight), (safeZoneW + roomSize * j) + roomSize - iconSize, (safeZoneH + roomSize * i), iconSize, iconSize);
-                            gc.setFill(light.isOpen() ? Color.BLACK : Color.ALICEBLUE);
-                            gc.fillText(Integer.toString(light.getId()), (safeZoneW + roomSize * j) + roomSize - iconSize * 0.7, (safeZoneH + roomSize * i) + iconSize * 0.7);
-                        } else if (currentObjectPosition == 2) {
-                            currentObjectPosition++;
-                            gc.drawImage((light.isOpen() ? openedLight : closedLight), (safeZoneW + roomSize * j), (safeZoneH + roomSize * i) + roomSize - iconSize, iconSize, iconSize);
-                            gc.setFill(light.isOpen() ? Color.BLACK : Color.ALICEBLUE);
-                            gc.fillText(Integer.toString(light.getId()), (safeZoneW + roomSize * j) + iconSize / 3.0, (safeZoneH + roomSize * i) + roomSize - iconSize / 3.0);
-                        } else if (currentObjectPosition == 3) {
-                            currentObjectPosition++;
-                            gc.drawImage((light.isOpen() ? openedLight : closedLight), (safeZoneW + roomSize * j) + roomSize - iconSize, (safeZoneH + roomSize * i) + roomSize - iconSize, iconSize, iconSize);
-                            gc.setFill(light.isOpen() ? Color.BLACK : Color.ALICEBLUE);
-                            gc.fillText(Integer.toString(light.getId()), (safeZoneW + roomSize * j) + roomSize - iconSize * 0.7, (safeZoneH + roomSize * i) + roomSize - iconSize / 3.0);
-                        }
-                    }
-
-                    // User - under text there is visual maximum of individual inside of the same room, or else they wont be drawn
-                    int currentIndividualPosition = 0;
-                    for (Individual ind : individuals) {
-                        if (ind.getLocation().equals(room.getName()) && currentIndividualPosition < 4) {
-                            // Draw individual
-                            gc.drawImage(individual, (safeZoneW + roomSize * j) + (currentIndividualPosition * iconSize) + 5, (safeZoneH + roomSize * i) + (roomSize / 2.0), iconSize, iconSize);
-                            gc.setFill(Color.ALICEBLUE);
-                            gc.fillText(Integer.toString(ind.getId()), (safeZoneW + roomSize * j) + (iconSize / 2.0) - 5 + (currentIndividualPosition * iconSize), (safeZoneH + roomSize * i) + (roomSize / 2) + iconSize);
-                            currentIndividualPosition++;
-                        }
-                    }
-
-                    // Heater
-
-                    if (room.getHeater().isOn()) {
-                        gc.drawImage(heater, (safeZoneW + roomSize * j) + 20, (safeZoneH + roomSize * i) + iconSize / 2, iconSize, iconSize);
-                    }
-
-                    // AC
-
-                    if (room.getAC().isOn()) {
-                        gc.drawImage(ac, (safeZoneW + roomSize * j) + (roomSize / 3) * 2, (safeZoneH + roomSize * i) + roomSize / 4, iconSize, iconSize);
-                    }
-
-                    // Draw temperature on room
-                    double fontSize2 = 15;
-                    gc.setFont(new Font(fontSize2));
-                    Text temp = new Text(String.format("%.2f", room.getTemperature()) + "°C");
-                    temp.setFont(new Font(fontSize2));
-                    double tempSize = temp.getBoundsInLocal().getWidth();
-                    gc.fillText(String.format("%.2f", room.getTemperature())+ "°C", (safeZoneW + roomSize * j) + (roomSize - tempSize) / 2, (safeZoneH + roomSize * i) + roomSize / 4);
-
-
-                }
-            }
-        }
+        double WIDTH = 500;
+        double HEIGHT = 500;
+        gc.drawImage(grass, 0, 0, WIDTH, HEIGHT);
+        Images.drawImagesLayout(layout, gc, safeZoneW, roomSize);
+        drawAllRooms();
     }
 }
