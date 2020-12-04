@@ -99,12 +99,12 @@ public class SimulationInfoController extends Controller {
             chosenLocation.setText(getLocation);
         }
         updateTime();
+        String temp = String.format("%.2f", Model.getSimulationParameters().getOutsideTemp());
+        outsideTemp.setText(temp + " °C");
         String summerTemp1 = String.format("%.2f", Model.getSimulationParameters().getSmartHeatingParameters().getSummerTemp());
         summerTemp.setText(summerTemp1 + " °C");
         String winterTemp1 = String.format("%.2f", Model.getSimulationParameters().getSmartHeatingParameters().getWinterTemp());
         winterTemp.setText(winterTemp1 + " °C");
-        String temp = String.format("%.2f", Model.getSimulationParameters().getOutsideTemp());
-        outsideTemp.setText(temp + " °C");
     }
 
     public void updateTime() {
