@@ -411,7 +411,8 @@ public class SHHModule extends Service {
     private void decreaseTempSummer(Room room, double currentTemp) {
         if (currentTemp >= Model.getSimulationParameters().getOutsideTemp()) {
             if (canOpenWindow(room)) {
-                closeWindows(room);
+//                closeWindows(room);
+                openWindows(room);
             } else {
                 room.getAC().setOn(true);
             }
@@ -454,29 +455,35 @@ public class SHHModule extends Service {
         room.setTemperature(currentTemp + 0.1);
     }
 
+    /**
+     * If there's at least 1 blocked window,
+     * then do not open any.
+     * @param room
+     * @return
+     */
     private boolean canOpenWindow(Room room) {
         ArrayList<Window> windows = room.getWindows();
         if (windows.size() > 0) {
             for (Window w : windows) {
-                if (!w.isBlocked()) {
-                    return true;
+//                if (!w.isBlocked()) {
+//                    return true;
+//                }
+                if (w.isBlocked()) {
+                    ConsoleOutputService.getInstance().infoLog("[SHH Module] A window in " + room + " is blocked");
+                    return false;
                 }
+
             }
         }
-        return false;
+//        return false;
+        return true;
     }
+
 
     public void notifiesTimeUpdate() {
         // This is called every second and needs to update the temperature
         gigaUpdate();
         notifyObservers(this);
-    }
-
-    private float stringToFloatTemp(String temp) {
-        String delimiter = "\\u00B0";
-        String[] tokensVal = temp.split(delimiter);
-        float tempFl = Float.parseFloat(tokensVal[0]);
-        return tempFl;
     }
 
 
