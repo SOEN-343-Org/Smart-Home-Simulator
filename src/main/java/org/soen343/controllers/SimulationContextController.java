@@ -65,23 +65,8 @@ public class SimulationContextController extends Controller {
 
         blockUnblockTreeView.setCellFactory(CheckBoxTreeCell.forTreeView());
         blockUnblockSelected = new HashSet<>();
-        root2.addEventHandler(CheckBoxTreeItem.checkBoxSelectionChangedEvent(), (CheckBoxTreeItem.TreeModificationEvent<String> evt) -> {
-            CheckBoxTreeItem<String> item = evt.getTreeItem();
 
-            if (evt.wasIndeterminateChanged()) {
-                if (item.isIndeterminate()) {
-                    blockUnblockSelected.remove(item);
-                } else if (item.isSelected()) {
-                    blockUnblockSelected.add(item);
-                }
-            } else if (evt.wasSelectionChanged()) {
-                if (item.isSelected()) {
-                    blockUnblockSelected.add(item);
-                } else {
-                    blockUnblockSelected.remove(item);
-                }
-            }
-        });
+        checkBlockUnblockWindow(blockUnblockSelected, root2);
         update();
     }
 
@@ -117,6 +102,32 @@ public class SimulationContextController extends Controller {
                 root2.getChildren().add(superItem);
             }
         }
+    }
+
+    /**
+     * Refactired initializeController Function
+     * Extracted method to see if the windows are blocked or unblocked
+     * @param blockUnblockSelected
+     * @param root2
+     */
+    public void checkBlockUnblockWindow(Set <TreeItem<String>> blockUnblockSelected,CheckBoxTreeItem<String> root2){
+        root2.addEventHandler(CheckBoxTreeItem.checkBoxSelectionChangedEvent(), (CheckBoxTreeItem.TreeModificationEvent<String> evt) -> {
+            CheckBoxTreeItem<String> item = evt.getTreeItem();
+
+            if (evt.wasIndeterminateChanged()) {
+                if (item.isIndeterminate()) {
+                    blockUnblockSelected.remove(item);
+                } else if (item.isSelected()) {
+                    blockUnblockSelected.add(item);
+                }
+            } else if (evt.wasSelectionChanged()) {
+                if (item.isSelected()) {
+                    blockUnblockSelected.add(item);
+                } else {
+                    blockUnblockSelected.remove(item);
+                }
+            }
+        });
     }
 
     @Override
