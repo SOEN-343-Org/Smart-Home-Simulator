@@ -34,6 +34,7 @@ public class HouseLayoutController extends Controller {
         DoorsAndBlockers.initalizeImages();
         Images.intitializeImages();
         Individuals.intitializeImages();
+        ACAndHeater.initalizeImages();
         grass = new Image(String.valueOf(HouseLayoutController.class.getResource("/org/soen343/img/grass.jpg")));
         gc = canvas.getGraphicsContext2D();
     }
@@ -78,6 +79,10 @@ public class HouseLayoutController extends Controller {
 
                     // User - under text there is visual maximum of individual inside of the same room, or else they wont be drawn
                     Individuals.drawIndividuals(gc, safeZoneW, roomSize, room, i, j);
+
+                    // Ac and Heater and temp text over room name
+                    ACAndHeater.drawElectrics(gc, safeZoneW, roomSize, room, i, j);
+
                 }
             }
         }

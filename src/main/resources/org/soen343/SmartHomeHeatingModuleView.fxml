@@ -17,7 +17,7 @@
 <AnchorPane fx:id="smartHomeHeatingModule" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.soen343.controllers.SmartHomeHeatingModuleController">
     <children>
         <Label layoutX="14.0" layoutY="6.0" text="SMART HOME HEATER MODULE" />
-      <ChoiceBox layoutX="101.0" layoutY="229.0" prefHeight="26.0" prefWidth="106.0" />
+      <ChoiceBox fx:id="modifyZoneChoiceBox" layoutX="101.0" layoutY="229.0" prefHeight="26.0" prefWidth="106.0" />
       <Label layoutX="11.0" layoutY="233.0" text="Modify a zone:" />
       <GridPane layoutX="1.0" layoutY="314.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="111.0" prefWidth="450.0">
         <columnConstraints>
@@ -34,24 +34,24 @@
             <Label prefHeight="17.0" prefWidth="243.0" text="Morning temperature (4 am - 12 pm)" />
             <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1">
                <children>
-                  <TextField prefHeight="26.0" prefWidth="78.0" />
+                  <TextField fx:id="morningTempTextField" prefHeight="26.0" prefWidth="78.0" />
                   <Label text="°C" />
                </children>
             </HBox>
-            <Button  mnemonicParsing="false" text="Set" GridPane.columnIndex="2" />
+            <Button mnemonicParsing="false" onAction="#setMorningTempAction" text="Set" GridPane.columnIndex="2" />
             <Label text="Afternoon temperature (12 pm - 8 pm)" GridPane.rowIndex="1" />
-            <Button  mnemonicParsing="false" text="Set" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button mnemonicParsing="false" onAction="#setAfternoonTempAction" text="Set" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Label text="Night temperature (8 pm - 4 am)" GridPane.rowIndex="2" />
-            <Button  mnemonicParsing="false" text="Set" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Button mnemonicParsing="false" onAction="#setNightTempAction" text="Set" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <TextField prefHeight="26.0" prefWidth="78.0" />
+                  <TextField fx:id="afternoonTempTextField" prefHeight="26.0" prefWidth="78.0" />
                   <Label text="°C" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <TextField prefHeight="26.0" prefWidth="78.0" />
+                  <TextField fx:id="nightTempTextField" prefHeight="26.0" prefWidth="78.0" />
                   <Label text="°C" />
                </children>
             </HBox>
@@ -60,11 +60,11 @@
             <Insets left="10.0" />
          </padding>
       </GridPane>
-      <TableView layoutX="22.0" layoutY="23.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="111.0" prefWidth="407.0">
+      <TableView fx:id="zonesTableView" layoutX="22.0" layoutY="23.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="111.0" prefWidth="407.0">
         <columns>
-          <TableColumn editable="false" prefWidth="113.0" text="Zones" />
-          <TableColumn editable="false" prefWidth="186.0" text="Rooms" />
-            <TableColumn editable="false" prefWidth="107.0" text="Desired Temp" />
+          <TableColumn fx:id="zoneColumn" editable="false" prefWidth="66.0" text="Zones" />
+          <TableColumn fx:id="roomColumn" editable="false" prefWidth="168.0" text="Rooms" />
+            <TableColumn fx:id="tempColumn" editable="false" prefWidth="172.0" text="Desired Temp" />
         </columns>
       </TableView>
       <GridPane layoutY="134.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="450.0">
@@ -81,14 +81,14 @@
             <Label text="Delete a zone:" GridPane.columnIndex="1" />
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="1">
                <children>
-                  <TextField prefHeight="25.0" prefWidth="96.0" />
-                  <Button mnemonicParsing="false" text="Create" />
+                  <TextField fx:id="createZoneTextField" prefHeight="25.0" prefWidth="96.0" />
+                  <Button mnemonicParsing="false" onAction="#createZoneAction" text="Create" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <ChoiceBox prefHeight="25.0" prefWidth="93.0" />
-                  <Button mnemonicParsing="false" text="Delete" />
+                  <ChoiceBox fx:id="deleteZoneChoiceBox" prefHeight="25.0" prefWidth="93.0" />
+                  <Button mnemonicParsing="false" onAction="#deleteZoneAction" text="Delete" />
                </children>
             </HBox>
          </children>
@@ -110,14 +110,14 @@
             <Label text="Remove a room from the zone:" GridPane.columnIndex="1" />
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="1">
                <children>
-                  <ChoiceBox prefHeight="25.0" prefWidth="93.0" />
-                  <Button mnemonicParsing="false" text="Add" />
+                  <ChoiceBox fx:id="addRoomToZoneChoiceBox" prefHeight="25.0" prefWidth="93.0" />
+                  <Button mnemonicParsing="false" onAction="#addRoomToZoneAction" text="Add" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <ChoiceBox prefHeight="25.0" prefWidth="93.0" />
-                  <Button mnemonicParsing="false" text="Remove" />
+                  <ChoiceBox fx:id="removeRoomFromZoneChoiceBox" prefHeight="25.0" prefWidth="93.0" />
+                  <Button mnemonicParsing="false" onAction="#removeRoomFromZoneAction" text="Remove" />
                </children>
             </HBox>
          </children>
@@ -138,14 +138,14 @@
             <Label prefHeight="17.0" prefWidth="244.0" text="Overwrite desired temperature of the zone:" />
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="1">
                <children>
-                  <TextField prefHeight="26.0" prefWidth="78.0" />
+                  <TextField fx:id="overwriteTempTextField" prefHeight="26.0" prefWidth="78.0" />
                   <Label text="°C" />
-                  <Button mnemonicParsing="false" text="Overwrite" />
+                  <Button mnemonicParsing="false" onAction="#overwriteTempAction" text="Overwrite" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <Button mnemonicParsing="false" text="Remove overwrite" />
+                  <Button mnemonicParsing="false" onAction="#removeOverwriteAction" text="Remove overwrite" />
                </children>
             </HBox>
          </children>
@@ -166,17 +166,17 @@
             <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="205.0" spacing="10.0">
                <children>
                   <Label prefHeight="36.0" prefWidth="78.0" text="Set Summer temperature" wrapText="true" />
-                  <TextField prefHeight="25.0" prefWidth="47.0" />
+                  <TextField fx:id="summerTempTextField" prefHeight="25.0" prefWidth="47.0" />
                   <Label text="°C" />
-                  <Button mnemonicParsing="false" text="Set" />
+                  <Button mnemonicParsing="false" onAction="#setSummerTempAction" text="Set" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1">
                <children>
                   <Label prefHeight="36.0" prefWidth="78.0" text="Set Winter temperature" wrapText="true" />
-                  <TextField prefHeight="25.0" prefWidth="47.0" />
+                  <TextField fx:id="winterTempTextField" prefHeight="25.0" prefWidth="47.0" />
                   <Label text="°C" />
-                  <Button mnemonicParsing="false" text="Set" />
+                  <Button mnemonicParsing="false" onAction="#setWinterTempAction" text="Set" />
                </children>
             </HBox>
          </children>
@@ -184,6 +184,7 @@
             <Insets left="10.0" />
          </padding>
       </GridPane>
-      <Button layoutX="217.0" layoutY="230.0" mnemonicParsing="false" text="Modify" />
+      <Button layoutX="217.0" layoutY="230.0" mnemonicParsing="false" onAction="#modifyZoneAction" text="Modify" />
+      <Label fx:id="currentZoneLabel" layoutX="289.0" layoutY="234.0" prefHeight="17.0" prefWidth="139.0" text="Modifying: " textFill="#1100ff" visible="false" />
     </children>
 </AnchorPane>

@@ -75,6 +75,7 @@ public class SHPModule extends Service {
         if (Model.getSimulationParameters().isAwayModeOn()) {
             Model.getSimulationParameters().setAwayMode();
             ConsoleOutputService.getInstance().infoLog("[SHP Module] [Away Mode] " + currentIndividual.getName() + " has set Away Mode to OFF");
+            SHHModule.getInstance().resetHVAC();
             notifyObservers(this);
             return true;
         }
@@ -96,6 +97,7 @@ public class SHPModule extends Service {
             SHCModule.getInstance().awayCloseLights(Model.getHouse().getAllLights());
             SHCModule.getInstance().awayCloseWindows(Model.getHouse().getAllWindows());
             SHCModule.getInstance().awayCloseDoors(Model.getHouse().getAllDoors());
+            SHHModule.getInstance().resetHVAC();
         }
         notifyObservers(this);
         return true;

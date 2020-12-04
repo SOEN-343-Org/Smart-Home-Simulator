@@ -3,6 +3,7 @@ package org.soen343.services;
 import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.Individual;
+import org.soen343.services.modules.SHHModule;
 
 public class DashboardService extends Service {
 
@@ -36,11 +37,12 @@ public class DashboardService extends Service {
         }
         Model.getSimulationParameters().setSimulationIsRunning();
 
-        if(Model.getSimulationParameters().isSimulationRunning()) {
+        if (Model.getSimulationParameters().isSimulationRunning()) {
             ConsoleOutputService.getInstance().infoLog("Simulation has started");
-        }
-        else {
+            SHHModule.getInstance().resetHVAC();
+        } else {
             ConsoleOutputService.getInstance().infoLog("Simulation has stopped");
+            SHHModule.getInstance().resetHVAC();
         }
 
         this.notifyObservers(this);

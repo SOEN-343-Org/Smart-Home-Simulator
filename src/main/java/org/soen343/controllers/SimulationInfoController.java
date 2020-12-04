@@ -10,6 +10,7 @@ import org.soen343.models.Model;
 import org.soen343.models.User;
 import org.soen343.models.house.Individual;
 import org.soen343.services.DashboardService;
+import org.soen343.services.modules.SHHModule;
 import org.soen343.services.modules.SHPModule;
 
 import java.text.DateFormat;
@@ -22,7 +23,11 @@ import java.util.TimerTask;
 public class SimulationInfoController extends Controller {
 
     @FXML
-    public Slider slider;
+    private Slider slider;
+    @FXML
+    private Label summerTemp;
+    @FXML
+    private Label winterTemp;
     @FXML
     private Label currentMultiplier;
     @FXML
@@ -53,6 +58,7 @@ public class SimulationInfoController extends Controller {
 
     @FXML
     private void startSimulation(ActionEvent actionEvent) {
+        boolean success = dashboardService.setSimulationRunning();
         boolean status = Model.getSimulationParameters().isSimulationRunning();
         startStopToggle.setText(status ? "ON" : "OFF");
         startStopToggle.setSelected(status);
@@ -62,9 +68,10 @@ public class SimulationInfoController extends Controller {
     /**
      * Refactored version of startSimulation
      * Checks the status of the simulation
+     *
      * @param status
      */
-    private void checkSimulationStatus(boolean status){
+    private void checkSimulationStatus(boolean status) {
         if (status) {
             Model.getSimulationParameters().getDateTime().startTime();
             startAnimatedTime();
@@ -91,16 +98,17 @@ public class SimulationInfoController extends Controller {
         Individual user = User.getCurrentIndividual();
         checkIfProfileIsSet(user);
         updateTime();
-        String temp = Integer.toString(Model.getSimulationParameters().getOutsideTemp());
+        String temp = String.format("%.2f", Model.getSimulationParameters().getOutsideTemp());
         outsideTemp.setText(temp + " °C");
     }
 
     /**
      * Refactored the update function
      * Extracted the if else statement into the new checkIfProfileIsSet function
+     *
      * @param user
      */
-    public void checkIfProfileIsSet(Individual user){
+    public void checkIfProfileIsSet(Individual user) {
         if (user == null) {
             profileName.setText("Profile not set");
             role.setText("Profile not set");
@@ -113,6 +121,13 @@ public class SimulationInfoController extends Controller {
             String getLocation = User.getCurrentIndividual().getLocation();
             chosenLocation.setText(getLocation);
         }
+        updateTime();
+        String temp = String.format("%.2f", Model.getSimulationParameters().getOutsideTemp());
+        outsideTemp.setText(temp + " °C");
+        String summerTemp1 = String.format("%.2f", Model.getSimulationParameters().getSmartHeatingParameters().getSummerTemp());
+        summerTemp.setText(summerTemp1 + " °C");
+        String winterTemp1 = String.format("%.2f", Model.getSimulationParameters().getSmartHeatingParameters().getWinterTemp());
+        winterTemp.setText(winterTemp1 + " °C");
     }
 
     public void updateTime() {
@@ -126,11 +141,14 @@ public class SimulationInfoController extends Controller {
     private void startAnimatedTime() {
         timer = new Timer();
         SHPModule shpModule = SHPModule.getInstance();
+        SHHModule shhModule = SHHModule.getInstance();
+        Model.getHouse().setHavcStatus("START");
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(() -> {
                     shpModule.notifiesTimeUpdate();
+                    shhModule.notifiesTimeUpdate();
                     updateTime();
                 });
             }

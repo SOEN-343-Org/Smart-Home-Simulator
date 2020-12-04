@@ -2,11 +2,12 @@ package org.soen343.models.parameters;
 
 public class SimulationParameters {
     private static DateTime dateTime;
-    private static int outsideTemp;
+    private static double outsideTemp;
     private static boolean simulationRunning;
     private static boolean autoMode;
     private static boolean awayMode;
     private static AwayModeParameters awayModeParameters;
+    private static SmartHeatingParameters smartHeatingParameters;
 
     /**
      * Default constructor for SimulationParameters object
@@ -18,6 +19,11 @@ public class SimulationParameters {
         autoMode = false;
         awayMode = false;
         awayModeParameters = new AwayModeParameters();
+        smartHeatingParameters = new SmartHeatingParameters();
+    }
+
+    public SmartHeatingParameters getSmartHeatingParameters() {
+        return smartHeatingParameters;
     }
 
     public boolean isAwayModeOn() {
@@ -32,13 +38,15 @@ public class SimulationParameters {
         return autoMode;
     }
 
-    public void setAutoMode() { autoMode = !autoMode; }
+    public void setAutoMode() {
+        autoMode = !autoMode;
+    }
 
     public boolean isSimulationRunning() {
         return simulationRunning;
     }
 
-    public int getOutsideTemp() {
+    public double getOutsideTemp() {
         return outsideTemp;
     }
 

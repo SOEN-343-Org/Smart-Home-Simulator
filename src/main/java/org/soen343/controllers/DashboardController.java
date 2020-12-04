@@ -7,6 +7,7 @@ import org.soen343.services.ConsoleOutputService;
 import org.soen343.services.DashboardService;
 import org.soen343.services.SimulationContextService;
 import org.soen343.services.modules.SHCModule;
+import org.soen343.services.modules.SHHModule;
 import org.soen343.services.modules.SHPModule;
 import org.soen343.services.modules.SHSModule;
 
@@ -69,9 +70,14 @@ public class DashboardController extends Controller {
         SHSModule.getInstance().attachObserver(houseLayoutController) // To update individual location and more
                 .attachObserver(simulationContextController) // To update individual location in the table
                 .attachObserver(simulationInfoController) // To update time, date, temperature etc
-                .attachObserver(smartHomeSimulatorModuleController); // To update the SHS table
+                .attachObserver(smartHomeSimulatorModuleController) // To update the SHS table
+                .attachObserver(smartHomeHeatingModuleController); // To update the desired temps from time
         SHCModule.getInstance().attachObserver(houseLayoutController); // To update the modification to the house
-        SHPModule.getInstance().attachObserver(smartHomeSecurityModuleController); // To update the visibility of the away mode
+        SHPModule.getInstance().attachObserver(smartHomeSecurityModuleController) // To update the visibility of the away model
+                .attachObserver(smartHomeHeatingModuleController); // For when away mode is turned on
+        SHHModule.getInstance().attachObserver(smartHomeHeatingModuleController)
+                .attachObserver(simulationInfoController)
+                .attachObserver(houseLayoutController);
         DashboardService.getInstance().attachObserver(simulationContextController) // To update individual location
                 .attachObserver(smartHomeSimulatorModuleController) // To update individual location
                 .attachObserver(smartHomeCoreModuleController) // To update the visibility of the SHC tab
