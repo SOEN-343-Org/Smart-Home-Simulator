@@ -411,7 +411,6 @@ public class SHHModule extends Service {
     private void decreaseTempSummer(Room room, double currentTemp) {
         if (currentTemp >= Model.getSimulationParameters().getOutsideTemp()) {
             if (canOpenWindow(room)) {
-//                closeWindows(room);
                 openWindows(room);
             } else {
                 room.getAC().setOn(true);
@@ -465,9 +464,6 @@ public class SHHModule extends Service {
         ArrayList<Window> windows = room.getWindows();
         if (windows.size() > 0) {
             for (Window w : windows) {
-//                if (!w.isBlocked()) {
-//                    return true;
-//                }
                 if (w.isBlocked()) {
                     ConsoleOutputService.getInstance().infoLog("[SHH Module] A window in " + room + " is blocked");
                     return false;
@@ -475,7 +471,6 @@ public class SHHModule extends Service {
 
             }
         }
-//        return false;
         return true;
     }
 
