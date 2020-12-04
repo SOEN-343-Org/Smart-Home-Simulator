@@ -53,10 +53,18 @@ public class SimulationInfoController extends Controller {
 
     @FXML
     private void startSimulation(ActionEvent actionEvent) {
-        boolean success = dashboardService.setSimulationRunning();
         boolean status = Model.getSimulationParameters().isSimulationRunning();
         startStopToggle.setText(status ? "ON" : "OFF");
         startStopToggle.setSelected(status);
+        checkSimulationStatus(status);
+    }
+
+    /**
+     * Refactored version of startSimulation
+     * Checks the status of the simulation
+     * @param status
+     */
+    private void checkSimulationStatus(boolean status){
         if (status) {
             Model.getSimulationParameters().getDateTime().startTime();
             startAnimatedTime();
@@ -81,6 +89,18 @@ public class SimulationInfoController extends Controller {
     @Override
     public void update() {
         Individual user = User.getCurrentIndividual();
+        checkIfProfileIsSet(user);
+        updateTime();
+        String temp = Integer.toString(Model.getSimulationParameters().getOutsideTemp());
+        outsideTemp.setText(temp + " °C");
+    }
+
+    /**
+     * Refactored the update function
+     * Extracted the if else statement into the new checkIfProfileIsSet function
+     * @param user
+     */
+    public void checkIfProfileIsSet(Individual user){
         if (user == null) {
             profileName.setText("Profile not set");
             role.setText("Profile not set");
@@ -93,9 +113,6 @@ public class SimulationInfoController extends Controller {
             String getLocation = User.getCurrentIndividual().getLocation();
             chosenLocation.setText(getLocation);
         }
-        updateTime();
-        String temp = Integer.toString(Model.getSimulationParameters().getOutsideTemp());
-        outsideTemp.setText(temp + " °C");
     }
 
     public void updateTime() {
