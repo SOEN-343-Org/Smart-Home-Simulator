@@ -326,6 +326,17 @@ public class SHHModule extends Service {
 
         // Update all rooms that are in no zones, like HVAC stopped, temperature will go towards outside temp
         updateNoZoneTemp();
+
+        // Look at 0 degree rooms and alert of possible pipe explosion
+        alertColdRooms();
+    }
+
+    private void alertColdRooms() {
+        for (Room r : Model.getHouse().getRooms()) {
+            if (r.getTemperature() <= 0.01 && r.getTemperature() >= -0.06) {
+                ConsoleOutputService.getInstance().warningLog("[SHS Module] ALERT - Temperature of 0°C has been reach in room: " + r.getName() + ". Potential danger of pipe burst.");
+            }
+        }
     }
 
     private ArrayList<String> getAllZoneRoomNames() {
