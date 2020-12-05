@@ -44,4 +44,14 @@ public class SmartHeatingParametersTest {
     public void checksIfWinter(){
         Assertions.assertFalse(smartHeatingParameters.isSummer(1));
     }
+
+    @Test
+    public void checksIfGivenTimePeriodDoesNotAssertNull(){
+        Assertions.assertNotNull(smartHeatingParameters.getTimePeriod(5));
+    }
+
+    @Test
+    public void checksIfNoTimePeriodAssertsNull(){
+        Assertions.assertNull(smartHeatingParameters.getTimePeriod(0));
+    }
 }
