@@ -7,7 +7,6 @@ import org.soen343.exceptions.InvalidOptionException;
 import org.soen343.models.house.House;
 import org.soen343.models.house.Individual;
 import org.soen343.models.parameters.SimulationParameters;
-import org.soen343.services.ConsoleOutputService;
 import org.soen343.util.HouseLayoutUtil;
 
 import java.sql.*;
