@@ -144,7 +144,6 @@ public class HouseLayoutUtil {
         } catch (Exception e) {
             System.out.println("Error reading the house layout file.");
             System.out.println(e.getMessage());
-//            e.printStackTrace();
         }
         return null;
     }
