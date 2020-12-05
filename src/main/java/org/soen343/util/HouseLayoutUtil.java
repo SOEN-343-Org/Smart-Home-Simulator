@@ -3,6 +3,8 @@ package org.soen343.util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.soen343.exceptions.IncorrectFileNameException;
+import org.soen343.exceptions.InvalidOptionException;
 import org.soen343.models.house.*;
 
 import java.io.InputStream;
@@ -17,12 +19,12 @@ public class HouseLayoutUtil {
      *
      * @return House object
      */
-    public static House ReadHouseLayoutFile() {
+    public static House ReadHouseLayoutFile() throws IncorrectFileNameException {
 
         String fileUrl = "/org/soen343/houseLayout/house-layout.json";
         InputStream inputStream = HouseLayoutUtil.class.getResourceAsStream(fileUrl);
         if (inputStream == null) {
-            throw new NullPointerException("Cannot find the house-layout file at " + fileUrl);
+            throw new IncorrectFileNameException("Cannot find the house-layout file at " + fileUrl);
         }
 
         try {
@@ -73,7 +75,7 @@ public class HouseLayoutUtil {
                             topObject = new Door(doorId++);
                         }
                     } else {
-                        throw new NullPointerException(top + " is not in the valid option [window, door]");
+                        throw new InvalidOptionException(top);
                     }
                 }
 
@@ -91,7 +93,7 @@ public class HouseLayoutUtil {
                             rightObject = new Door(doorId++);
                         }
                     } else {
-                        throw new NullPointerException(top + " is not in the valid option [window, door]");
+                        throw new InvalidOptionException(top);
                     }
                 }
 
@@ -109,7 +111,7 @@ public class HouseLayoutUtil {
                             downObject = new Door(doorId++);
                         }
                     } else {
-                        throw new NullPointerException(top + " is not in the valid option [window, door]");
+                        throw new InvalidOptionException(top);
                     }
                 }
 
@@ -127,7 +129,7 @@ public class HouseLayoutUtil {
                             leftObject = new Door(doorId++);
                         }
                     } else {
-                        throw new NullPointerException(top + " is not in the valid option [window, door]");
+                        throw new InvalidOptionException(top);
                     }
                 }
                 Room r = new Room(roomId++, name, lights, topObject, rightObject, downObject, leftObject);
