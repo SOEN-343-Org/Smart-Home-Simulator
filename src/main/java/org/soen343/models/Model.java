@@ -33,8 +33,7 @@ public class Model {
             house = HouseLayoutUtil.ReadHouseLayoutFile();
 
         } catch (IncorrectFileNameException e) {
-            IncorrectFileNameException ex = new IncorrectFileNameException("Incorrect House Layout File Name");
-            System.err.println(ex.getMessage());
+            System.err.println(e.getMessage());
             System.exit(0);
         }
 
