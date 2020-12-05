@@ -1,9 +1,7 @@
 package test;
 
 import org.junit.jupiter.api.*;
-import org.soen343.models.house.Light;
-import org.soen343.models.house.Room;
-import org.soen343.models.house.Zone;
+import org.soen343.models.house.*;
 
 public class SHHModuleTest {
     private Zone zone;
@@ -24,33 +22,31 @@ public class SHHModuleTest {
         Assertions.assertNull(zone);
     }
 
-    //buggy test
     @Test
     public void addRoomInZoneCheckIfZoneContainsRoom(){
         zone= new Zone("zone1");
         Light[] lights= new Light[2];
         lights[0]= new Light(1);
         lights[1]= new Light(2);
-        Object top= new Object();
-        Object right= new Object();
-        Object down= new Object();
-        Object left= new Object();
+        Window top= new Window(3);
+        Door right= new Door(4);
+        Door down= new Door(5);
+        Window left= new Window(6);
         Room room= new Room(4, "Kitchen",lights, top, right, down, left);
         zone.addRoom(room);
         Assertions.assertTrue(zone.getRooms().contains(room));
     }
 
-    //buggy test
     @Test
     public void removeRoomAndCheckIfZoneStillContainsIt() {
         zone = new Zone("zone1");
         Light[] lights = new Light[2];
         lights[0] = new Light(1);
         lights[1] = new Light(2);
-        Object top = new Object();
-        Object right = new Object();
-        Object down = new Object();
-        Object left = new Object();
+        Window top= new Window(3);
+        Door right= new Door(4);
+        Door down= new Door(5);
+        Window left= new Window(6);
         Room room = new Room(4, "Kitchen", lights, top, right, down, left);
         zone.addRoom(room);
         zone.removeRoom(room);
