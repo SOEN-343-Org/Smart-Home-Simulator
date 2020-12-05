@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.soen343.models.parameters.SmartHeatingParameters;
 
-public class smartHeatingParametersTest {
+public class SmartHeatingParametersTest {
     private  SmartHeatingParameters smartHeatingParameters;
 
     @BeforeEach

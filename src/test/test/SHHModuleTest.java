@@ -5,9 +5,8 @@ import org.soen343.models.house.Light;
 import org.soen343.models.house.Room;
 import org.soen343.models.house.Zone;
 
-public class settingZoneTest {
+public class SHHModuleTest {
     private Zone zone;
-    private Room room;
 
     @BeforeEach
     public void setup(){
@@ -25,19 +24,37 @@ public class settingZoneTest {
         Assertions.assertNull(zone);
     }
 
+    //buggy test
     @Test
     public void addRoomInZoneCheckIfZoneContainsRoom(){
         zone= new Zone("zone1");
-        Light [] lights= new Light[2];
+        Light[] lights= new Light[2];
         lights[0]= new Light(1);
         lights[1]= new Light(2);
         Object top= new Object();
         Object right= new Object();
         Object down= new Object();
         Object left= new Object();
-        room= new Room(4, "Kitchen",lights, top, right, down, left);
+        Room room= new Room(4, "Kitchen",lights, top, right, down, left);
         zone.addRoom(room);
         Assertions.assertTrue(zone.getRooms().contains(room));
+    }
+
+    //buggy test
+    @Test
+    public void removeRoomAndCheckIfZoneStillContainsIt() {
+        zone = new Zone("zone1");
+        Light[] lights = new Light[2];
+        lights[0] = new Light(1);
+        lights[1] = new Light(2);
+        Object top = new Object();
+        Object right = new Object();
+        Object down = new Object();
+        Object left = new Object();
+        Room room = new Room(4, "Kitchen", lights, top, right, down, left);
+        zone.addRoom(room);
+        zone.removeRoom(room);
+        Assertions.assertFalse(zone.getRooms().contains(room));
     }
 
     @Test
