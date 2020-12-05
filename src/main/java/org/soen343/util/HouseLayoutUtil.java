@@ -24,7 +24,7 @@ public class HouseLayoutUtil {
         String fileName = "house-layout.json";
         String fileUrl = "/org/soen343/houseLayout/" + fileName;
 
-        if (!fileName.equals("house-layout.json")) throw new IncorrectFileNameException("Incorrect File Name : " + fileName);
+        if (!fileName.equals("house-layout.json")) throw new IncorrectFileNameException(fileName);
 
         InputStream inputStream = HouseLayoutUtil.class.getResourceAsStream(fileUrl);
         if (inputStream == null) {
