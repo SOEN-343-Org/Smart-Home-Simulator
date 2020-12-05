@@ -19,12 +19,16 @@ public class HouseLayoutUtil {
      *
      * @return House object
      */
-    public static House ReadHouseLayoutFile() throws IncorrectFileNameException {
+    public static House ReadHouseLayoutFile() throws IncorrectFileNameException, InvalidOptionException {
 
-        String fileUrl = "/org/soen343/houseLayout/house-layout.json";
+        String fileName = "house-layout.json";
+        String fileUrl = "/org/soen343/houseLayout/" + fileName;
+
+        if (!fileName.equals("house-layout.json")) throw new IncorrectFileNameException("Incorrect File Name : " + fileName);
+
         InputStream inputStream = HouseLayoutUtil.class.getResourceAsStream(fileUrl);
         if (inputStream == null) {
-            throw new IncorrectFileNameException("Cannot find the house-layout file at " + fileUrl);
+            throw new NullPointerException("Cannot find the house-layout file at " + fileUrl);
         }
 
         try {
@@ -140,7 +144,7 @@ public class HouseLayoutUtil {
         } catch (Exception e) {
             System.out.println("Error reading the house layout file.");
             System.out.println(e.getMessage());
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return null;
     }
