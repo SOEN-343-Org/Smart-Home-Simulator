@@ -9,14 +9,19 @@ public class settingZoneTest {
     private Zone zone;
     private Room room;
 
+    @BeforeEach
+    public void setup(){
+        zone= new Zone("zone1");
+    }
+
     @Test
     public void createZoneAndCheckIfNotNull(){
-        zone= new Zone("zone1");
         Assertions.assertNotNull(zone);
     }
 
     @Test
     public void doNotCreateZoneAndCheckIfNull(){
+        zone=null;
         Assertions.assertNull(zone);
     }
 
@@ -35,5 +40,47 @@ public class settingZoneTest {
         Assertions.assertTrue(zone.getRooms().contains(room));
     }
 
+    @Test
+    public void checkIfZoneHasANightTempWithoutSettingTemp(){
+        Assertions.assertEquals( 20, zone.getNightTemp());
+    }
 
+    @Test
+    public void checkIfZoneHasAMorningTempWithoutSettingTemp(){
+        Assertions.assertEquals(20, zone.getMorningTemp());
+    }
+
+    @Test
+    public void checkIfZoneHasAnAfternoonTempWithoutSettingTemp(){
+        Assertions.assertEquals(20, zone.getAfternoonTemp());
+    }
+
+    @Test
+    public void setMorningTempOfZone(){
+        zone.setMorningTemp(25);
+        Assertions.assertEquals(25,zone.getMorningTemp());
+    }
+
+    @Test
+    public void setAfternoonTempOfZone(){
+        zone.setAfternoonTemp(25);
+        Assertions.assertEquals(25,zone.getAfternoonTemp());
+    }
+
+    @Test
+    public void setNightTempOfZone(){
+        zone.setNightTemp(25);
+        Assertions.assertEquals(25,zone.getNightTemp());
+    }
+
+    @Test
+    public void checkIfTempIsOverwrittenReturnFalse(){
+        Assertions.assertFalse(zone.getOverwritten());
+    }
+
+    @Test
+    public void overwriteTempCheckIfOverwritten(){
+        zone.setOverwrittenTemp(32);
+        Assertions.assertTrue(zone.getOverwritten());
+    }
 }
