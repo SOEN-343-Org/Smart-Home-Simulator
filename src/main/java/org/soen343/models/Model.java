@@ -2,6 +2,8 @@ package org.soen343.models;
 
 import org.soen343.connection.DBConnection;
 import org.soen343.connection.SQLQueriesBuilder;
+import org.soen343.exceptions.IncorrectFileNameException;
+import org.soen343.exceptions.InvalidOptionException;
 import org.soen343.models.house.House;
 import org.soen343.models.house.Individual;
 import org.soen343.models.parameters.SimulationParameters;
@@ -27,7 +29,17 @@ public class Model {
      * Set the Model objects
      */
     public static void setModelParameters() {
-        house = HouseLayoutUtil.ReadHouseLayoutFile();
+        try {
+            house = HouseLayoutUtil.ReadHouseLayoutFile();
+
+        } catch (IncorrectFileNameException e) {
+            System.err.println(e.getMessage());
+            System.exit(0);
+        } catch (InvalidOptionException e) {
+            System.err.println(e.getMessage());
+            System.exit(0);
+        }
+
         connection = DBConnection.getConnection();
         simulationParameters = new SimulationParameters();
     }
