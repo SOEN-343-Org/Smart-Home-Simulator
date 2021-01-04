@@ -21,3 +21,12 @@ Anthony Chraim - [@AnthonyChraim](https://github.com/AnthonyChraim) <br />
 Carlin Lee - [@car12lin12](https://github.com/car12lin12) <br />
 Kelvin Chow Wan Chuen - [@WanProduction](https://github.com/WanProduction) <br />
 Nafisa Shamsuzzaman - [@theNafsters](https://github.com/theNafsters) <br />
+
+## Screenshots
+
+### Login
+![Screenshot Desktop](github/screenshots/login.png) 
+### Home
+![Screenshot Desktop](github/screenshots/home.png) 
+### Zone control
+![Screenshot Desktop](github/screenshots/zone.png) 
