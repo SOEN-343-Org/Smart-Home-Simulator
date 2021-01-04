@@ -16,7 +16,7 @@ How-to:
 4. This should start the application and from this point you can start the application directly from the run 'App' / Shift+f10 command
 
 ### Contributors:
-Sébastien Blain-Nadeau - [@Sebastien0730](https://github.com/Sebastien0730) <br />
+Sébastien Blain-Nadeau - [@Sebastien0730](https://github.com/sebastien-blain) <br />
 Anthony Chraim - [@AnthonyChraim](https://github.com/AnthonyChraim) <br />
 Carlin Lee - [@car12lin12](https://github.com/car12lin12) <br />
 Kelvin Chow Wan Chuen - [@WanProduction](https://github.com/WanProduction) <br />
